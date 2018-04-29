@@ -1,0 +1,21 @@
+--- gnats/mail.c	2017-11-19 12:27:06.011743252 -0700
++++ gnats/mail.c	2017-11-19 12:26:57.706981592 -0700
+@@ -67,7 +67,7 @@
+   if (res != NULL)
+     {
+       if (res->admFields[ResponsibleAdmAlias] == NULL ||
+-	  res->admFields[ResponsibleAdmAlias] == '\0')
++	  *res->admFields[ResponsibleAdmAlias] == '\0')
+ 	{
+ 	  if (res->admFields[ResponsibleAdmAlias] != NULL)
+ 	    {
+--- gnats/misc.c	2017-11-19 12:26:26.609868063 -0700
++++ gnats/misc.c	2017-11-19 12:26:08.491379855 -0700
+@@ -109,6 +109,7 @@
+ 	      break;
+ 	    }
+ 	  /* No log file, log to stderr. */
++	__attribute__((fallthrough));
+ 	case STDERR:
+ 	  fprintf (stderr, "%s", buf);
+ 	  break;
