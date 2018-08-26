@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# Slackware build script for Telegraf
+# Slackware build script for InfluxDB
 
-# Copyright 2017, 2018 Ebben Aries <e@dscp.org>
+# Copyright 2017 Giuseppe Di Terlizzi <giuseppe.diterlizzi@gmail.com>
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -22,8 +22,8 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-PRGNAM=telegraf
-VERSION=${VERSION:-1.7.3}
+PRGNAM=influxdb
+VERSION=${VERSION:-1.6.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -35,14 +35,14 @@ if [ -z "$ARCH" ]; then
   esac
 fi
 
-UIDGID=349
-if ! getent group $PRGNAM; then
+UIDGID=348
+if ! grep -q ^${PRGNAM}: /etc/group; then
 	echo "  You must have the \"$PRGNAM\" group to run this script."
 	echo "    # groupadd -g $UIDGID $PRGNAM"
 	exit 1
-elif ! getent passwd $PRGNAM; then
+elif ! grep -q ^${PRGNAM}: /etc/passwd; then
 	echo "  You must have the \"$PRGNAM\" user to run this script."
-	echo "    # useradd -u $UIDGID -s /bin/false -d /dev/null -g $PRGNAM $PRGNAM"
+	echo "    # useradd -u $UIDGID -s /bin/false -d /var/lib/$PRGNAM $PRGNAM"
 	exit 1
 fi
 
@@ -65,9 +65,9 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $PRGNAM
+rm -rf $PRGNAM-${VERSION}*
 tar xvf $CWD/$PRGNAM-${VERSION}_linux_${PKG_ARCH}.tar.gz
-cd $PRGNAM
+cd $PRGNAM-${VERSION}*
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
@@ -81,20 +81,28 @@ find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | gr
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
 mkdir -p $PKG/etc/rc.d
-mv $PKG/usr/lib/telegraf/scripts/init.sh $PKG/etc/rc.d/rc.telegraf.new
+mv $PKG/usr/lib/influxdb/scripts/init.sh $PKG/etc/rc.d/rc.influxdb.new
 rm -rf $PKG/usr/lib
 
-mv $PKG/etc/telegraf/telegraf.conf $PKG/etc/telegraf/telegraf.conf.new
-mv $PKG/etc/logrotate.d/telegraf $PKG/etc/logrotate.d/telegraf.new
+mv $PKG/usr/share/man $PKG/usr/man
+rmdir $PKG/usr/share
+find $PKG/usr/man -type f -exec gzip -q -9 {} \;
+for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
+
+mv $PKG/etc/influxdb/influxdb.conf $PKG/etc/influxdb/influxdb.conf.new
+mv $PKG/etc/logrotate.d/influxdb $PKG/etc/logrotate.d/influxdb.new
 mkdir -p $PKG/etc/default
-cat $CWD/telegraf > $PKG/etc/default/telegraf.new
+cat $CWD/influxdb > $PKG/etc/default/influxdb.new
 
-chown telegraf:telegraf $PKG/var/log/telegraf
-chmod 0755 $PKG/var/log/telegraf
+chown influxdb:influxdb $PKG/var/lib/influxdb
+chmod 0750 $PKG/var/lib/influxdb
 
-mkdir -p $PKG/var/run/telegraf
-chown telegraf:telegraf $PKG/var/run/telegraf
-chmod 0755 $PKG/var/run/telegraf
+chown influxdb:influxdb $PKG/var/log/influxdb
+chmod 0755 $PKG/var/log/influxdb
+
+mkdir -p $PKG/var/run/influxdb
+chown influxdb:influxdb $PKG/var/run/influxdb
+chmod 0750 $PKG/var/run/influxdb
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
