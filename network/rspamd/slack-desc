@@ -1,0 +1,24 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' above the ':' following the base package name, and
+# the '|' on the right side marks the last column you can put a character in.
+# You must make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
+          |-----handy-ruler------------------------------------------------------|
+rspamd: rspamd (An advanced spam filtering system)
+rspamd:
+rspamd: Rspamd is an advanced spam filtering system that allows evaluation of
+rspamd: messages by a number of rules including regular expressions, statistical
+rspamd: analysis and custom services such as URL black lists. Each message is
+rspamd: analysed by Rspamd and given a spam score.
+rspamd:
+rspamd: According to this spam score and the user’s settings Rspamd recommends an
+rspamd: action for the MTA to apply to the message: for example, to pass, to
+rspamd: reject or to add a header. Rspamd is designed to process hundreds of
+rspamd: messages per second simultaneously and has a number of features
+rspamd: available.
+rspamd:
+rspamd: Home-Page: https://rspamd.com
+rspamd:
+rspamd:
