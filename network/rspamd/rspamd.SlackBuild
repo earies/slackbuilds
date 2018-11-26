@@ -92,7 +92,7 @@ cd build
     -DENABLE_JEMALLOC=ON \
     -DCMAKE_BUILD_TYPE=Release \
     ..
-  make -j8
+  make
   make install DESTDIR=$PKG
 cd ..
 
