@@ -35,6 +35,17 @@ if [ -z "$ARCH" ]; then
   esac
 fi
 
+UIDGID=119
+if ! getent group $PRGNAM; then
+	echo "  You must have the \"$PRGNAM\" group to run this script."
+	echo "    # groupadd -g $UIDGID $PRGNAM"
+	exit 1
+elif ! getent passwd $PRGNAM; then
+	echo "  You must have the \"$PRGNAM\" user to run this script."
+	echo "    # useradd -u $UIDGID -s /bin/false -d /dev/null -g $PRGNAM $PRGNAM"
+	exit 1
+fi
+
 CWD=$(pwd)
 TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
@@ -88,7 +99,20 @@ cd ..
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
-find $PKG -name perllocal.pod -o -name ".packlist" -o -name "*.bs" | xargs rm -f || true
+mkdir -p $PKG/var/log/rspamd
+chown rspamd:rspamd $PKG/var/log/rspamd
+chmod 0755 $PKG/var/log/rspamd
+
+mkdir -p $PKG/var/run/rspamd
+chown rspamd:rspamd $PKG/var/run/rspamd
+chmod 0750 $PKG/var/run/rspamd
+
+mkdir -p $PKG/var/lib/rspamd
+chown rspamd:rspamd $PKG/var/lib/rspamd
+chmod 0750 $PKG/var/lib/rspamd
+
+mkdir -p $PKG/etc/rc.d
+cat $CWD/rc.rspamd.new > $PKG/etc/rc.d/rc.rspamd.new
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a AUTHORS.md ChangeLog CONTRIBUTIONS.md LICENSE.md README.md \
