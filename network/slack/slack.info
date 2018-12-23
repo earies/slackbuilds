@@ -3,8 +3,10 @@ VERSION="3.3.3"
 HOMEPAGE="https://slack.com"
 DOWNLOAD="UNSUPPORTED"
 MD5SUM=""
-DOWNLOAD_x86_64="https://downloads.slack-edge.com/linux_releases/slack-desktop-3.3.3-amd64.deb"
-MD5SUM_x86_64="97eb4c74e4aacf7771c13b1493d6acc6"
+DOWNLOAD_x86_64="https://downloads.slack-edge.com/linux_releases/slack-desktop-3.3.3-amd64.deb \
+                 https://atom-installer.github.com/v1.33.1/atom-amd64.deb"
+MD5SUM_x86_64="97eb4c74e4aacf7771c13b1493d6acc6 \
+               6a95da4b9fe44172f1ab9aea12120311"
 REQUIRES=""
 MAINTAINER="Harald Achitz"
 EMAIL="harald.achitz@gmail.com"

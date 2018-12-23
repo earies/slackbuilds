@@ -89,6 +89,16 @@ cp -rv usr/share/* $PKG/usr/share/
 ## remove lintian stuff and another copy of LICENSE
 rm -rf $PKG/usr/share/{doc,lintian}
 
+## replace libnode.so with version from atom package
+## https://stackoverflow.com/questions/53084955/why-does-slack-return-a-segmentation-fault-after-fedora-29-upgrade
+## https://github.com/shiftkey/desktop/issues/78
+rm -rf $PKG/usr/lib64/slack/libnode.so
+mkdir atom
+cd atom
+ar p $CWD/atom-amd64.deb data.tar.xz | tar xJv
+chown -R root:root .
+cp -rv usr/share/atom/libnode.so $PKG/usr/lib64/slack/
+
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION/
 cp -a $PKG/usr/lib64/slack/LICENSE $PKG/usr/doc/$PRGNAM-$VERSION/
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
