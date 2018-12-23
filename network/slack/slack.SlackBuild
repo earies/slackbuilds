@@ -26,7 +26,7 @@
 
 
 PRGNAM=slack
-VERSION=${VERSION:-3.1.1}
+VERSION=${VERSION:-3.3.3}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -82,15 +82,15 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-mv * $PKG/
+mkdir -p $PKG/usr/bin $PKG/usr/lib64 $PKG/usr/share
+cp -rv usr/lib/* $PKG/usr/lib64/
+cp -rv usr/share/* $PKG/usr/share/
 
-## we do not need a debian cron job :^)
-rm -rf $PKG/etc/
-## nor lintian stuff and another copy of LICENSE
+## remove lintian stuff and another copy of LICENSE
 rm -rf $PKG/usr/share/{doc,lintian}
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION/
-cp -a $PKG/usr/lib/slack/LICENSE $PKG/usr/doc/$PRGNAM-$VERSION/
+cp -a $PKG/usr/lib64/slack/LICENSE $PKG/usr/doc/$PRGNAM-$VERSION/
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install
