@@ -5,7 +5,7 @@
 # Updated by Andrew Brouwers, abrouwers@gmail.com
 
 PRGNAM=libtorrent
-VERSION=${VERSION:-0.13.6}
+VERSION=${VERSION:-0.13.7}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -50,6 +50,11 @@ find -L . \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+# Support for OpenSSL 1.1
+patch -p1 --verbose < $CWD/0001-Fix-the-DH-parameters-generation-with-OpenSSL-1.1.patch
+
+./autogen.sh
 
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
