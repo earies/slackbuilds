@@ -13,5 +13,5 @@ Groupname and Username
 
 You must have the "ircd" group and user to run this script, for example:
 
-  groupadd -g 666 ircd
-  useradd -u 666 -s /bin/false -d /var/empty -g ircd ircd
+  groupadd -g 360 ircd
+  useradd -u 360 -s /bin/false -d /var/empty -g ircd ircd
