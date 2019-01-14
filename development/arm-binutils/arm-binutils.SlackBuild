@@ -83,10 +83,10 @@ CXXFLAGS="$SLKCFLAGS" \
   --localstatedir=/var \
   --infodir=/usr/info \
   --mandir=/usr/man \
-  --program-prefix="arm-none-eabi-" \
+  --program-prefix="aarch64-linux-" \
   --program-suffix="" \
   --build=$ARCH-slackware-linux \
-  --target="arm-none-eabi" \
+  --target=aarch64-linux \
   --enable-interwork \
   --enable-multilib \
   --disable-nls \
