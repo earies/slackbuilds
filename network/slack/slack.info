@@ -4,7 +4,7 @@ HOMEPAGE="https://slack.com"
 DOWNLOAD="UNSUPPORTED"
 MD5SUM=""
 DOWNLOAD_x86_64="https://downloads.slack-edge.com/linux_releases/slack-desktop-3.3.7-amd64.deb \
-                 https://atom-installer.github.com/v1.33.1/atom-amd64.deb"
+                 https://atom-installer.github.com/v1.34.0/atom-amd64.deb"
 MD5SUM_x86_64="d61bc0745a396e0ded0320ccb7cca4d3 \
                6a95da4b9fe44172f1ab9aea12120311"
 REQUIRES=""
