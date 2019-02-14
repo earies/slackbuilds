@@ -1,0 +1,11 @@
+--- xsel.c	2008-02-11 20:50:18.000000000 -0800
++++ xsel.c	2019-02-13 19:06:36.319969858 -0800
+@@ -1983,7 +1983,7 @@
+       dont_output = True;
+     } else if (OPT("--logfile") || OPT("-l")) {
+       i++; if (i >= argc) goto usage_err;
+-      strncpy (logfile, argv[i], MAXFNAME);
++      strncpy (logfile, argv[i], MAXFNAME-1);
+     } else {
+       goto usage_err;
+     }
