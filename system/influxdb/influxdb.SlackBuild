@@ -23,7 +23,7 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=influxdb
-VERSION=${VERSION:-1.7.3}
+VERSION=${VERSION:-1.7.4}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -42,7 +42,7 @@ if ! grep -q ^${PRGNAM}: /etc/group; then
 	exit 1
 elif ! grep -q ^${PRGNAM}: /etc/passwd; then
 	echo "  You must have the \"$PRGNAM\" user to run this script."
-	echo "    # useradd -u $UIDGID -s /bin/false -d /var/lib/$PRGNAM $PRGNAM"
+	echo "    # useradd -u $UIDGID -s /bin/false -d /var/lib/$PRGNAM -g $PRGNAM $PRGNAM"
 	exit 1
 fi
 

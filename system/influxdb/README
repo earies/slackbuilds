@@ -14,4 +14,4 @@ Groupname and Username
 You must have the "influxdb" group and user to run this script, for example:
 
   groupadd -g 348 influxdb
-  useradd -u 348 -s /bin/false -d /var/lib/influxdb influxdb
+  useradd -u 348 -s /bin/false -d /var/lib/influxdb -g influxdb influxdb
