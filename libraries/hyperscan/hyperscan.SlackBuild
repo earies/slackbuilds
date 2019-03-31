@@ -64,17 +64,18 @@ tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
 cd $PRGNAM-$VERSION
 chown -R root:root .
 find -L . \
-\( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
- -o -perm 511 \) -exec chmod 755 {} \; -o \
-\( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
- -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+ \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
+  -o -perm 511 \) -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
+  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
 mkdir -p build
 cd build
   cmake \
-    -DCMAKE_CXX_FLAGS:STRING="$SLKCFLAGS" \
     -DCMAKE_C_FLAGS:STRING="$SLKCFLAGS" \
+    -DCMAKE_CXX_FLAGS:STRING="$SLKCFLAGS" \
     -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_DOCDIR=/usr/doc/$PRGNAM-$VERSION \
     -DBUILD_STATIC_AND_SHARED=ON \
     -DCMAKE_BUILD_TYPE=Release \
     ..
@@ -85,8 +86,6 @@ cd ..
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
-find $PKG -name perllocal.pod -o -name ".packlist" -o -name "*.bs" | xargs rm -f || true
-
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a CHANGELOG.md COPYING LICENSE README.md \
   $PKG/usr/doc/$PRGNAM-$VERSION
@@ -94,7 +93,6 @@ cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
-cat $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
