@@ -24,7 +24,7 @@
 
 SRCNAM=redis
 PRGNAM=php-redis
-VERSION=${VERSION:-5.0.0}
+VERSION=${VERSION:-5.0.2}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
