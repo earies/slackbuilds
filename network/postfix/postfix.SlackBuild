@@ -22,7 +22,7 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=postfix
-VERSION=${VERSION:-3.4.6}
+VERSION=${VERSION:-3.4.7}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -148,6 +148,9 @@ find -L . \
 # Use config files from build tree, not system ones
 # This should probably go to upstream...
 patch -p1 <$CWD/patches/postconf.diff
+
+# Patch for glibc 2.30+
+patch -p1 <$CWD/patches/80_glibc2.30-ftbfs.diff
 
 # Postfix does not use a ./configure script
 
