@@ -77,7 +77,6 @@ CPPFLAGS+=" -I/usr/include/et" \
   --localstatedir=/var \
   --mandir=/usr/man \
   --enable-dns-for-realm \
-  --with-ldap \
   --with-system-et \
   --with-system-ss \
   --enable-pkinit \
