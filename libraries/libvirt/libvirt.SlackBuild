@@ -5,7 +5,7 @@
 # Maintained by Robby Workman <rworkman@slackbuilds.org>
 
 PRGNAM=libvirt
-VERSION=${VERSION:-6.3.0}
+VERSION=${VERSION:-6.5.0}
 BUILD=${BUILD:-2}
 TAG=${TAG:-_SBo}
 
@@ -114,7 +114,7 @@ for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; r
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cd ..
 cp -a \
-  AUTHORS ChangeLog COPYING* INSTALL README NEWS examples/polkit/* \
+  AUTHORS ChangeLog COPYING* INSTALL README examples/polkit/* \
   $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
