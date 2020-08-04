@@ -22,7 +22,7 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=postfix
-VERSION=${VERSION:-3.4.7}
+VERSION=${VERSION:-3.5.4}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -150,7 +150,7 @@ find -L . \
 patch -p1 <$CWD/patches/postconf.diff
 
 # Patch for glibc 2.30+
-patch -p1 <$CWD/patches/80_glibc2.30-ftbfs.diff
+#patch -p1 <$CWD/patches/80_glibc2.30-ftbfs.diff
 
 # Postfix does not use a ./configure script
 
