@@ -1,0 +1,19 @@
+--- src/cmd/dist/buildtool.go	2020-09-03 12:42:12.198135095 -0600
++++ src/cmd/dist/buildtool.go	2020-09-03 12:42:56.247132659 -0600
+@@ -113,14 +113,15 @@
+ 
+ // File suffixes that use build tags introduced since Go 1.4.
+ // These must not be copied into the bootstrap build directory.
++// Also ignore test files.
+ var ignoreSuffixes = []string{
+ 	"_arm64.s",
+-	"_arm64_test.s",
+ 	"_arm64.go",
+ 	"_riscv64.s",
+ 	"_riscv64.go",
+ 	"_wasm.s",
+ 	"_wasm.go",
++	"_test.s",
+ }
+ 
+ func bootstrapBuildTools() {
