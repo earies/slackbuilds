@@ -25,7 +25,7 @@
 # 02/Apr/2018 * First version
 
 PRGNAM=sflowtool
-VERSION=${VERSION:-5.04}
+VERSION=${VERSION:-5.05}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
