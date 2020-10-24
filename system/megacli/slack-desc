@@ -13,7 +13,7 @@ megacli: controller family.  It is used as a diagnostic utility to obtain
 megacli: information, event logs and interact with the RAID controller and
 megacli: attached peripherals.
 megacli:
-megacli:
 megacli: Home-Page: http://www.broadcom.com
+megacli:
 megacli:
 megacli:
