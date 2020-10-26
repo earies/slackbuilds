@@ -44,10 +44,7 @@ case "$ARCH" in
   x86_64)
     BINARCH="amd64"
     ;;
-  i586)
-    BINARCH="386"
-    ;;
-  i686)
+  i?86)
     BINARCH="386"
     ;;
   *)
