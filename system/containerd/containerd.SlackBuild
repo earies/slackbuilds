@@ -24,7 +24,7 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=containerd
-VERSION=${VERSION:-1.4.0}
+VERSION=${VERSION:-1.4.1}
 GITHASH=${GITHASH:-09814d48d50816305a8e6c1a4ae3e2bcc4ba725a}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
@@ -66,6 +66,8 @@ sed -i \
 mkdir build
 mv vendor build/src
 ln -sf $TMP/$PRGNAM-$VERSION build/src/github.com/containerd/containerd
+
+go mod init github.com/containerd/containerd
 
 make \
   BUILDTAGS="seccomp" \
