@@ -5,8 +5,8 @@ originally built at SoundCloud.
 
 Prometheus's main features are:
 
-- a multi-dimensional data model with time series data identified by metric
-  name and key/value pairs
+- a multi-dimensional data model with time series data identified by
+  metric name and key/value pairs
 - PromQL, a flexible query language to leverage this dimensionality
 - no reliance on distributed storage; single server nodes are autonomous
 - time series collection happens via a pull model over HTTP
@@ -16,7 +16,9 @@ Prometheus's main features are:
 
 Groupname and Username
 
-You must have the "prometheus" group and user to run this script, for example:
+You must have the "prometheus" group and user to run this script, for
+example:
 
   groupadd -g 368 prometheus
-  useradd -u 368 -s /bin/false -d /var/lib/prometheus -g prometheus prometheus
+  useradd -u 368 -s /bin/false -d /var/lib/prometheus \
+    -g prometheus prometheus
