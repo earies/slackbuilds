@@ -60,6 +60,9 @@ find -L . \
 mkdir build
 mv vendor build/src
 
+# Module initialization for go 1.15+
+go mod init github.com/moby/libnetwork
+
 GOPATH=$TMP/$SRCNAM-$GITHASH/build \
 go build -o $PKG/usr/bin/docker-proxy ./cmd/proxy
 
