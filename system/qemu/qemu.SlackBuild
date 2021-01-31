@@ -55,10 +55,11 @@
 # 4.5   03-Jun-2018     version update to 2.12.0 release, note new deps: sdl2, gtk+3
 # 5.0   14-Dec-2018	version update to 3.1.0 release, note minimum dependency versions on release notes
 # 6.0   14-JUL-2019	version update to 4.0.0 release, note minimum dependency versions on release notes, doc fixes
-# 6.1   19-AUG-2019	verion update
+# 6.1   19-AUG-2019	version update
+# 6.2   16-Nov-2020     version update, 14.2 final release.
 
 PRGNAM=qemu
-VERSION=${VERSION:-5.1.0}
+VERSION=${VERSION:-5.2.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -119,6 +120,10 @@ find -L . \
 # Remove double CFLAGS
 sed -i "s|^\ \ CFLAGS=\"-O2\ |  CFLAGS=\"|" configure
 
+# Patch for recent binutils unsupported flags
+# https://git.sailfishos.org/mirror/qemu/commit/bbd2d5a8120771ec59b86a80a1f51884e0a26e53
+patch -p1 < $CWD/binutils-unsupported-options.patch
+
 # Enable only x86* and arm emulation for qemu: if you want to build
 # all the targets available use TARGETS=all
 if [ "$TARGETS" = "all" ]; then
@@ -154,14 +159,11 @@ CXXFLAGS="$SLKCFLAGS" \
   $with_vnc \
   $targets
 
-# Make these first; otherwise make won't run in parallel.
-make config-all-devices.mak config-all-disas.mak
-
 make V=1
 make install DESTDIR=$PKG
 
 # Remove empty /var
-rm -rf $PKG/var/run
+rm -rf $PKG/var
 
 # install some udev rules for /dev/kvm
 # Note: no udev rules for usb pasthrough when running qemu as non-root on linux hosts. See Section 2.11.2
@@ -190,7 +192,7 @@ fi
 
 # Add docs to the proper location
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a Changelog COPYING* CODING_STYLE.rst LICENSE MAINTAINERS README.rst docs/* \
+cp -a COPYING* CODING_STYLE.rst LICENSE MAINTAINERS README.rst docs/* \
   $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
