@@ -27,7 +27,7 @@
 # SOFTWARE.
 
 PRGNAM=google-go-lang
-VERSION=${VERSION:-1.15.8}
+VERSION=${VERSION:-1.16}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -80,7 +80,7 @@ find -L . \
 # Patch issue with 1.15 compilation when bootstrapping with gccgo
 # https://github.com/golang/go/issues/40855
 # https://go-review.googlesource.com/c/go/+/249018/3/src/cmd/dist/buildtool.go
-patch -p0 < $CWD/patches/bootstrap.patch
+#patch -p0 < $CWD/patches/bootstrap.patch
 
 # as of >= go1.5, the cross-compiler does not need to be bootstrap, so the
 # compiler need only be compiled for the host OS, which it detects
