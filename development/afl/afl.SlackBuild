@@ -72,20 +72,20 @@ make \
 
 # llvm fast mode looks useful, include it.
 # comment this out if you're building on slack 14.1, its llvm is too old.
-make -C llvm_mode \
-  PREFIX=/usr \
-  HELPER_PATH=/usr/lib$LIBDIRSUFFIX/$PRGNAM
+#make -C llvm_mode \
+#  PREFIX=/usr \
+#  HELPER_PATH=/usr/lib$LIBDIRSUFFIX/$PRGNAM
 
 # no 'make install' support, manual install.
-install -s -m0755 -oroot -groot afl-clang-fast $PKG/usr/bin
-ln -s afl-clang-fast $PKG/usr/bin/afl-clang-fast++
+#install -s -m0755 -oroot -groot afl-clang-fast $PKG/usr/bin
+#ln -s afl-clang-fast $PKG/usr/bin/afl-clang-fast++
 
 # 20200217 bkw: clang fast mode support libraries. Thanks to mity for
 # a very detailed bug report.
-CLANGLIB=$PKG/usr/lib$LIBDIRSUFFIX/$PRGNAM
-install -s -m0755 -oroot -groot afl-llvm-pass.so $CLANGLIB
+#CLANGLIB=$PKG/usr/lib$LIBDIRSUFFIX/$PRGNAM
+#install -s -m0755 -oroot -groot afl-llvm-pass.so $CLANGLIB
 # no -s here, stripping this would be bad:
-install -m0644 -oroot -groot afl-llvm-rt*.o $CLANGLIB
+#install -m0644 -oroot -groot afl-llvm-rt*.o $CLANGLIB
 
 # replace identical .o files with symlinks
 baseobj=$CLANGLIB/afl-llvm-rt.o
