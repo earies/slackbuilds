@@ -7,4 +7,4 @@ DOWNLOAD_x86_64="https://github.com/klinker-apps/pulse-sms-desktop/releases/down
 MD5SUM_x86_64="6af4b099465abdf9baacb6e4a5bc3899"
 REQUIRES=""
 MAINTAINER="Ebben Aries"
-EMAIL="e@dscp.org"
+EMAIL="slackbuilds@dscp.org"
