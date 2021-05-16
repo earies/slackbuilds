@@ -7,9 +7,9 @@
 # You are free to modify or redistribute this in any way you wish.
 
 PRGNAM=tint2
-VERSION=${VERSION:-dba0e666}
+VERSION=${VERSION:-a9228844}
 BRANCH=master
-HASH=dba0e66646d7d7fb12bbf7874b6aa9c1c1ef4b19
+HASH=a92288448515be3429e427a422ae518f9dc4a3a5
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
