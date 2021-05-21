@@ -25,7 +25,7 @@
 #
 
 PRGNAM=freeipmi
-VERSION=${VERSION:-1.6.7}
+VERSION=${VERSION:-1.6.8}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
