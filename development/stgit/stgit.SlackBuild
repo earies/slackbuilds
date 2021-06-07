@@ -23,7 +23,7 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=stgit
-VERSION=${VERSION:-0.19}
+VERSION=${VERSION:-1.1}
 BUILD=${BUILD:-2}
 TAG=${TAG:-_SBo}
 
@@ -55,15 +55,12 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
  -exec chmod 644 {} \;
 
-# This fixes the tutorial not building.
-sed -i s/##############/==============/ Documentation/tutorial.txt
-
 make prefix=/usr mandir=/usr/man all doc
 make prefix=/usr mandir=/usr/man DESTDIR=$PKG install install-doc
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a \
-  AUTHORS COPYING README RELEASENOTES TODO \
+  AUTHORS.md CHANGELOG.md COPYING README.md TODO \
   $PKG/usr/doc/$PRGNAM-$VERSION
 chmod 0644 $PKG/usr/doc/$PRGNAM-$VERSION/*
 
