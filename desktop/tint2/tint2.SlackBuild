@@ -7,7 +7,7 @@
 # You are free to modify or redistribute this in any way you wish.
 
 PRGNAM=tint2
-VERSION=${VERSION:-f628cba9}
+VERSION="17.0.1"
 BRANCH=master
 HASH=f628cba9668e5243c6433f87a42675019a02d066
 BUILD=${BUILD:-1}
@@ -41,9 +41,9 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $PRGNAM-$BRANCH-$HASH
-tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
-cd $PRGNAM-$BRANCH-$HASH
+rm -rf $PRGNAM-v$VERSION
+tar xvf $CWD/$PRGNAM-v$VERSION.tar.gz
+cd $PRGNAM-v$VERSION
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
