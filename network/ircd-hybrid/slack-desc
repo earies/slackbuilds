@@ -5,7 +5,7 @@
 # You must make exactly 11 lines for the formatting to be correct.  It's also
 # customary to leave one space after the ':' except on otherwise blank lines.
 
-          |-----handy-ruler------------------------------------------------------|
+           |-----handy-ruler------------------------------------------------------|
 ircd-hybrid: ircd-hybrid (A lightweight, high-performance IRC daemon)
 ircd-hybrid:
 ircd-hybrid: ircd is the server (daemon) program for the Internet Relay Chat
@@ -16,7 +16,4 @@ ircd-hybrid: ircd for processing and relaying to other IRC servers.
 ircd-hybrid:
 ircd-hybrid: This is ircd-hybrid, the highly modified (and hopefully improved)
 ircd-hybrid: variant of the original ircd program by Jarkko Oikarinen.
-ircd-hybrid:
 ircd-hybrid: Home-Page: http://www.ircd-hybrid.org/
-ircd-hybrid:
-ircd-hybrid:
