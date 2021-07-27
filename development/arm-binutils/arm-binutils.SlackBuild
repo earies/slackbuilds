@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Slackware build script for arm-binutils
 
@@ -27,10 +27,13 @@
 # Vliegendehuiskat <vliegendehuiskat [at] gmail [dot] com> and
 # Claudio Henrique Fortes Felix <felix.claudio [at] gmail [dot] com>.
 
+cd $(dirname $0) ; CWD=$(pwd)
+
 PRGNAM=arm-binutils
-VERSION=${VERSION:-2.31.1}
+VERSION=${VERSION:-2.35}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
+PKGTYPE=${PKGTYPE:-tgz}
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -40,7 +43,14 @@ if [ -z "$ARCH" ]; then
   esac
 fi
 
-CWD=$(pwd)
+# If the variable PRINT_PACKAGE_NAME is set, then this script will report what
+# the name of the created package would be, and then exit. This information
+# could be useful to other scripts.
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
+  exit 0
+fi
+
 TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
@@ -65,9 +75,10 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf binutils-$VERSION
-tar xvf $CWD/binutils-$VERSION.tar.xz
+tar xvf $CWD/binutils-$VERSION.tar.?z
 cd binutils-$VERSION
 chown -R root:root .
+
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
@@ -83,15 +94,14 @@ CXXFLAGS="$SLKCFLAGS" \
   --localstatedir=/var \
   --infodir=/usr/info \
   --mandir=/usr/man \
-  --program-prefix="aarch64-linux-" \
+  --program-prefix="arm-none-eabi-" \
   --program-suffix="" \
   --build=$ARCH-slackware-linux \
-  --target=aarch64-linux \
+  --target="arm-none-eabi" \
   --enable-interwork \
   --enable-multilib \
   --disable-nls \
   --disable-werror \
-  --disable-libssp \
   --with-system-zlib \
   --with-gnu-as \
   --with-gnu-ld
@@ -118,4 +128,4 @@ mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
-/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
