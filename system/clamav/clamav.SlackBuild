@@ -28,7 +28,7 @@
 # No additional license terms added
 
 PRGNAM=clamav
-VERSION=${VERSION:-0.103.3}
+VERSION=${VERSION:-0.104.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -82,19 +82,19 @@ fi
 # the file properties collection and analysis feature
 # http://blog.clamav.net/2014/11/intro-to-collection-and-analysis-of.html
 if pkg-config --exists json-c ; then
-  with_jsonc="--with-libjson"
+  jsonc="ON"
 else
-  with_jsonc=""
+  jsonc="OFF"
 fi
 
 # Some people don't have sendmail installed: don't build milter stuff
 # in this case.
 # This is your call, not having sendmail is *UNSUPPORTED*
 if [ ! -f /usr/lib$LIBDIRSUFFIX/libmilter.a ]; then
-  milter="dis"
+  milter="OFF"
   milter_cf=""
 else
-  milter="en"
+  milter="ON"
   milter_cf="clamav-milter"
 fi
 
@@ -143,33 +143,32 @@ sed \
   -e "s/^\#ExitOnOOM/ExitOnOOM/" \
   -i etc/clamd.conf.sample || exit 1
 
-autoreconf -fi
-
-CFLAGS="$SLKCFLAGS" \
-CXXFLAGS="$SLKCFLAGS" \
-./configure \
-  --prefix=/usr \
-  --libdir=/usr/lib${LIBDIRSUFFIX} \
-  --localstatedir=/var \
-  --sysconfdir=/etc \
-  --mandir=/usr/man \
-  --with-user=clamav \
-  --with-group=clamav \
-  --with-dbdir=/var/lib/clamav \
-  --${milter}able-milter \
-  --enable-id-check \
-  --enable-clamdtop \
-  --disable-static \
-  --disable-experimental \
-  $with_jsonc \
-  --build=$ARCH-slackware-linux
-
-make V=1
-make install DESTDIR=$PKG
+mkdir -p build
+cd build
+  cmake \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=/usr/lib${LIBDIRSUFFIX} \
+    -DCMAKE_INSTALL_LOCALSTATEDIR=/var \
+    -DCMAKE_INSTALL_SYSCONFDIR=/etc/clamav \
+    -DCMAKE_INSTALL_MANDIR=/usr/man \
+    -DAPP_CONFIG_DIRECTORY=/etc/clamav \
+    -DCLAMAV_USER=clamav \
+    -DCLAMAV_GROUP=clamav \
+    -DDATABASE_DIRECTORY=/var/lib/clamav \
+    -DENABLE_MILTER=${milter} \
+    -DENABLE_STATIC_LIB=OFF \
+    -DENABLE_EXPERIMENTAL=OFF \
+    -DENABLE_JSON_SHARED=${jsonc} \
+    -DCMAKE_BUILD_TYPE=$ARCH-slackware-linux \
+    ..
+  make
+  make install DESTDIR=$PKG
+cd ..
 
 # Prepare the config files:
+mkdir -p $PKG/etc/clamav
 for cf in clamd freshclam $milter_cf; do
-  mv $PKG/etc/$cf.conf.sample $PKG/etc/$cf.conf.new
+  mv etc/$cf.conf.sample $PKG/etc/clamav/$cf.conf.new
 done
 
 # Our rc script and logrotate entry:
