@@ -1,0 +1,30 @@
+--- configure.ac	2021-09-20 17:43:34.784557210 -0600
++++ configure.ac	2021-09-20 17:43:45.801622371 -0600
+@@ -46,9 +46,9 @@
+ 		COLM_WRAP="$withval/bin/colm-wrap"
+ 		CPPFLAGS="-I$withval/include ${CPPFLAGS}"
+ 		CPPFLAGS="-I$withval/include/aapl ${CPPFLAGS}"
+-		LDFLAGS="-L$withval/lib ${LDFLAGS}"
+-		LIBCOLM_LA="$withval/lib/libcolm.la"
+-		LIBFSM_LA="$withval/lib/libfsm.la"
++		LDFLAGS="-L$withval/lib64 ${LDFLAGS}"
++		LIBCOLM_LA="$withval/lib64/libcolm.la"
++		LIBFSM_LA="$withval/lib64/libfsm.la"
+ 		COLM_SHARE="$withval/share"
+ 	],
+ 	[]
+--- configure	2021-09-20 17:43:30.980534711 -0600
++++ configure	2021-09-20 17:43:52.985664866 -0600
+@@ -4864,9 +4864,9 @@
+ 		COLM_WRAP="$withval/bin/colm-wrap"
+ 		CPPFLAGS="-I$withval/include ${CPPFLAGS}"
+ 		CPPFLAGS="-I$withval/include/aapl ${CPPFLAGS}"
+-		LDFLAGS="-L$withval/lib ${LDFLAGS}"
+-		LIBCOLM_LA="$withval/lib/libcolm.la"
+-		LIBFSM_LA="$withval/lib/libfsm.la"
++		LDFLAGS="-L$withval/lib64 ${LDFLAGS}"
++		LIBCOLM_LA="$withval/lib64/libcolm.la"
++		LIBFSM_LA="$withval/lib64/libfsm.la"
+ 		COLM_SHARE="$withval/share"
+ 
+ fi
