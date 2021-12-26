@@ -24,7 +24,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=dunst
-VERSION=${VERSION:-1.6.1}
+VERSION=${VERSION:-1.7.3}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -81,6 +81,7 @@ find -L . \
 CFLAGS="$SLKCFLAGS" \
 make DESTDIR=$PKG \
   PREFIX=/usr \
+  SYSCONFFILE=/etc/dunst/dunstrc \
   MANPREFIX=/usr/man \
   all install
 
