@@ -1,0 +1,4 @@
+bolt (Thunderbolt device management)
+
+Userspace system daemon and command line utility to manage Thunderbolt
+devices on GNU/Linux.
