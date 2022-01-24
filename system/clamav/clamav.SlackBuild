@@ -28,7 +28,7 @@
 # No additional license terms added
 
 PRGNAM=clamav
-VERSION=${VERSION:-0.104.1}
+VERSION=${VERSION:-0.104.2}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
