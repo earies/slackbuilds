@@ -7,7 +7,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=libvirt
-VERSION=${VERSION:-8.0.0}
+VERSION=${VERSION:-8.1.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -43,6 +43,7 @@ else
   LIBDIRSUFFIX=""
 fi
 
+VIRTUSER=${VIRTUSER:-nobody}
 VIRTGROUP=${VIRTGROUP:-users}
 
 # Some optional dependencies checks
@@ -86,6 +87,7 @@ cd build
     --mandir=/usr/man \
     --prefix=/usr \
     --sysconfdir=/etc \
+    -Dqemu_user=$VIRTUSER \
     -Dqemu_group=$VIRTGROUP \
     $bash_completion \
     -Daudit=${audit}abled \
