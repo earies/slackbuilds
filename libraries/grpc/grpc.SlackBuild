@@ -26,8 +26,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=grpc
-VERSION=${VERSION:-1.28.1}
-CPP_VERSION=${UPB_VERSION:-20200225.2}
+VERSION=${VERSION:-1.44.0}
+CPP_VERSION=${UPB_VERSION:-20211102.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -84,33 +84,23 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-# Fix Makefile
-# Ref: https://github.com/grpc/grpc/issues/14844
-patch -p1 < $CWD/grpc-use-shell-loop-instead-makefile-function.patch
-
-sed -i 's|^prefix ?= .*|prefix ?= /usr|' Makefile
-sed -i "s|\$(prefix)/lib|\$(prefix)/lib${LIBDIRSUFFIX}|" Makefile
-sed -i "/libdir/s|/lib|/lib${LIBDIRSUFFIX}|" Makefile
-sed -i 's|^GTEST_LIB =.*||' Makefile
-
-CFLAGS="$SLKCFLAGS" \
-CXXFLAGS="$SLKCFLAGS" \
-make shared plugins V=1
-CFLAGS="$SLKCFLAGS" \
-CXXFLAGS="$SLKCFLAGS" \
-make install prefix=$PKG/usr V=1
-CFLAGS="$SLKCFLAGS" \
-CXXFLAGS="$SLKCFLAGS" \
-make install-grpc-cli prefix=$PKG/usr V=1
-
-if $(python3 -c 'import Cython' 2>/dev/null); then
-  GRPC_PYTHON_BUILD_WITH_CYTHON=True \
-  GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=True \
-  GRPC_PYTHON_BUILD_SYSTEM_ZLIB=True \
-  GRPC_PYTHON_BUILD_SYSTEM_CARES=True \
-  CFLAGS="$SLKCFLAGS" \
-  python3 setup.py install --root=$PKG
-fi
+mkdir -p build
+cd build
+  cmake \
+    -DCMAKE_CXX_FLAGS:STRING="$SLKCFLAGS" \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DABSL_PROPAGATE_CXX_STD=ON \
+    -DgRPC_INSTALL_LIBDIR="lib${LIBDIRSUFFIX}" \
+    -DgRPC_RE2_PROVIDER=package \
+    -DgRPC_PROTOBUF_PROVIDER=package \
+    -DgRPC_SSL_PROVIDER=package \
+    -DgRPC_ZLIB_PROVIDER=package \
+    -DgRPC_CARES_PROVIDER=package \
+    ..
+  make -j8
+  make install DESTDIR=$PKG
+cd ..
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
