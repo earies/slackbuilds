@@ -36,7 +36,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=evince
-VERSION=${VERSION:-41.3}
+VERSION=${VERSION:-42.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -104,8 +104,8 @@ cd build
     -Dcomics=enabled \
     -Ddjvu=enabled \
     -Ddvi=enabled \
-    -Dt1lib=enabled \
     -Dpdf=enabled \
+    -Dgtk_doc=false \
     -Dps=enabled \
     -Dtiff=enabled \
     -Dnautilus=false \
