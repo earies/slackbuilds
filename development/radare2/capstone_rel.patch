@@ -1,0 +1,11 @@
+--- shlr/Makefile	2021-11-24 17:24:01.043547910 -0700
++++ shlr/Makefile	2021-11-24 17:24:35.799786070 -0700
+@@ -10,7 +10,7 @@
+ ifeq ($(shell test -d ../.git && echo 1),1)
+ CS_RELEASE=0
+ else
+-CS_RELEASE=1
++CS_RELEASE=0
+ endif
+ 
+ CAPSTONE_CFLAGS?=-g
