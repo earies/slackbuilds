@@ -1,4 +1,4 @@
-libhandy (Building blocks for modern GNOME applications)
+libhandy (additional UI components for gtk+3)
 
-Handy offers application developers many widgets and objects to build
-GNOME applications scaling from desktop workstations to mobile phones
+The aim of the Handy library is to help with developing UI for mobile
+devices using GTK/GNOME.
