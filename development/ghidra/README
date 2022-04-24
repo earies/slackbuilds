@@ -10,4 +10,3 @@ and can be run in both user-interactive and automated modes.
 NOTE: On first run, ghidra will prompt you for your path to the JDK 11+
 home directory.  This is usually /usr/lib64/jdk11-<version> if
 installed from slackbuilds.
-
