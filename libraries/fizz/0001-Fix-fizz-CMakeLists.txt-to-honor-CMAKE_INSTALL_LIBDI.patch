@@ -1,0 +1,30 @@
+From 0cebf249e687af387df2a03489b13eaa03de3035 Mon Sep 17 00:00:00 2001
+From: Ebben Aries <exa@dscp.org>
+Date: Thu, 16 Jun 2022 11:30:37 -0700
+Subject: [PATCH] Fix fizz/CMakeLists.txt to honor CMAKE_INSTALL_LIBDIR
+
+---
+ fizz/CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fizz/CMakeLists.txt b/fizz/CMakeLists.txt
+index 5c8a575b..227340d9 100644
+--- a/fizz/CMakeLists.txt
++++ b/fizz/CMakeLists.txt
+@@ -39,11 +39,11 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+ set(INCLUDE_INSTALL_DIR include CACHE STRING
+     "The subdirectory where header files should be installed")
+-set(LIB_INSTALL_DIR lib CACHE STRING
++set(LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR} CACHE STRING
+     "The subdirectory where libraries should be installed")
+ set(BIN_INSTALL_DIR bin CACHE STRING
+     "The subdirectory where binaries should be installed")
+-set(CMAKE_INSTALL_DIR lib/cmake/fizz CACHE STRING
++set(CMAKE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/fizz CACHE STRING
+     "The subdirectory where CMake package config files should be installed")
+ 
+ find_package(folly CONFIG REQUIRED)
+-- 
+2.36.1
+

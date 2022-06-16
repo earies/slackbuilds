@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' above the ':' following the base package name, and
+# the '|' on the right side marks the last column you can put a character in.
+# You must make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
+     |-----handy-ruler------------------------------------------------------|
+fizz: fizz (Facebook TLS 1.3 Implementation)
+fizz:
+fizz: Fizz currently supports TLS 1.3 drafts 28, 26 (both wire-compatible
+fizz: with the final specification), and 23. All major handshake modes are
+fizz: supported, including PSK resumption, early data, client authentication,
+fizz: and HelloRetryRequest.
+fizz:
+fizz:
+fizz:
+fizz: Homepage: https://github.com/facebookincubator/fizz
+fizz:
