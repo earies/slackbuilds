@@ -9,8 +9,8 @@ Subject: [PATCH] Fix CMakeLists.txt to honor CMAKE_INSTALL_LIBDIR
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 21d24ba6e..8f83f22c4 100644
---- CMakeLists.txt
-+++ CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
 @@ -52,11 +52,11 @@ project(${PACKAGE_NAME} CXX C ASM)
  
  set(INCLUDE_INSTALL_DIR include CACHE STRING

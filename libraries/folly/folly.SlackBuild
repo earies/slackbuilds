@@ -82,7 +82,7 @@ find -L . \
 
 # Fix for CMAKE_INSTALL_LIBDIR
 # https://github.com/facebook/folly/pull/1796
-patch -p0 < $CWD/0001-Fix-CMakeLists.txt-to-honor-CMAKE_INSTALL_LIBDIR.patch
+patch -p1 < $CWD/0001-Fix-CMakeLists.txt-to-honor-CMAKE_INSTALL_LIBDIR.patch
 
 mkdir -p _build
 cd _build
@@ -97,7 +97,7 @@ cd _build
     -DBUILD_SHARED_LIBS=ON \
     ..
 
-  make -j8
+  make
   make install DESTDIR=$PKG
 cd ..
 
