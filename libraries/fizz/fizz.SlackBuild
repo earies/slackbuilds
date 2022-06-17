@@ -94,7 +94,7 @@ cd build_
     -DBUILD_SHARED_LIBS=ON \
     ../fizz
 
-  make -j8
+  make
   make install DESTDIR=$PKG
 cd ..
 
