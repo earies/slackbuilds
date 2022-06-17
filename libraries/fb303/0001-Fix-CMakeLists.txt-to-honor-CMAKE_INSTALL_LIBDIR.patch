@@ -1,0 +1,28 @@
+From 28fc72473b2d43f74b1a175cd1bba78a232d1c56 Mon Sep 17 00:00:00 2001
+From: Ebben Aries <exa@dscp.org>
+Date: Fri, 17 Jun 2022 07:25:43 -0700
+Subject: [PATCH] Fix CMakeLists.txt to honor CMAKE_INSTALL_LIBDIR
+
+---
+ CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 874bd359..2cfe4b18 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -35,9 +35,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
+ 
+ set(INCLUDE_INSTALL_DIR include CACHE STRING
+     "The subdirectory where header files should be installed")
+-set(LIB_INSTALL_DIR lib CACHE STRING
++set(LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR} CACHE STRING
+     "The subdirectory where libraries should be installed")
+-set(CMAKE_INSTALL_DIR lib/cmake/fb303 CACHE STRING
++set(CMAKE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/fb303 CACHE STRING
+     "The subdirectory where CMake package config files should be installed")
+ 
+ # CMake include directories
+-- 
+2.36.1
+
