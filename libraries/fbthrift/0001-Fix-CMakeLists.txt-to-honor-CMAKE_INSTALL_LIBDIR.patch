@@ -1,0 +1,28 @@
+From c1b62107b7b0be42a9bc789b96f7f85a17c78880 Mon Sep 17 00:00:00 2001
+From: Ebben Aries <exa@dscp.org>
+Date: Thu, 16 Jun 2022 18:36:38 -0700
+Subject: [PATCH] Fix CMakeLists.txt to honor CMAKE_INSTALL_LIBDIR
+
+---
+ CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0389a2185d..b828d39f9f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -34,9 +34,9 @@ set(BIN_INSTALL_DIR bin CACHE STRING
+     "The subdirectory where the compiler binary should be installed")
+ set(INCLUDE_INSTALL_DIR include CACHE STRING
+     "The subdirectory where include files should be installed")
+-set(LIB_INSTALL_DIR lib CACHE STRING
++set(LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR} CACHE STRING
+     "The subdirectory where libraries should be installed")
+-set(CMAKE_INSTALL_DIR lib/cmake/fbthrift CACHE STRING
++set(CMAKE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/fbthrift CACHE STRING
+     "The subdirectory where CMake package config files should be installed")
+ 
+ set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}")
+-- 
+2.36.1
+

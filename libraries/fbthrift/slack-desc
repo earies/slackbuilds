@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' above the ':' following the base package name, and
+# the '|' on the right side marks the last column you can put a character in.
+# You must make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
+        |-----handy-ruler------------------------------------------------------|
+fbthrift: fbthrift (C++ networking library)
+fbthrift:
+fbthrift: Thrift is a serialization and RPC framework for service communication.
+fbthrift: Thrift enables these features in all major languages, and there is
+fbthrift: strong support for C++, Python, Hack, and Java. Most services at
+fbthrift: Facebook are written using Thrift for RPC, and some storage systems
+fbthrift: use Thrift for serializing records on disk.
+fbthrift:
+fbthrift:
+fbthrift: Homepage: https://github.com/facebook/fbthrift
+fbthrift:

@@ -1,0 +1,12 @@
+Thrift is a serialization and RPC framework for service communication.
+Thrift enables these features in all major languages, and there is
+strong support for C++, Python, Hack, and Java. Most services at
+Facebook are written using Thrift for RPC, and some storage systems use
+Thrift for serializing records on disk.
+
+Facebook Thrift is not a distribution of Apache Thrift. This is an
+evolved internal branch of Thrift that Facebook re-released to open
+source community in February 2014. Facebook Thrift was originally
+released closely tracking Apache Thrift but is now evolving in new
+directions. In particular, the compiler was rewritten from scratch and
+the new implementation features a fully asynchronous Thrift server.
