@@ -70,6 +70,7 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
+rm -rf $PRGNAM-$GITHASH
 mkdir $PRGNAM-$GITHASH
 tar xvf $CWD/$PRGNAM-$GITHASH.tar.gz
 cd $PRGNAM-$GITHASH
