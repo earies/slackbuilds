@@ -29,7 +29,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=google-go-lang
-VERSION=${VERSION:-1.18.5}
+VERSION=${VERSION:-1.19}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -160,7 +160,7 @@ chmod 0755 $PKG/etc/profile.d/go.sh
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a \
-  AUTHORS CONTRIBUTING.md CONTRIBUTORS LICENSE PATENTS README.md VERSION \
+  CONTRIBUTING.md LICENSE PATENTS README.md SECURITY.md VERSION \
   $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
