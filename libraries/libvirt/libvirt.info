@@ -1,8 +1,10 @@
 PRGNAM="libvirt"
-VERSION="8.5.0"
+VERSION="20220817_d81ae1f"
 HOMEPAGE="http://libvirt.org"
-DOWNLOAD="https://libvirt.org/sources/libvirt-8.5.0.tar.xz"
-MD5SUM="65ac379ffb6cbdb13bd5dd5636b79d27"
+DOWNLOAD="https://github.com/libvirt/libvirt/archive/d81ae1f/libvirt-d81ae1f24405b33c2bcd11dc16469d5d569abe58.tar.gz \
+          https://github.com/qemu/keycodemapdb/archive/e15649b/keycodemapdb-e15649b83a78f89f57205927022115536d2c1698.tar.gz"
+MD5SUM="3f3bc08f90313574a9f1e7303e6a8e9d \
+        8ae8f3aeea934decb037c6d125f85ea3"
 DOWNLOAD_x86_64=""
 MD5SUM_x86_64=""
 REQUIRES="yajl"
