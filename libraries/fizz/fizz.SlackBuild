@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=fizz
-VERSION=${VERSION:-20220805_7de8cde}
-GITHASH=${GITHASH:-7de8cdebda7063dca21c8e36b1f94e0abd962b10}
+VERSION=${VERSION:-20220913_1460e77}
+GITHASH=${GITHASH:-1460e776c8a09ef3d4d372cf3719313af73af181}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -95,7 +95,7 @@ cd build_
     -DBUILD_SHARED_LIBS=ON \
     ../fizz
 
-  make
+  make -j8
   make install DESTDIR=$PKG
 cd ..
 
