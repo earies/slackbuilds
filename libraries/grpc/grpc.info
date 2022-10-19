@@ -1,9 +1,9 @@
 PRGNAM="grpc"
-VERSION="1.49.1"
+VERSION="1.50.0"
 HOMEPAGE="https://grpc.io/"
-DOWNLOAD="https://github.com/grpc/grpc/archive/v1.49.1/grpc-1.49.1.tar.gz \
+DOWNLOAD="https://github.com/grpc/grpc/archive/v1.50.0/grpc-1.50.0.tar.gz \
           https://github.com/abseil/abseil-cpp/archive/20220623.1/abseil-cpp-20220623.1.tar.gz"
-MD5SUM="fea45f6553ebac7ea7c6b36c3f602d4c \
+MD5SUM="9259e6658d63b164bc50854bedb6b541 \
         2aea7c1171c4c280f755de170295afd6"
 DOWNLOAD_x86_64=""
 MD5SUM_x86_64=""
