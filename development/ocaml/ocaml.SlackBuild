@@ -27,8 +27,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=ocaml
-VERSION=${VERSION:-4.14.0}
-MANVER=${MANVER:-4.14}
+VERSION=${VERSION:-5.0.0}
+MANVER=${MANVER:-5.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -87,8 +87,7 @@ sed "s|@CFLAGS@|$SLKCFLAGS|" $CWD/configure.patch | patch -p1
 ./configure \
   --prefix /usr \
   --libdir /usr/lib${LIBDIRSUFFIX}/ocaml \
-  --mandir /usr/man \
-  --disable-force-safe-string
+  --mandir /usr/man
 
 make world.opt
 make DESTDIR=$PKG install
