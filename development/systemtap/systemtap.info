@@ -1,7 +1,7 @@
 PRGNAM="systemtap"
 VERSION="4.8"
 HOMEPAGE="https://sourceware.org/systemtap/"
-DOWNLOAD="https://sourceware.org/systemtap/ftp/releases/systemtap-4.8.tar.gz"
+DOWNLOAD="https://sourceware.org/ftp/systemtap/releases/systemtap-4.8.tar.gz"
 MD5SUM="c0d629b1188a649a482b95661b53c910"
 DOWNLOAD_x86_64=""
 MD5SUM_x86_64=""
