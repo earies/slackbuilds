@@ -25,7 +25,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=proxygen
-VERSION=${VERSION:-2023.01.23.00}
+VERSION=${VERSION:-2023.01.30.00}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
