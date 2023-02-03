@@ -24,8 +24,8 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=docker
-VERSION=${VERSION:-20.10.23}
-GITHASH=${GITHASH:-75249d8}
+VERSION=${VERSION:-23.0.0}
+GITHASH=${GITHASH:-d7573ab}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -70,7 +70,7 @@ VERSION=$VERSION \
 GOPATH=$TMP/$SRCNAM-$VERSION/build \
 ./hack/make.sh dynbinary
 
-install -D -m 0755 bundles/dynbinary-daemon/dockerd-$VERSION \
+install -D -m 0755 bundles/dynbinary-daemon/dockerd \
   $PKG/usr/bin/dockerd
 
 # Integrate required components.
