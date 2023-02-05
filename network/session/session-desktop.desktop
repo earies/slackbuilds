@@ -5,6 +5,6 @@ Terminal=false
 Type=Application
 Icon=session-desktop
 StartupWMClass=Session
-X-AppImage-Version=1.10.3
+X-AppImage-Version=1.10.4
 Comment=Private messaging from your desktop
 Categories=Network;
