@@ -1,0 +1,12 @@
+PRGNAM="ldns"
+VERSION="1.8.3"
+HOMEPAGE="http://www.nlnetlabs.nl/projects/ldns/"
+DOWNLOAD="http://www.nlnetlabs.nl/downloads/ldns/ldns-1.8.3.tar.gz \
+          https://data.iana.org/root-anchors/root-anchors.xml"
+MD5SUM="429b93dacb2d6ecc5ed63788b14c38e6 \
+        9000e073302426bad33eb9a34eac72f9"
+DOWNLOAD_x86_64=""
+MD5SUM_x86_64=""
+REQUIRES="perl-Test-Exception"
+MAINTAINER="Larry Hajali"
+EMAIL="larryhaja@gmail.com"
