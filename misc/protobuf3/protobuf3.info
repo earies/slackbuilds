@@ -1,8 +1,10 @@
 PRGNAM="protobuf3"
-VERSION="21.12"
+VERSION="22.0"
 HOMEPAGE="https://github.com/google/protobuf"
-DOWNLOAD="https://github.com/google/protobuf/archive/v21.12/protobuf-21.12.tar.gz"
-MD5SUM="41fe80037118f53dea3f0822aee96629"
+DOWNLOAD="https://github.com/google/protobuf/archive/v22.0/protobuf-22.0.tar.gz" \
+          https://github.com/abseil/abseil-cpp/archive/20230125.0/abseil-cpp-20230125.0.tar.gz"
+MD5SUM="f4f3f55ee653eee95a1c9002cab6a9df \
+        dfdb51e6e8a95acca9ac4636c6473bf0"
 DOWNLOAD_x86_64=""
 MD5SUM_x86_64=""
 REQUIRES=""

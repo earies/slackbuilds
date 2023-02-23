@@ -25,7 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=protobuf3
-VERSION=${VERSION:-21.12}
+VERSION=${VERSION:-22.0}
+CPP_VERSION=${UPB_VERSION:-20230125.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -77,6 +78,9 @@ cd $TMP
 rm -rf $SRCNAM-$VERSION
 tar xvf $CWD/$SRCNAM-$VERSION.tar.gz
 cd $SRCNAM-$VERSION
+rm -rf third_party/abseil-cpp
+tar xvf $CWD/abseil-cpp-${CPP_VERSION}.tar.gz -C third_party
+ln -s abseil-cpp-${CPP_VERSION} third_party/abseil-cpp
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
@@ -86,27 +90,29 @@ find -L . \
 
 patch -p1 < $CWD/protobuf3.patch
 
-./autogen.sh
-CFLAGS="$SLKCFLAGS" \
-CXXFLAGS="$SLKCFLAGS" \
-./configure \
-  --prefix=/usr \
-  --disable-static \
-  --libdir=/usr/lib${LIBDIRSUFFIX} \
-  --sysconfdir=/etc \
-  --localstatedir=/var \
-  --mandir=/usr/man \
-  --enable-static=no \
-  --build=$ARCH-slackware-linux
-
-make
-make install DESTDIR=$PKG
+mkdir -p _build
+cd _build
+  cmake \
+      -DCMAKE_CXX_FLAGS:STRING="$SLKCFLAGS" \
+      -DCMAKE_INSTALL_PREFIX=/usr \
+      -DCMAKE_INSTALL_LIBDIR=/usr/lib${LIBDIRSUFFIX} \
+      -DCMAKE_INSTALL_SYSCONFDIR=/etc \
+      -DCMAKE_INSTALL_LOCALSTATEDIR=/var \
+      -DCMAKE_INSTALL_MANDIR=/usr/man \
+      -DBUILD_SHARED_LIBS=ON \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DABSL_PROPAGATE_CXX_STD=ON \
+      -Dprotobuf_BUILD_TESTS=OFF \
+      ..
+  make -j4
+  make install DESTDIR=$PKG
+cd ..
 
 # Install the python bindings
-cd python
-python setup.py install --root=$PKG
-python3 setup.py install --root=$PKG
-cd ..
+#cd python
+#python setup.py install --root=$PKG
+#python3 setup.py install --root=$PKG
+#cd ..
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
