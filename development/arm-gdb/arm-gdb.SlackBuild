@@ -27,7 +27,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=arm-gdb
-VERSION=${VERSION:-11.2}
+VERSION=${VERSION:-13.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -101,7 +101,7 @@ CXXFLAGS_FOR_BUILD="$SLKCFLAGS" \
   --enable-multilib \
   --disable-nls \
   --disable-libssp \
-  --with-python=/usr/bin/python \
+  --with-python=/usr/bin/python3 \
   --with-system-gdbinit=/etc/gdb/gdbinit
 
 make
