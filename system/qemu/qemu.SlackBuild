@@ -59,7 +59,7 @@
 # 6.2   16-Nov-2020     version update, 14.2 final release.
 
 PRGNAM=qemu
-VERSION=${VERSION:-7.2.0}
+VERSION=${VERSION:-8.0.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -153,7 +153,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --disable-debug-info \
   --enable-virtfs \
   --enable-sdl \
-  --enable-jemalloc \
+  --enable-malloc=jemalloc \
   --enable-nettle \
   --audio-drv-list=${AUDIODRIVERS} \
   $with_vnc \
