@@ -130,6 +130,7 @@ LDFLAGS="$SLKLDFLAGS" \
   --build=$ARCH-slackware-linux \
   --enable-qt=5 \
   --enable-merge-ffmpeg \
+  --disable-chromecast \
   --disable-upnp \
   --disable-libplacebo \
   $wayland \
