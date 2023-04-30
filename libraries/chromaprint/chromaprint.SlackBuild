@@ -25,7 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=chromaprint
-VERSION=${VERSION:-1.5.1}
+VERSION=${VERSION:-20221217_aa67c95}
+GITHASH=${GITHASH:-aa67c95b9e486884a6d3ee8b0c91207d8c2b0551}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -62,11 +63,14 @@ DOCS="LICENSE.md NEWS.txt README.md"
 set -e
 
 rm -rf $PKG
-mkdir -p $TMP $PKG $OUTPUT
+mkdir -p $TMP $PKG
+
 cd $TMP
-rm -rf $PRGNAM-v$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.?z*
-cd $PRGNAM-$VERSION
+rm -rf $PRGNAM-$GITHASH
+mkdir $PRGNAM-$GITHASH
+tar xvf $CWD/$PRGNAM-$GITHASH.tar.?z* || exit 1
+cd $PRGNAM-$GITHASH || exit 1
+
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
