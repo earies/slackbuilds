@@ -127,8 +127,10 @@ cd ..
 # Don't ship .a files:
 find $PKG -type f -iname '*.a' -exec rm -rf {} \+
 
-find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
-  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+# NOTE: Since this is a debug symbol enabled variant, do not strip
+#
+#find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
+#  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
 # Conky now requires pandoc to generate the man pages.  
 # No need to add that dependency, we will use the
