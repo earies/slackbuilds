@@ -25,7 +25,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=flatbuffers
-VERSION=${VERSION:-23.3.3}
+VERSION=${VERSION:-23.5.26}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -112,7 +112,7 @@ rm docs/source/CONTRIBUTING.md
 cp -rav docs/html docs/source/*.{md,txt} samples/ \
         CHANGELOG.md CONTRIBUTING.md LICENSE SECURITY.md \
         $PKG/usr/doc/$PRGNAM-$VERSION
-install -m644 readme.md $PKG/usr/doc/$PRGNAM-$VERSION
+install -m644 CHANGELOG.md README.md SECURITY.md $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install
