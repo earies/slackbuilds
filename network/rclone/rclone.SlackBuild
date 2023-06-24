@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-# Copyright 2019-2020 Andrew Payne, Boston MA <phalange@komputermatrix.com>
+# Copyright 2019-2022 Andrew Payne <phalange@komputermatrix.com>
 # Copyright 2017-2018 Rodrigo Gimenez <estrod[at]zoho[dot]com>
 # All rights reserved.
 #
@@ -21,13 +21,13 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Version History
-# 4-29-2020 update to version 1.50
+cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=rclone
 VERSION=${VERSION:-1.62.2}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
+PKGTYPE=${PKGTYPE:-tgz}
 
 set -e
 
@@ -46,8 +46,15 @@ else
   exit 1
 fi
 
+# If the variable PRINT_PACKAGE_NAME is set, then this script will report what
+# the name of the created package would be, and then exit. This information
+# could be useful to other scripts.
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
+  exit 0
+fi
+
 TMP=${TMP:-/tmp/SBo}
-CWD=$(pwd)
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
 mkdir -p $TMP $PKG $OUTPUT
@@ -64,20 +71,22 @@ find -L . \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
 rm -rf $PKG
-mkdir -p $PKG/usr/bin/
+mkdir -p $PKG/{usr/bin,opt/$PRGNAM}
+  cp -a rclone $PKG/opt/$PRGNAM
+  ln -s /opt/$PRGNAM/rclone $PKG/usr/bin/$PRGNAM
+
 mkdir -p $PKG/usr/man/man1/
-cp rclone $PKG/usr/bin/
 cp rclone.1 $PKG/usr/man/man1/
 
 find $PKG/usr/man -type f -exec gzip -9 {} \;
-for i in $( find $PKG/usr/ -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
+for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a README.txt $PKG/usr/doc/$PRGNAM-$VERSION
-cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM-bin.SlackBuild
+cp -a README.* $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
-/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
