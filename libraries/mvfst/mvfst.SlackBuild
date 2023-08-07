@@ -25,8 +25,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=mvfst
-VERSION=${VERSION:-20230722_5cbdeff}
-GITHASH=${GITHASH:-5cbdeff46a7767c6736e78da1384e42911b7028e}
+VERSION=${VERSION:-2023.08.07.00}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -70,10 +69,10 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $PRGNAM-$GITHASH
-mkdir $PRGNAM-$GITHASH
-tar xvf $CWD/$PRGNAM-$GITHASH.tar.?z || exit 1
-cd $PRGNAM-$GITHASH || exit 1
+rm -rf $PRGNAM-$VERSION
+mkdir $PRGNAM-$VERSION
+tar xvf $CWD/v$VERSION.tar.?z || exit 1
+cd $PRGNAM-$VERSION || exit 1
 
 chown -R root:root .
 find -L . \
