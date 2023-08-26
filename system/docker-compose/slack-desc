@@ -6,7 +6,7 @@
 # customary to leave one space after the ':' except on otherwise blank lines.
 
               |-----handy-ruler------------------------------------------------------|
-docker-compose: Docker Compose v2 (Utility for running containers on Docker)
+docker-compose: docker-compose (Utility for running containers on Docker)
 docker-compose:
 docker-compose: Docker Compose is a tool for running multi-container
 docker-compose: applications on Docker defined using the Compose file format. A
