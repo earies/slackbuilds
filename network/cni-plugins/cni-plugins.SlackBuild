@@ -27,7 +27,7 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=cni-plugins
 REPONAME=plugins
-VERSION=${VERSION:-1.2.0}
+VERSION=${VERSION:-1.3.0}
 GIT_COMMIT="4744ec27b89c083194e7df498de50f03a8a1d3ec"
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
