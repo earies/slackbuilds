@@ -1,12 +1,10 @@
 PRGNAM="grpc"
-VERSION="1.57.0"
+VERSION="1.58.0"
 HOMEPAGE="https://grpc.io/"
-DOWNLOAD="https://github.com/grpc/grpc/archive/v1.57.0/grpc-1.57.0.tar.gz \
-          https://github.com/abseil/abseil-cpp/archive/20230802.0/abseil-cpp-20230802.0.tar.gz"
-MD5SUM="c10d87e195f4c49a0fdf2ef9a059e245 \
-        f40605e07aa804aa82e7090f12db7e34"
+DOWNLOAD="https://github.com/grpc/grpc/archive/v1.58.0/grpc-1.58.0.tar.gz"
+MD5SUM="6ff20709f5318ee924dfd2de73f3f40e"
 DOWNLOAD_x86_64=""
 MD5SUM_x86_64=""
-REQUIRES="protobuf3 gflags c-ares re2"
+REQUIRES="protobuf3 abseil-cpp gflags c-ares re2"
 MAINTAINER="Larry Hajali"
 EMAIL="larryhaja[at]gmail[dot]com"
