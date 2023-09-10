@@ -94,7 +94,7 @@ cd _build
     -DCMAKE_INSTALL_LOCALSTATEDIR=/var \
     -DCMAKE_INSTALL_MANDIR=/usr/man \
     -DCMAKE_BUILD_TYPE=Release \
-    -DBUILD_SHARED_LIBS=ON \
+    -DBUILD_SHARED_LIBS=OFF \
     ..
 
   make
