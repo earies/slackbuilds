@@ -55,3 +55,7 @@ it may break other third-party Lua plugins; your mileage may vary). The
 default is to build with lua52 if it's installed, or lua otherwise. If
 you have both lua versions installed, you can build with LUA52=no in
 the environment to build with the older lua.
+
+NOTE: qt6 support will be disabled by default.  If you would prefer to
+build against qt6, please pass QT6=ON to the build script.  This will
+introduce a dependency on qt6.
