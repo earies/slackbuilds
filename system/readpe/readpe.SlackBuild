@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=readpe
-VERSION=${VERSION:-20231027_576c2c8}
-GITHASH=${GITHASH:-576c2c87a1b36836070b0327402e5330e63fda86}
+VERSION=${VERSION:-20231128_7f3c136}
+GITHASH=${GITHASH:-7f3c13649959747ec57db172da355038c3521e1e}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -39,9 +39,6 @@ if [ -z "$ARCH" ]; then
   esac
 fi
 
-# If the variable PRINT_PACKAGE_NAME is set, then this script will report what
-# the name of the created package would be, and then exit. This information
-# could be useful to other scripts.
 if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
   exit 0
