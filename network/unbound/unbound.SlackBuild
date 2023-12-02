@@ -111,6 +111,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --localstatedir=/var \
   --mandir=/usr/man \
   --docdir=/usr/doc/$PRGNAM-$VERSION \
+  --enable-event-api \
   --with-libevent \
   --with-ssl \
   --with-username=$UB_USER \
