@@ -23,7 +23,8 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=freeradius-server
-VERSION=${VERSION:-3.2.2}
+VERSION=${VERSION:-20231127_863a3f2}
+GITHASH=${GITHASH:-863a3f2342568bfdfcf16f12177178bb14c74b4b}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -59,9 +60,11 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $PRGNAM-$VERSION
-tar jxvf $CWD/$PRGNAM-$VERSION.tar.bz2
-cd $PRGNAM-$VERSION
+rm -rf $PRGNAM-$GITHASH
+mkdir $PRGNAM-$GITHASH
+tar xvf $CWD/$PRGNAM-$GITHASH.tar.?z || exit 1
+cd $PRGNAM-$GITHASH || exit 1
+
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
@@ -104,7 +107,7 @@ rm $PKG/usr/sbin/rc.radiusd
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 # Perform greedy copy on INSTALL file to support feature release tree
 cp -a \
-  COPYRIGHT CREDITS INSTALL* LICENSE README.rst VERSION \
+  COPYRIGHT CREDITS LICENSE README.md VERSION \
   $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 cat $CWD/README.SLACKWARE > $PKG/usr/doc/$PRGNAM-$VERSION/README.SLACKWARE
