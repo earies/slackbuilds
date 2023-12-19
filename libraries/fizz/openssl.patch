@@ -1,0 +1,24 @@
+diff --git a/fizz/protocol/Factory.h b/fizz/protocol/Factory.h
+index 040eeed1..1e2edc14 100644
+--- a/fizz/protocol/Factory.h
++++ b/fizz/protocol/Factory.h
+@@ -15,6 +15,7 @@
+ #include <fizz/crypto/RandomGenerator.h>
+ #include <fizz/crypto/aead/Aead.h>
+ #include <fizz/crypto/exchange/KeyExchange.h>
++#include <fizz/crypto/exchange/X25519.h>
+ #include <fizz/protocol/Certificate.h>
+ #include <fizz/protocol/HandshakeContext.h>
+ #include <fizz/protocol/KeyScheduler.h>
+diff --git a/fizz/server/FizzServerContext.h b/fizz/server/FizzServerContext.h
+index d13108fc..367ac933 100644
+--- a/fizz/server/FizzServerContext.h
++++ b/fizz/server/FizzServerContext.h
+@@ -9,6 +9,7 @@
+ #pragma once
+ 
+ #include <fizz/protocol/Certificate.h>
++#include <fizz/protocol/OpenSSLFactory.h>
+ #include <fizz/protocol/Factory.h>
+ #include <fizz/protocol/clock/SystemClock.h>
+ #include <fizz/protocol/ech/Decrypter.h>
