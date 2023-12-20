@@ -1,0 +1,12 @@
+diff --git a/thrift/lib/cpp2/async/ServerRequestData.h b/thrift/lib/cpp2/async/ServerRequestData.h
+index be007c5761..5e1a6ebd6b 100644
+--- a/thrift/lib/cpp2/async/ServerRequestData.h
++++ b/thrift/lib/cpp2/async/ServerRequestData.h
+@@ -19,6 +19,7 @@
+ #include <chrono>
+ #include <cstdint>
+ #include <optional>
++#include <utility>
+ 
+ namespace apache::thrift {
+ 
