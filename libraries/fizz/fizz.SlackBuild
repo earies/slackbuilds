@@ -25,7 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=fizz
-VERSION=${VERSION:-2023.12.18.00}
+VERSION=${VERSION:-20231219_603588b}
+GITHASH=${GITHASH:-603588b01583a711057caeb6a3d6f79290246b78}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -69,10 +70,10 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $PRGNAM-$VERSION
-mkdir $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-v$VERSION.tar.gz -C $PRGNAM-$VERSION
-cd $PRGNAM-$VERSION
+rm -rf $PRGNAM-$GITHASH
+mkdir $PRGNAM-$GITHASH
+tar xvf $CWD/$PRGNAM-$GITHASH.tar.gz
+cd $PRGNAM-$GITHASH
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
@@ -84,6 +85,7 @@ find -L . \
 # https://github.com/facebookincubator/fizz/pull/78
 patch -p1 < $CWD/0001-Fix-fizz-CMakeLists.txt-to-honor-CMAKE_INSTALL_LIBDI.patch
 
+# Temporary patch
 patch -p1 < $CWD/openssl.patch
 
 mkdir -p build_
