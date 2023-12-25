@@ -2,7 +2,7 @@
 
 # Slackware build script for fizz
 
-# Copyright 2022 Ebben Aries <slackbuilds@dscp.org>
+# Copyright 2023 Ebben Aries <slackbuilds@dscp.org>
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=fizz
-VERSION=${VERSION:-20231219_603588b}
-GITHASH=${GITHASH:-603588b01583a711057caeb6a3d6f79290246b78}
+VERSION=${VERSION:-20231223_be908f3}
+GITHASH=${GITHASH:-be908f37483a6217bded39c9119d68ecab7a8919}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
