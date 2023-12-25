@@ -2,7 +2,7 @@
 
 # Slackware build script for wangle
 
-# Copyright 2022 Ebben Aries <slackbuilds@dscp.org>
+# Copyright 2023 Ebben Aries <slackbuilds@dscp.org>
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=wangle
-VERSION=${VERSION:-20231219_1d4b305}
-GITHASH=${GITHASH:-1d4b3054060c61f74f54a9bb6602e682aab018b5}
+VERSION=${VERSION:-20231224_938cb04}
+GITHASH=${GITHASH:-938cb044f65fa65fa3f3f434db56f202785c71f3}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
