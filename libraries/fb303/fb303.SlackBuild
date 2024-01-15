@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=fb303
-VERSION=${VERSION:-20240109_cc1a5a6}
-GITHASH=${GITHASH:-cc1a5a6b8acc45fd7f89d9a0bb1c1e1fcdc8ffe7}
+VERSION=${VERSION:-20240115_abcac8a}
+GITHASH=${GITHASH:-abcac8ab1b0a3a79b7de3224a82b9dd02a64efaf}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
