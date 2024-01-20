@@ -67,6 +67,7 @@ find -L . \
 
 mkdir -p $PKG/usr/bin
 cp -a $PRGNAM $PKG/usr/bin/$PRGNAM
+strip --strip-unneeded $PKG/usr/bin/$PRGNAM
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a LICENSE.txt $PKG/usr/doc/$PRGNAM-$VERSION
