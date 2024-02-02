@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Slackware build script for containerd
 
@@ -23,11 +23,14 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+cd $(dirname $0) ; CWD=$(pwd)
+
 PRGNAM=containerd
-VERSION=${VERSION:-1.7.12}
-GITHASH=${GITHASH:-05f951a3781f4f2c1911b05e61c160e9c30eaa8e}
+VERSION=${VERSION:-1.7.13}
+GITHASH=${GITHASH:-091922f03c2762540fd057fba91260237ff86acb}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
+PKGTYPE=${PKGTYPE:-tgz}
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -37,7 +40,11 @@ if [ -z "$ARCH" ]; then
   esac
 fi
 
-CWD=$(pwd)
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
+  exit 0
+fi
+
 TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
@@ -72,7 +79,7 @@ make \
   BUILDTAGS="seccomp" \
   GIT_COMMIT=$GITHASH \
   GOPATH=$TMP/$PRGNAM-$VERSION/build
-make install DESTDIR=$PKG
+make install DESTDIR=$PKG PREFIX=/usr
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a README.md LICENSE NOTICE $PKG/usr/doc/$PRGNAM-$VERSION
@@ -82,4 +89,4 @@ mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
-/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
