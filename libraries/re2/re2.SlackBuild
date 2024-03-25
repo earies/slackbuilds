@@ -25,7 +25,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=re2
-VERSION=${VERSION:-2023-11-01}
+VERSION=${VERSION:-2024-03-01}
 PKGVER=$(echo $VERSION)
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
@@ -94,7 +94,7 @@ find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | gr
 rm -f $PKG/usr/lib${LIBDIRSUFFIX}/*.a
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a \
-  AUTHORS CONTRIBUTING.md CONTRIBUTORS LICENSE README SECURITY.md \
+  CONTRIBUTING.md LICENSE README SECURITY.md \
   $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
