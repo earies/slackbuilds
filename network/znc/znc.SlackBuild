@@ -24,7 +24,7 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=znc
-VERSION=${VERSION:-1.8.2}
+VERSION=${VERSION:-1.9.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -136,7 +136,6 @@ CXXFLAGS="$SLKCFLAGS" \
   --sysconfdir=/etc \
   --localstatedir=/var \
   --mandir=/usr/man \
-  --build=$ARCH-slackware-linux \
   $do_openssl \
   $do_ipv6 \
   $do_perl \
