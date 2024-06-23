@@ -10,7 +10,7 @@ CONF=/etc/$NAME/${NAME}.conf
 DAEMON_ARGS="-pidfile $PIDFILE -logfile $LOGFILE"
 
 ircd_start() {
-  if [! -r $CONF ]; then
+  if [ ! -r $CONF ]; then
     echo "$CONF does not appear to exist.  Abort."
     exit 1
   fi
