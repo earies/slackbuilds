@@ -25,7 +25,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=bazel
-VERSION=${VERSION:-7.1.2}
+VERSION=${VERSION:-7.2.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -77,8 +77,8 @@ find -L . \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
 # Export environmental variables
-# Please change JAVA_HOME if not using zulu-openjdk11
-export JAVA_HOME=/usr/lib$LIBDIRSUFFIX/zulu-openjdk11
+# Please change JAVA_HOME if not using zulu-openjdk21
+export JAVA_HOME=/usr/lib$LIBDIRSUFFIX/zulu-openjdk21
 export EMBED_LABEL=$VERSION
 export EXTRA_BAZEL_ARGS="--java_runtime_version=local_jdk --tool_java_runtime_version=local_jdk"
 
