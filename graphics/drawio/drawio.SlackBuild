@@ -2,7 +2,7 @@
 
 # Slackware build script for draw.io
 
-# Copyright 2018 Wayne Cuddy, Virginia, USA
+# Copyright 2024 Ebben Aries <slackbuilds@dscp.org>
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -21,14 +21,6 @@
 #  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-#
-# 2022/10/08 - Updated to upstream V20.3.0
-#            - Updated package name draw.io -> drawio to be consistent with
-#              upstream naming adjustment.
-# 2019/12/22 - Updated to upstream V12.4.2
-# 2019/09/08 - Updated to upstream V11.2.5
-#
 
 cd $(dirname $0) ; CWD=$(pwd)
 
@@ -76,6 +68,11 @@ mv usr/share/icons/hicolor/720x720 usr/share/icons/hicolor/718x718
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
+mkdir -p $PKG/usr/bin
+cd $PKG/usr/bin
+ln -sf ../../opt/drawio/drawio drawio
+
+cd $PKG
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 cp opt/$PRGNAM/LICENSES.chromium.html $PKG/usr/doc/$PRGNAM-$VERSION
