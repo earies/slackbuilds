@@ -1,0 +1,15 @@
+--- a/GNUmakefile	2024-09-01 09:05:09.528859358 -0700
++++ b/GNUmakefile	2024-09-01 09:05:45.352287963 -0700
+@@ -1,9 +1,9 @@
+ VERSION ?= $(shell cat VERSION)
+-PREFIX ?= /usr/local
++PREFIX ?= /usr
+ includedir ?= /include
+ bindir ?= /bin
+-libdir ?= /lib
+-mandir ?= /share/man/man1
++libdir ?= /lib64
++mandir ?= /man/man1
+ PKG_CONFIG ?= pkg-config
+ 
+ GIT_SHA1 = $(shell git rev-parse HEAD 2>/dev/null || printf 'nogit')
