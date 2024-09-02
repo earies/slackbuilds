@@ -2,6 +2,7 @@
 
 # Slackware build script for graphviz
 
+# Copyright 2024 Ebben Aries <slackbuilds@dscp.org>
 # Copyright 2022 Yth | Pont-en-Royans, France | yth@ythogtha.org
 # Copyright 2007 Robby Workman <rworkman@slackbuilds.org>
 # Copyright 2011 Heinz Wiesinger <pprkut@slackbuilds.org>
@@ -28,7 +29,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=graphviz
-VERSION=${VERSION:-11.0.0}
+VERSION=${VERSION:-12.1.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
