@@ -83,6 +83,7 @@ cd build
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_MANDIR=/usr/man \
     -DINSTALL_DOCUMENTATION=ON \
+    -DINSTALL_EXAMPLE_SCRIPTS=ON \
     -DCMAKE_BUILD_TYPE=Release ..
 
   make
