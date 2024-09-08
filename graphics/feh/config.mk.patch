@@ -1,0 +1,12 @@
+--- config.mk	2024-09-08 11:10:14.794571134 -0600
++++ config.mk	2024-09-08 11:12:16.502969314 -0600
+@@ -39,9 +39,6 @@
+ CFLAGS ?= -g -O2
+ CFLAGS += -Wall -Wextra -pedantic
+ 
+-# Settings for glibc >= 2.19 - may need to be adjusted for other systems
+-CFLAGS += -std=c11 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -D_DARWIN_C_SOURCE
+-
+ ifeq (${curl},1)
+ 	CFLAGS += -DHAVE_LIBCURL
+ 	LDLIBS += -lcurl
