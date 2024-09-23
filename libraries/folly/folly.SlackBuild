@@ -85,6 +85,10 @@ find -L . \
 # https://github.com/facebook/folly/pull/1796
 patch -p1 < $CWD/0001-Fix-CMakeLists.txt-to-honor-CMAKE_INSTALL_LIBDIR.patch
 
+export CC=clang
+export CXX=clang++
+export CFLAGS="$SLKCFLAGS"
+
 mkdir -p _build
 cd _build
   cmake \
