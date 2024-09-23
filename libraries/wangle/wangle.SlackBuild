@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=wangle
-VERSION=${VERSION:-20240512_57b5845}
-GITHASH=${GITHASH:-57b58457dbfba68050ceb4e93c264d34a88ca9c1}
+VERSION=${VERSION:-20240923_49273eb}
+GITHASH=${GITHASH:-49273eba9388f21460917d6188ba36144d5a689c}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -84,6 +84,10 @@ find -L . \
 # Fix for CMAKE_INSTALL_LIBDIR
 # https://github.com/facebook/wangle/pull/207
 patch -p1 < $CWD/0001-Fix-wangle-CMakeLists.txt-to-honor-CMAKE_INSTALL_LIB.patch
+
+export CC=clang
+export CXX=clang++
+export CFLAGS="$SLKCFLAGS"
 
 mkdir -p build_
 cd build_
