@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=fizz
-VERSION=${VERSION:-20240512_e4184cc}
-GITHASH=${GITHASH:-e4184cc2ba0eaefc67891c4c23136014a910030a}
+VERSION=${VERSION:-20240922_94040c2}
+GITHASH=${GITHASH:-94040c278695fdaea7a4d2c6f34c06138c01f8cf}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -85,8 +85,9 @@ find -L . \
 # https://github.com/facebookincubator/fizz/pull/78
 patch -p1 < $CWD/0001-Fix-fizz-CMakeLists.txt-to-honor-CMAKE_INSTALL_LIBDI.patch
 
-# Temporary patch
-patch -p1 < $CWD/openssl.patch
+export CC=clang
+export CXX=clang++
+export CFLAGS="$SLKCFLAGS"
 
 mkdir -p build_
 cd build_
