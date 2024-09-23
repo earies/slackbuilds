@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=fb303
-VERSION=${VERSION:-20240513_bc8dace}
-GITHASH=${GITHASH:-bc8daceae9e5481e298d0eefb5e373e4315558e6}
+VERSION=${VERSION:-20240923_cc9644f}
+GITHASH=${GITHASH:-cc9644f60daed88ba48b6574c50daebceafe3d07}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -84,6 +84,10 @@ find -L . \
 # Fix for CMAKE_INSTALL_LIBDIR
 # https://github.com/facebook/fbthrift/pull/504
 patch -p1 < $CWD/0001-Fix-CMakeLists.txt-to-honor-CMAKE_INSTALL_LIBDIR.patch
+
+export CC=clang
+export CXX=clang++
+export CFLAGS="$SLKCFLAGS"
 
 mkdir -p build_
 cd build_
