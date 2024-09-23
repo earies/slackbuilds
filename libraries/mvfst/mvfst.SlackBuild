@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=mvfst
-VERSION=${VERSION:-20240512_efe60bb}
-GITHASH=${GITHASH:-efe60bb35f0e6eb4829a672896fa505e6d4f40c2}
+VERSION=${VERSION:-20240923_8c62142}
+GITHASH=${GITHASH:-8c62142b558120d177bd090dcfbe28a5330b85e0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -81,6 +81,10 @@ find -L . \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+export CC=clang
+export CXX=clang++
+export CFLAGS="$SLKCFLAGS"
 
 mkdir -p build_
 cd build_
