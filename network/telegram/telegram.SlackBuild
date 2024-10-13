@@ -28,7 +28,7 @@
 PRGNAM=telegram
 SRCNAM=tsetup
 SRCDIR=Telegram
-VERSION=${VERSION:-5.5.5}
+VERSION=${VERSION:-5.6.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
