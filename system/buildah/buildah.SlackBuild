@@ -25,7 +25,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=buildah
-VERSION=${VERSION:-1.37.3}
+VERSION=${VERSION:-1.37.4}
 GIT_COMMIT="e94b4f9"
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
