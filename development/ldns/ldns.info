@@ -1,10 +1,10 @@
 PRGNAM="ldns"
-VERSION="1.8.3"
+VERSION="1.8.4"
 HOMEPAGE="http://www.nlnetlabs.nl/projects/ldns/"
-DOWNLOAD="http://www.nlnetlabs.nl/downloads/ldns/ldns-1.8.3.tar.gz \
+DOWNLOAD="http://www.nlnetlabs.nl/downloads/ldns/ldns-1.8.4.tar.gz \
           https://data.iana.org/root-anchors/root-anchors.xml"
-MD5SUM="429b93dacb2d6ecc5ed63788b14c38e6 \
-        9000e073302426bad33eb9a34eac72f9"
+MD5SUM="94ea1ed8fc7095bef003b64b53b71ec7 \
+        0f117d9525f1481310e13cbc966df064"
 DOWNLOAD_x86_64=""
 MD5SUM_x86_64=""
 REQUIRES="perl-Test-Exception"
