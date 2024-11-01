@@ -25,7 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=swaylock
-VERSION=${VERSION:-1.8.0}
+VERSION=${VERSION:-20241012_fc6fbc9}
+GITHASH=${GITHASH:-fc6fbc98fba775e152443a3d587600767d451fa1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -68,9 +69,10 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.?z
-cd $PRGNAM-$VERSION
+rm -rf $PRGNAM-$GITHASH
+mkdir $PRGNAM-$GITHASH
+tar xvf $CWD/$PRGNAM-$GITHASH.tar.?z
+cd $PRGNAM-$GITHASH
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
