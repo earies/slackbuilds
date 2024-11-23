@@ -25,7 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=labwc
-VERSION=${VERSION:-0.8.1}
+VERSION=${VERSION:-20241123_da1f28f}
+GITHASH=${GITHASH:-da1f28f3dd2da1e8e61c8da5c581c270af32eae3}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -66,9 +67,10 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
-cd $PRGNAM-$VERSION
+rm -rf $PRGNAM-$GITHASH
+mkdir $PRGNAM-$GITHASH
+tar xvf $CWD/$PRGNAM-$GITHASH.tar.gz
+cd $PRGNAM-$GITHASH
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
