@@ -1,15 +1,18 @@
-#!/bin/sh
+#!/bin/bash
 
 # Slackware build script for virt-manager
 
 # Written by Ash Wiren  ash@spooksoftware.com # Released to public domain.
 # Modified by Zoran Stojakovic
-# Lots of mods by rworkman for 1.x
+# Lots of mods by rworkman for 1.x and (later) 2.x
+
+cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=virt-manager
-VERSION=${VERSION:-4.1.0}
+VERSION=${VERSION:-5.0.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
+PKGTYPE=${PKGTYPE:-tgz}
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -19,7 +22,14 @@ if [ -z "$ARCH" ]; then
   esac
 fi
 
-CWD=$(pwd)
+# If the variable PRINT_PACKAGE_NAME is set, then this script will report what
+# the name of the created package would be, and then exit. This information
+# could be useful to other scripts.
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
+  exit 0
+fi
+
 TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
@@ -44,7 +54,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
+tar xvf $CWD/$PRGNAM-$VERSION.tar.xz
 cd $PRGNAM-$VERSION
 chown -R root:root .
 find -L . \
@@ -53,8 +63,18 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
  -exec chmod 644 {} \;
 
-python3 setup.py configure
-python3 setup.py --no-update-icon-cache --no-compile-schemas install --root=$PKG
+CFLAGS="$SLKCFLAGS" \
+CXXFLAGS="$SLKCFLAGS" \
+meson setup build \
+  --buildtype=release \
+  --infodir=/usr/info \
+  --libdir=/usr/lib${LIBDIRSUFFIX} \
+  --localstatedir=/var \
+  --mandir=/usr/man \
+  --prefix=/usr \
+  --sysconfdir=/etc
+
+meson install -C build --destdir=$PKG
 
 find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
@@ -74,4 +94,4 @@ cat $CWD/slack-desc > $PKG/install/slack-desc
 cat $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
-/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
