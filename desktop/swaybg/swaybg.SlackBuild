@@ -24,10 +24,11 @@
 
 cd $(dirname $0) ; CWD=$(pwd)
 
-PRGNAM=swaybg		
-VERSION=${VERSION:-1.2.1}	
+PRGNAM=swaybg
+VERSION=${VERSION:-20241020_d7ec784}
+GITHASH=${GITHASH:-d7ec784e5d69af9d9addf5ef95df5c40af3df478}
 BUILD=${BUILD:-1}
-TAG=${TAG:-_SBo}		
+TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
 
 if [ -z "$ARCH" ]; then
@@ -43,9 +44,9 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   exit 0
 fi
 
-TMP=${TMP:-/tmp/SBo}	
+TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}	
+OUTPUT=${OUTPUT:-/tmp}
 
 if [ "$ARCH" = "i586" ]; then
   SLKCFLAGS="-O2 -march=i586 -mtune=i686"
@@ -61,13 +62,14 @@ else
   LIBDIRSUFFIX=""
 fi
 
-set -e 
+set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
-cd $PRGNAM-$VERSION
+rm -rf $PRGNAM-$GITHASH
+mkdir $PRGNAM-$GITHASH
+tar xvf $CWD/$PRGNAM-$GITHASH.tar.gz
+cd $PRGNAM-$GITHASH
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
