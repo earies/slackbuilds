@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=proxygen
-VERSION=${VERSION:-20240423_da75177}
-GITHASH=${GITHASH:-da75177a9387a572ac6521703648612bf2693794}
+VERSION=${VERSION:-20241202_1cf2c66}
+GITHASH=${GITHASH:-1cf2c66666c1794b040c2f2bf1d99f0f1f44f6aa}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -80,6 +80,10 @@ find -L . \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+export CC=clang
+export CXX=clang++
+export CFLAGS="$SLKCFLAGS"
 
 mkdir -p _build
 cd _build
