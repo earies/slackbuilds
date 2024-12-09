@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=fizz
-VERSION=${VERSION:-20241202_120b741}
-GITHASH=${GITHASH:-120b74146b7891ffb146a5e9c45977606ea034ae}
+VERSION=${VERSION:-20241209_a52532e}
+GITHASH=${GITHASH:-a52532eed12892a41e42c6b2366f51d07a5938bd}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -84,10 +84,6 @@ find -L . \
 # Fix for CMAKE_INSTALL_LIBDIR
 # https://github.com/facebookincubator/fizz/pull/78
 patch -p1 < $CWD/0001-Fix-fizz-CMakeLists.txt-to-honor-CMAKE_INSTALL_LIBDI.patch
-
-# Fix for folly commit 3729257
-# https://github.com/facebookincubator/fizz/pull/154
-patch -p1 < $CWD/gflags.patch
 
 export CC=clang
 export CXX=clang++
