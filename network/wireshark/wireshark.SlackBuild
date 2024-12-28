@@ -2,6 +2,7 @@
 
 # Slackware build script for wireshark
 
+# Copyright 2024 Ebben Aries <slackbuilds@dscp.org>
 # Copyright 2008-2014  Michiel van Wessem, Leicester, United Kingdom
 # Copyright 2017-2024 Willy Sudiarto Raharjo <willysr@slackbuilds.org>
 # Originally written by Jick Nan (jick.nan@gmail.com)
@@ -32,7 +33,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=wireshark
-VERSION=${VERSION:-4.4.2}
+VERSION=${VERSION:-20241227_5f3ca4a4}
+GITHASH=${GITHASH:-5f3ca4a480b48c3e1bcbf2ff8f3480a6aade05f6}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -70,15 +72,19 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.xz
-cd $PRGNAM-$VERSION
+rm -rf $PRGNAM-$GITHASH
+mkdir $PRGNAM-$GITHASH
+tar xvf $CWD/$PRGNAM-$GITHASH.tar.gz
+cd $PRGNAM-$GITHASH
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+# Apply patches
+patch -p1 < $CWD/semcheck-uninit.patch
 
 mkdir -p build
 cd build
