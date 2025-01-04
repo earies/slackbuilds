@@ -1,5 +1,7 @@
---- a/Makefile	2024-09-01 10:44:00.401073254 -0700
-+++ b/Makefile	2024-09-01 10:44:27.642368725 -0700
+diff --git a/Makefile b/Makefile
+index 9157869..f61ce7e 100644
+--- a/Makefile
++++ b/Makefile
 @@ -1,8 +1,8 @@
  SCANNER := wayland-scanner
  
@@ -8,6 +10,6 @@
  BINDIR=$(PREFIX)/bin
 -MANDIR=$(PREFIX)/share/man
 +MANDIR=$(PREFIX)/man
+ BASHCOMPDIR=$(PREFIX)/share/bash-completion/completions
  
- CFLAGS+=-Wall -Werror -Wextra -Wpedantic -Wno-unused-parameter -Wconversion -Wformat-security -Wformat -Wsign-conversion -Wfloat-conversion -Wunused-result
- LIBS=-lwayland-client
+ CFLAGS+=-Wall -Werror -Wextra -Wpedantic -Wno-unused-parameter -Wconversion -Wformat-security -Wformat -Wsign-conversion -Wfloat-conversion -Wunused-result -Wno-strict-prototypes
