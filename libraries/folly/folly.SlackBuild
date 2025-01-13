@@ -2,7 +2,7 @@
 
 # Slackware build script for folly
 
-# Copyright 2023-2024 Ebben Aries <slackbuilds@dscp.org>
+# Copyright 2023-2025 Ebben Aries <slackbuilds@dscp.org>
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=folly
-VERSION=${VERSION:-20250107_b7954d2}
-GITHASH=${GITHASH:-b7954d2ef5c87b4583ae408cefb421baa7be804a}
+VERSION=${VERSION:-20250113_94a7bd4}
+GITHASH=${GITHASH:-94a7bd4976a0ff53cae3ffd756add2d5df0a6d67}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
