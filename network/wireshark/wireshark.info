@@ -5,6 +5,6 @@ DOWNLOAD="https://gitlab.com/wireshark/wireshark/-/archive/88e177318c0bdaf59b461
 MD5SUM="db3ceca4de5166f5dca7a64045a70ef9"
 DOWNLOAD_x86_64=""
 MD5SUM_x86_64=""
-REQUIRES="lua53"
+REQUIRES="lua53 falcosecurity-libs"
 MAINTAINER="Ebben Aries"
 EMAIL="slackbuilds@dscp.org"

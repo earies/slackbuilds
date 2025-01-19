@@ -2,7 +2,7 @@
 
 # Slackware build script for wireshark
 
-# Copyright 2024 Ebben Aries <slackbuilds@dscp.org>
+# Copyright 2025 Ebben Aries <slackbuilds@dscp.org>
 # Copyright 2008-2014  Michiel van Wessem, Leicester, United Kingdom
 # Copyright 2017-2024 Willy Sudiarto Raharjo <willysr@slackbuilds.org>
 # Originally written by Jick Nan (jick.nan@gmail.com)
@@ -95,6 +95,9 @@ cd build
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_MANDIR=/usr/man \
     -DCMAKE_INSTALL_DOCDIR=/usr/doc/$PRGNAM-$VERSION \
+    -DCMAKE_PREFIX_PATH=/usr/lib${LIBDIRSUFFIX} \
+    -DBUILD_stratoshark=ON \
+    -DBUILD_falcodump=ON \
     -DLIB_SUFFIX=${LIBDIRSUFFIX} \
     -DUSE_qt6=OFF \
     -DCMAKE_BUILD_TYPE=Release ..
