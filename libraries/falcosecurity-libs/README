@@ -1,0 +1,10 @@
+Falcosecurity Libraries contain libsinsp, libscap, the kernel module and
+the eBPF probes sources.
+
+This component stack mainly operates on syscall events. We monitor
+syscalls using either a kernel module or an eBPF probe, which we call
+drivers. On top of the drivers, libscap manages the data capture
+process, while libsinsp enriches the data, and provides a rich set of
+API to consume the data. Furthermore, these two libraries also implement
+a plugin framework that extends this stack to potentially any other data
+sources.
