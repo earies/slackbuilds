@@ -33,8 +33,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=wireshark
-VERSION=${VERSION:-20250111_88e17731}
-GITHASH=${GITHASH:-88e177318c0bdaf59b4610377c19742d976cf534}
+VERSION=${VERSION:-20250207_80e41937}
+GITHASH=${GITHASH:-80e41937d02276354b11be4c9967a217ab646811}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -82,10 +82,6 @@ find -L . \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
-
-# Apply patches
-patch -p1 < $CWD/semcheck-uninit.patch
-patch -p1 < $CWD/erf-uninit.patch
 
 mkdir -p build
 cd build
