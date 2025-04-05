@@ -22,7 +22,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=rtorrent
-VERSION=${VERSION:-0.15.1}
+VERSION=${VERSION:-20250331_2ab7460}
+GITHASH=${GITHASH:-2ab7460cbca4a0e8d5c33e71610de2e620eecc8c}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -68,13 +69,16 @@ set -e
 
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
-rm -rf $TMP/$PRGNAM-$VERSION
 cd $TMP
-tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
-cd $PRGNAM-$VERSION
+rm -rf $PRGNAM-$GITHASH
+mkdir $PRGNAM-$GITHASH
+tar xvf $CWD/$PRGNAM-$GITHASH.tar.gz
+cd $PRGNAM-$GITHASH
 chown -R root:root .
 find -L .  -perm /111 -a \! -perm 755 -a -exec chmod 755 {} + -o \
         \! -perm /111 -a \! -perm 644 -a -exec chmod 644 {} +
+
+autoreconf -if
 
 LDFLAGS="-lpthread" \
 CFLAGS="$SLKCFLAGS" \
