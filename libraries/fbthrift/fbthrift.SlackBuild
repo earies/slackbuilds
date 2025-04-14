@@ -2,7 +2,7 @@
 
 # Slackware build script for fbthrift
 
-# Copyright 2023-2024 Ebben Aries <slackbuilds@dscp.org>
+# Copyright 2023-2025 Ebben Aries <slackbuilds@dscp.org>
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=fbthrift
-VERSION=${VERSION:-20241230_ea577d5}
-GITHASH=${GITHASH:-ea577d502b6bfdbbcb7dc8207463c05d2dba887f}
+VERSION=${VERSION:-20250414_f01d417}
+GITHASH=${GITHASH:-f01d4172260e9a6fdaafc9bfba95cce30a52a1a0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
