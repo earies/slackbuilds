@@ -80,6 +80,9 @@ GOPATH="$(pwd)" \
 install -D -m 0755 bundles/dynbinary-daemon/dockerd \
   $PKG/usr/bin/dockerd
 
+install -D -m 0755 bundles/dynbinary-daemon/docker-proxy \
+  $PKG/usr/bin/docker-proxy
+
 # Integrate required components.
 ln -s runc $PKG/usr/bin/docker-runc
 ln -s containerd $PKG/usr/bin/docker-containerd
