@@ -1,0 +1,29 @@
+--- usr/bin/claude-desktop	2025-05-08 15:25:30.882149973 -0600
++++ usr/bin/claude-desktop	2025-05-08 15:25:50.879363661 -0600
+@@ -13,7 +13,7 @@
+ 
+ # Determine Electron executable path
+ ELECTRON_EXEC="electron" # Default to global
+-LOCAL_ELECTRON_PATH="/usr/lib/claude-desktop/node_modules/electron/dist/electron" # Correct path to executable
++LOCAL_ELECTRON_PATH="/usr/lib64/claude-desktop/node_modules/electron/dist/electron" # Correct path to executable
+ if [ -f "$LOCAL_ELECTRON_PATH" ]; then
+     ELECTRON_EXEC="$LOCAL_ELECTRON_PATH"
+     echo "Using local Electron: $ELECTRON_EXEC" >> "$LOG_FILE"
+@@ -34,7 +34,7 @@
+ fi
+ 
+ # Base command arguments array, starting with app path
+-APP_PATH="/usr/lib/claude-desktop/app.asar"
++APP_PATH="/usr/lib64/claude-desktop/app.asar"
+ ELECTRON_ARGS=("$APP_PATH")
+ 
+ # Add Wayland flags if Wayland is detected
+@@ -44,7 +44,7 @@
+ fi
+ 
+ # Change to the application directory
+-APP_DIR="/usr/lib/claude-desktop"
++APP_DIR="/usr/lib64/claude-desktop"
+ echo "Changing directory to $APP_DIR" >> "$LOG_FILE"
+ cd "$APP_DIR" || { echo "Failed to cd to $APP_DIR" >> "$LOG_FILE"; exit 1; }
+ 
