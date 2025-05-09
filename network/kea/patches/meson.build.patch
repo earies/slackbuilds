@@ -1,0 +1,17 @@
+--- a/meson.build	2025-05-09 17:23:38.387132001 -0600
++++ b/meson.build	2025-05-09 17:27:23.868708008 -0600
+@@ -71,13 +71,12 @@
+ RUNSTATEDIR_INSTALLED = PREFIX / RUNSTATEDIR
+ SHAREDSTATEDIR = LOCALSTATEDIR / 'lib/kea'
+ SHAREDSTATEDIR_INSTALLED = PREFIX / SHAREDSTATEDIR
+-SYSCONFDIR_INSTALLED = PREFIX / SYSCONFDIR
++SYSCONFDIR_INSTALLED = SYSCONFDIR
+ TEST_CA_DIR = TOP_SOURCE_DIR / 'src/lib/asiolink/testutils/ca'
+ 
+ # Meson is annoying with its opinionated alteration of certain paths based on whether prefix is default or not.
+ # So we revert what it does.
+ if PREFIX == '/usr/local'
+-    SYSCONFDIR_INSTALLED = '/usr/local/etc'
+     LOGDIR_INSTALLED = '/usr/local/var/log'
+     RUNSTATEDIR_INSTALLED = '/usr/local/var/run/kea'
+     SHAREDSTATEDIR_INSTALLED = '/usr/local/var/lib/kea'

@@ -1,0 +1,10 @@
+--- a/src/bin/keactrl/meson.build	2025-05-09 17:28:44.359657741 -0600
++++ b/src/bin/keactrl/meson.build	2025-05-09 17:29:03.267642844 -0600
+@@ -1,6 +1,6 @@
+ keactrl_conf_data = configuration_data()
+ keactrl_conf_data.set('prefix', PREFIX)
+-keactrl_conf_data.set('sysconfdir', '${prefix}/' + SYSCONFDIR)
++keactrl_conf_data.set('sysconfdir', SYSCONFDIR)
+ keactrl_conf_data.set('PACKAGE', 'kea')
+ keactrl_conf_data.set('exec_prefix', '${prefix}')
+ keactrl_conf_data.set('sbindir', '${prefix}/' + SBINDIR)
