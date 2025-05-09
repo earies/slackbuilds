@@ -1,2 +1,3 @@
-Wlr-randr is a utility to manage outputs of a Wayland compositor.
-is a xrandr clone for wlroots compositors.
+wlr-randr (xrandr clone for wlroots compositors)
+
+A utility to manage outputs of a Wayland compositor.
