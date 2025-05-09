@@ -1,5 +1,5 @@
 --- a/src/bin/keactrl/meson.build	2025-05-09 17:28:44.359657741 -0600
-+++ b/src/bin/keactrl/meson.build	2025-05-09 17:29:03.267642844 -0600
++++ a/src/bin/keactrl/meson.build	2025-05-09 17:49:46.492981904 -0600
 @@ -1,6 +1,6 @@
  keactrl_conf_data = configuration_data()
  keactrl_conf_data.set('prefix', PREFIX)
@@ -8,3 +8,14 @@
  keactrl_conf_data.set('PACKAGE', 'kea')
  keactrl_conf_data.set('exec_prefix', '${prefix}')
  keactrl_conf_data.set('sbindir', '${prefix}/' + SBINDIR)
+@@ -14,8 +14,8 @@
+     PROJECT_VERSION + f' (@SOURCE_OF_INSTALLATION@)',
+ )
+ keactrl_conf_data.set('PACKAGE_VERSION', PROJECT_VERSION)
+-keactrl_conf_data.set('runstatedir', '${prefix}/' + LOCALSTATEDIR + '/run')
+-keactrl_conf_data.set('localstatedir', '${prefix}/' + LOCALSTATEDIR)
++keactrl_conf_data.set('runstatedir', LOCALSTATEDIR + '/run')
++keactrl_conf_data.set('localstatedir', LOCALSTATEDIR)
+ kea_configfiles_destdir = SYSCONFDIR / 'kea'
+ configure_file(
+     input: 'keactrl.conf.in',
