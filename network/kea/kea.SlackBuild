@@ -2,7 +2,7 @@
 
 # Slackware build script for kea
 
-# Copyright 2016-2017 Thibaut Notteboom, Paris, FRANCE
+# Copyright 2025 Ebben Aries <slackbuilds@dscp.org>
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=kea
-VERSION=${VERSION:-2.7.6}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-2.7.8}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
 
@@ -73,7 +73,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
+tar xvf $CWD/$PRGNAM-$VERSION.tar.xz
 cd $PRGNAM-$VERSION
 chown -R root:root .
 find -L . \
@@ -82,38 +82,38 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-CFLAGS="$SLKCFLAGS" \
-CXXFLAGS="$SLKCFLAGS" \
-./configure \
-  --prefix=/usr \
-  --libdir=/usr/lib${LIBDIRSUFFIX} \
-  --sysconfdir=/etc \
-  --localstatedir=/var \
-  --mandir=/usr/man \
-  --docdir=/usr/doc/$PRGNAM-$VERSION \
-  --with-log4cplus \
-  --with-mysql \
-  --with${OPENSSL}-openssl \
-  --with${PGSQL}-pgsql \
-  --enable-shell \
-  --disable-static \
-  --build=$ARCH-slackware-linux
+mkdir -p build
+cd build
+  CFLAGS="$SLKCFLAGS" \
+  CXXFLAGS="$SLKCFLAGS" \
+  meson .. \
+    --prefix=/usr \
+    --libdir=/usr/lib${LIBDIRSUFFIX} \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --mandir=/usr/man \
+    --buildtype=release \
+    -Dmysql=enabled \
+    -Dcrypto=openssl \
 
-make -j8
-make install DESTDIR=$PKG
+  "${NINJA:=ninja}"
+  DESTDIR=$PKG $NINJA install
 
-mkdir -p $PKG/etc/rc.d
-cat $CWD/rc.kea > $PKG/etc/rc.d/rc.kea.new
+cd ..
+rm -f $PKG/{,usr/}lib${LIBDIRSUFFIX}/*.la
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
-find $PKG/usr/man -type f -exec gzip -9 {} \;
-for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
+mkdir -p $PKG/etc/rc.d
+cat $CWD/rc.kea > $PKG/etc/rc.d/rc.kea.new
 
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+if [ -d $PKG/usr/share/doc ]; then
+    mv $PKG/usr/share/doc/* $PKG/usr/doc/$PRGNAM-$VERSION
+    rm -rf $PKG/usr/share/doc
+fi
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
-
-rm -f $PKG/usr/lib*/*.la
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
