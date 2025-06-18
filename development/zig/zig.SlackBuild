@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=zig
-VERSION=${VERSION:-0.14.0}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-0.14.1}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
 
@@ -61,11 +61,11 @@ elif [ "$ARCH" = "i686" ]; then
 elif [ "$ARCH" = "x86_64" ]; then
   SLKCFLAGS="-O2 -fPIC"
   LIBDIRSUFFIX="64"
-  SRCNAM=zig-linux-x86_64
+  SRCNAM=zig-x86_64-linux
 else
  SLKCFLAGS="-O2"
  LIBDIRSUFFIX=""
- SRCNAM=zig-linux-x86_64
+ SRCNAM=zig-x86_64-linux
 fi
 
 set -e
