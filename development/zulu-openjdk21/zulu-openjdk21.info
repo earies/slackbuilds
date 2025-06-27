@@ -1,12 +1,12 @@
 PRGNAM="zulu-openjdk21"
-VERSION="21.0.5"
+VERSION="21.0.7"
 HOMEPAGE="https://www.azul.com/downloads/"
 DOWNLOAD="UNSUPPORTED"
 MD5SUM=""
-DOWNLOAD_x86_64="https://cdn.azul.com/zulu/bin/zulu21.38.21-ca-jdk21.0.5-linux_x64.tar.gz \
-                 https://cdn.azul.com/zulu/bin/zulu21.38.21-ca-jdk21.0.5-linux_aarch64.tar.gz"
-MD5SUM_x86_64="d4cdd7f384a57fb16646ca07cf432b4b \
-               2b2a479de67913851bd23f195b3aa60f"
+DOWNLOAD_x86_64="https://cdn.azul.com/zulu/bin/zulu21.42.19-ca-jdk21.0.7-linux_x64.tar.gz \
+                 https://cdn.azul.com/zulu/bin/zulu21.42.19-ca-jdk21.0.7-linux_aarch64.tar.gz"
+MD5SUM_x86_64="f6118022705c2ef5e11b5bd8c38761dd \
+               4190826aed0dc714472e01eeb2edf545"
 REQUIRES=""
 MAINTAINER="Andrew Clemons"
 EMAIL="andrew.clemons@gmail.com"
