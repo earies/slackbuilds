@@ -6,7 +6,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=snappy
-VERSION=${VERSION:-1.2.1}
+VERSION=${VERSION:-1.2.2}
 BUILD=${BUILD:-2}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -63,10 +63,10 @@ find -L . \
  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
 # Fix build with gtest installed
-patch -p1 < $CWD/73.patch
+#patch -p1 < $CWD/73.patch
 
 # Patch for enablement of RTTI (Needed for Facebook libs)
-patch -p1 < $CWD/rtti.patch
+#patch -p1 < $CWD/rtti.patch
 
 export CC=clang
 export CXX=clang++
