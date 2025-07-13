@@ -1,13 +1,14 @@
---- a/src/bin/keactrl/meson.build	2025-05-09 17:28:44.359657741 -0600
-+++ a/src/bin/keactrl/meson.build	2025-05-09 17:49:46.492981904 -0600
-@@ -1,6 +1,6 @@
- keactrl_conf_data = configuration_data()
+--- a/src/bin/keactrl/meson.build	2025-07-13 08:18:03.216821065 -0600
++++ b/src/bin/keactrl/meson.build	2025-07-13 08:18:39.973325899 -0600
+@@ -3,7 +3,7 @@
+ keactrl_conf_data.set('exec_prefix', '${prefix}')
  keactrl_conf_data.set('prefix', PREFIX)
+ keactrl_conf_data.set('sbindir', '${prefix}/' + SBINDIR)
 -keactrl_conf_data.set('sysconfdir', '${prefix}/' + SYSCONFDIR)
 +keactrl_conf_data.set('sysconfdir', SYSCONFDIR)
- keactrl_conf_data.set('PACKAGE', 'kea')
- keactrl_conf_data.set('exec_prefix', '${prefix}')
- keactrl_conf_data.set('sbindir', '${prefix}/' + SBINDIR)
+ if NETCONF_DEP.found()
+     keactrl_conf_data.set('HAVE_NETCONF', 'yes')
+ else
 @@ -14,8 +14,8 @@
      PROJECT_VERSION + f' (@SOURCE_OF_INSTALLATION@)',
  )
@@ -16,6 +17,6 @@
 -keactrl_conf_data.set('localstatedir', '${prefix}/' + LOCALSTATEDIR)
 +keactrl_conf_data.set('runstatedir', LOCALSTATEDIR + '/run')
 +keactrl_conf_data.set('localstatedir', LOCALSTATEDIR)
- kea_configfiles_destdir = SYSCONFDIR / 'kea'
- configure_file(
-     input: 'keactrl.conf.in',
+ 
+ kea_conf_data = configuration_data()
+ kea_conf_data.set('libdir', LIBDIR_INSTALLED)
