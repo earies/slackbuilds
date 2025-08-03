@@ -26,7 +26,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=radare2
-VERSION=${VERSION:-5.9.8}
+VERSION=${VERSION:-6.0.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -81,7 +81,7 @@ find -L . \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
 # Add patch to disable CS_RELEASE to avoid ARM64_INS_NAND error in radare 5.5.0
-patch -p0 < $CWD/capstone_rel.patch
+#patch -p0 < $CWD/capstone_rel.patch
 
 CAPSTONE_CFLAGS="-I/usr/include/capstone" \
 CAPSTONE_LDFLAGS="-L/usr/lib${LIBDIRSUFFIX} -lcapstone" \
