@@ -9,6 +9,6 @@ I2C channel as devices named /dev/i2c-n.
 Use the following commands in order to be able to use ddcutil as a
 regular user:
 
-  # cp /usr/share/ddcutil/data/45-ddcutil-i2c.rules /etc/udev/rules.d
+  # cp /usr/share/ddcutil/data/60-ddcutil-i2c.rules /etc/udev/rules.d
   # groupadd -r i2c
   # usermod -aG i2c your_username_here
