@@ -1,0 +1,7 @@
+wlrctl (Command line utility for miscellaneous wlroots extensions)
+
+At this time, wlrctl supports the foreign-toplevel-mangement
+(window/toplevel command), virtual-keyboard (keyboard command), and
+virtual-pointer (pointer command) protocols.
+
+Requires wlroots 0.13+
