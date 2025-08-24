@@ -1,0 +1,6 @@
+wev (Wayland Event Viewer)
+
+wev is a tool for debugging events on a Wayland window, analagous to the
+X11 tool xev.
+
+wev depends on libwayland-client and libxkbcommon.
