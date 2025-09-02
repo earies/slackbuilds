@@ -1,0 +1,20 @@
+--- a/src/lib/asiolink/interval_timer.cc	2025-09-02 14:37:48.618350860 -0700
++++ b/src/lib/asiolink/interval_timer.cc	2025-09-02 14:38:15.179107070 -0700
+@@ -12,6 +12,7 @@
+ #include <boost/enable_shared_from_this.hpp>
+ #include <boost/noncopyable.hpp>
+ #include <boost/shared_ptr.hpp>
++#include <boost/asio/deadline_timer.hpp>
+ 
+ #include <exceptions/exceptions.h>
+ 
+--- a/src/lib/asiodns/io_fetch.cc	2025-09-02 14:41:38.151080939 -0700
++++ b/src/lib/asiodns/io_fetch.cc	2025-09-02 14:42:16.574228510 -0700
+@@ -24,6 +24,7 @@
+ 
+ #include <boost/scoped_ptr.hpp>
+ #include <boost/date_time/posix_time/posix_time_types.hpp>
++#include <boost/asio/deadline_timer.hpp>
+ 
+ #include <functional>
+ #include <unistd.h>             // for some IPC/network system calls

@@ -1,0 +1,11 @@
+--- a/meson.build	2025-09-02 14:25:02.560617410 -0700
++++ b/meson.build	2025-09-02 14:25:10.636168896 -0700
+@@ -189,7 +189,7 @@
+ 
+ #### Dependencies
+ 
+-boost_dep = dependency('boost', version: '>=1.66', modules: ['system'])
++boost_dep = dependency('boost', version: '>=1.66')
+ dl_dep = dependency('dl')
+ threads_dep = dependency('threads')
+ add_project_dependencies(boost_dep, dl_dep, threads_dep, language: ['cpp'])

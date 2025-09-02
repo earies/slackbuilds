@@ -25,7 +25,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=kea
-VERSION=${VERSION:-3.0.0}
+VERSION=${VERSION:-3.1.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -82,8 +82,9 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-#patch -p1 < $CWD/patches/meson.build.patch
-#patch -p1 < $CWD/patches/keactrl-meson.build.patch
+# Patches for Boost 1.89+
+patch -p1 < $CWD/patches/boost-system.patch
+patch -p1 < $CWD/patches/boost-deadline-timer.patch
 
 mkdir -p build
 cd build
