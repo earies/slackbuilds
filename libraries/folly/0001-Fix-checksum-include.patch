@@ -1,0 +1,24 @@
+From c1e8baf42d585cecdde43f10a4c22d997418eebb Mon Sep 17 00:00:00 2001
+From: Ebben Aries <exa@dscp.org>
+Date: Tue, 2 Sep 2025 12:07:58 -0700
+Subject: [PATCH] Fix checksum include
+
+---
+ folly/hash/Checksum.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/folly/hash/Checksum.cpp b/folly/hash/Checksum.cpp
+index 1d42d6a6e..aeafdb20b 100644
+--- a/folly/hash/Checksum.cpp
++++ b/folly/hash/Checksum.cpp
+@@ -17,6 +17,7 @@
+ #include <folly/hash/Checksum.h>
+ 
+ #include <algorithm>
++#include <stdexcept>
+ 
+ #include <boost/crc.hpp>
+ 
+-- 
+2.51.0
+
