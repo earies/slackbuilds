@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=folly
-VERSION=${VERSION:-20250927_af67dd1}
-GITHASH=${GITHASH:-af67dd1016a6e75785ae8905262d63b441123fb2}
+VERSION=${VERSION:-20251003_4df7ae9}
+GITHASH=${GITHASH:-4df7ae967488c4210162552254597c075d9682c4}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -87,9 +87,6 @@ patch -p1 < $CWD/0001-Fix-CMakeLists.txt-to-honor-CMAKE_INSTALL_LIBDIR.patch
 
 # Fix for Slackware + Boost 1.89.0 boost_system
 patch -p1 < $CWD/0001-Patch-for-Slackware-Boost-1.89.0-boost_system.patch
-
-# Fix missing includes
-patch -p1 < $CWD/0001-Fix-checksum-include.patch
 
 export CC=clang
 export CXX=clang++
