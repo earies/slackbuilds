@@ -1,0 +1,14 @@
+--- a/stapvirt.c	2025-11-11 07:39:09.020403097 -0700
++++ b/stapvirt.c	2025-11-11 07:39:39.183631020 -0700
+@@ -661,8 +661,9 @@
+         goto cleanup_buf;
+     }
+ 
+-    int rc = attach ? virDomainAttachDevice(dom, (const char *) buf->content)
+-                    : virDomainDetachDevice(dom, (const char *) buf->content);
++    const xmlChar *bufContent = xmlBufferContent(buf);
++    int rc = attach ? virDomainAttachDevice(dom, (const char *) bufContent)
++                    : virDomainDetachDevice(dom, (const char *) bufContent);
+     if (rc != 0) {
+         err("Couldn't %s the device\n", attach ? "attach" : "detach");
+         ret = -1;
