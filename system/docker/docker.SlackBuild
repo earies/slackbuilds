@@ -26,8 +26,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker
-VERSION=${VERSION:-28.5.2}
-GITHASH=${GITHASH:-606a7a7}
+VERSION=${VERSION:-29.0.0}
+GITHASH=${GITHASH:-d105562}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -56,9 +56,9 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $SRCNAM-$VERSION
-tar xvf $CWD/$SRCNAM-$VERSION.tar.gz
-cd $SRCNAM-$VERSION
+rm -rf $SRCNAM-$PRGNAM-v$VERSION
+tar xvf $CWD/$PRGNAM-v$VERSION.tar.gz
+cd $SRCNAM-$PRGNAM-v$VERSION
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
@@ -70,7 +70,7 @@ mkdir -p src/github.com/docker
 ln -sf "$(pwd)" src/github.com/docker/docker
 
 AUTO_GOPATH=1 \
-GO111MODULE=off \
+GO111MODULE=on \
 DOCKER_GITCOMMIT=$GITHASH \
 DOCKER_BUILDTAGS="seccomp" \
 VERSION=$VERSION \
@@ -93,10 +93,6 @@ ln -s tini-static $PKG/usr/bin/docker-init
 install -D -m 0644 $CWD/config/docker.default $PKG/etc/default/docker.new
 install -D -m 0644 $CWD/config/docker.logrotate $PKG/etc/logrotate.d/docker.new
 install -D -m 0644 $CWD/config/rc.docker $PKG/etc/rc.d/rc.docker.new
-
-# Install udev rules.
-install -D -m 0644 contrib/udev/80-docker.rules \
-  $PKG/lib/udev/rules.d/80-docker.rules
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a LICENSE NOTICE README.md $PKG/usr/doc/$PRGNAM-$VERSION
