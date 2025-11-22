@@ -26,7 +26,7 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=nerdctl
 VERSION=${VERSION:-2.2.0}
-GITHASH=${GITHASH:-ff9323859a8d7892d8d72380a17b99395ef9a516}
+GITHASH=${GITHASH:-4eb4cbdb6b7ae82ab864a9829d1162a20eb61f81}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -101,7 +101,7 @@ cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 if [ -d $PKG/usr/share/doc ]; then
   mv $PKG/usr/share/doc/* $PKG/usr/doc/$PRGNAM-$VERSION
-  rm -rf $PKG/usr/share/doc
+  rm -rf $PKG/usr/share/
 fi
 
 mkdir -p $PKG/install
