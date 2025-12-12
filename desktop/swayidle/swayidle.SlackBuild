@@ -2,7 +2,7 @@
 
 # Slackware build script for swayidle
 
-# Copyright 2024 Ebben Aries <slackbuilds@dscp.org>
+# Copyright 2025 Ebben Aries <slackbuilds@dscp.org>
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=swayidle
-VERSION=${VERSION:-20250917_afcce43}
-GITHASH=${GITHASH:-afcce4303d447f12b20e035fcb9ff09b4a0b948b}
+VERSION=${VERSION:-20251111_f54c11a}
+GITHASH=${GITHASH:-f54c11ac01916acbe1c7bbab50bfea22781efbcb}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
