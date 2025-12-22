@@ -1,0 +1,12 @@
+diff --git a/quic/congestion_control/PacerFactory.h b/quic/congestion_control/PacerFactory.h
+index 6ec641586..6937ba044 100644
+--- a/quic/congestion_control/PacerFactory.h
++++ b/quic/congestion_control/PacerFactory.h
+@@ -7,6 +7,7 @@
+ 
+ #pragma once
+ 
++#include <cstdint>
+ #include <memory>
+ 
+ namespace quic {

@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=mvfst
-VERSION=${VERSION:-20251006_66e5a97}
-GITHASH=${GITHASH:-66e5a976616fe1660fc52b7a81711770c2a1ad30}
+VERSION=${VERSION:-20251222_cf08d25}
+GITHASH=${GITHASH:-cf08d2523828440082c71ebbfe2d00833c36580e}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -82,8 +82,8 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-# Fix for Slackware + Boost 1.89.0 boost_system
-patch -p1 < $CWD/0001-Patch-for-Slackware-Boost-1.89.0-boost_system.patch
+# Fix for missing include
+patch -p1 < $CWD/missing-include.patch
 
 export CC=clang
 export CXX=clang++
