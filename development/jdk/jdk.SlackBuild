@@ -26,7 +26,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=jdk
-VERSION=${VERSION:-8u371}
+VERSION=${VERSION:-8u461}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -47,7 +47,7 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
 fi
 
 TMP=${TMP:-/tmp/SBo}
-PKG=$TMP/package-jdk
+PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
 
 if [ "$ARCH" = "x86_64" ]; then
@@ -68,7 +68,7 @@ cd $PKG
 mkdir -p usr/lib${LIBDIRSUFFIX}
 cd usr/lib${LIBDIRSUFFIX}
 tar xvf $CWD/$PRGNAM-$VERSION-linux-$SRC_ARCH.tar.gz
-chown -R root.root $PKG
+chown -R root:root $PKG
 find $PKG \
   \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 -o -perm 511 \) \
   -exec chmod 755 {} \; -o \
