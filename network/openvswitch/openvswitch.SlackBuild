@@ -2,7 +2,7 @@
 
 # Slackware build script for openvswitch
 
-# Copyright 2023-2025 Ebben Aries <slackbuilds@dscp.org>
+# Copyright 2023-2026 Ebben Aries <slackbuilds@dscp.org>
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=openvswitch
-VERSION=${VERSION:-20251003_0f8202e}
-GITHASH=${GITHASH:-0f8202e60845743b00b5fc6991b96f6827937c4c}
+VERSION=${VERSION:-20251217_40120c9}
+GITHASH=${GITHASH:-40120c91e620405e45148e62996bb7e230b5580b}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
