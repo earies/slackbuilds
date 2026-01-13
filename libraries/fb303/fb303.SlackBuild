@@ -2,7 +2,7 @@
 
 # Slackware build script for fb303
 
-# Copyright 2023-2025 Ebben Aries <slackbuilds@dscp.org>
+# Copyright 2023-2026 Ebben Aries <slackbuilds@dscp.org>
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=fb303
-VERSION=${VERSION:-20251222_04f4936}
-GITHASH=${GITHASH:-04f4936c1e218dede6d20389ff0095c3bb965171}
+VERSION=${VERSION:-20260113_e43505b}
+GITHASH=${GITHASH:-e43505babdc11f7cb578498329c096a494878fa6}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
