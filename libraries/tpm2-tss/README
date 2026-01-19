@@ -1,0 +1,9 @@
+Trusted Computing Group's (TCG) TPM2 Software Stack (TSS)
+
+This stack consists of the following layers from top to bottom:
+
+* Feature API (FAPI)
+* Enhanced System API (ESAPI, sometimes ESYS)
+* System API (SAPI, sometimes SYS)
+* Marshaling/Unmarshaling (MU)
+* TPM Command Transmission Interface (TCTI)
