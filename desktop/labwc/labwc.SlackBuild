@@ -2,6 +2,7 @@
 
 # Slackware build script for labwc
 
+# Copyright 2026 Ebben Aries <slackbuilds@dscp.org>
 # Copyright 2022 Damian Perticone,  Berisso, Argentina
 # All rights reserved.
 #
@@ -25,8 +26,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=labwc
-VERSION=${VERSION:-20260121_645a7b5}
-GITHASH=${GITHASH:-645a7b56ced72a4c902204cf7b2d558009e4148d}
+VERSION=${VERSION:-20260131_55a256f}
+GITHASH=${GITHASH:-55a256f2fa26a368066b238dbda57145f2684141}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
