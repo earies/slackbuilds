@@ -2,7 +2,7 @@
 
 # Slackware build script for swaylock
 
-# Copyright 2025 Ebben Aries <slackbuilds@dscp.org>
+# Copyright 2026 Ebben Aries <slackbuilds@dscp.org>
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=swaylock
-VERSION=${VERSION:-20251118_f9bc8cc}
-GITHASH=${GITHASH:-f9bc8cc5e4f1154ffacb408c21c1e71816712b3c}
+VERSION=${VERSION:-20260214_473ebba}
+GITHASH=${GITHASH:-473ebba206e4511f7300f9e32362cfff0eb7d908}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
