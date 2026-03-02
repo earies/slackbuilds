@@ -1,0 +1,59 @@
+diff --git a/include/vncauth.h b/include/vncauth.h
+index 86dc455..7fdb8d4 100644
+--- a/include/vncauth.h
++++ b/include/vncauth.h
+@@ -25,6 +25,8 @@
+ #define CHALLENGESIZE 16
+ 
+ extern int vncEncryptAndStorePasswd(char *passwd, char *fname);
++extern int vncEncryptAndStorePasswd2(char *passwd, char *passwdViewOnly, char *fname);
+ extern char *vncDecryptPasswdFromFile(char *fname);
++extern int vncDecryptPasswdFromFile2(char *fname, char *passwdFullControl, char *passwdViewOnly);
+ extern void vncRandomBytes(unsigned char *bytes);
+ extern void vncEncryptBytes(unsigned char *bytes, char *passwd);
+diff --git a/libvncauth/vncauth.c b/libvncauth/vncauth.c
+index a92d322..b8d870c 100644
+--- a/libvncauth/vncauth.c
++++ b/libvncauth/vncauth.c
+@@ -29,6 +29,7 @@
+ #include <unistd.h>
+ #include <vncauth.h>
+ #include <d3des.h>
++#include <time.h>
+ 
+ 
+ /*
+diff --git a/vncviewer/misc.c b/vncviewer/misc.c
+index be78597..f495400 100644
+--- a/vncviewer/misc.c
++++ b/vncviewer/misc.c
+@@ -25,6 +25,8 @@
+ #include <signal.h>
+ #include <fcntl.h>
+ 
++#include <sys/wait.h>
++
+ static void CleanupSignalHandler(int sig);
+ static int CleanupXErrorHandler(Display *dpy, XErrorEvent *error);
+ static int CleanupXIOErrorHandler(Display *dpy);
+diff --git a/vncviewer/vncviewer.h b/vncviewer/vncviewer.h
+index 755a480..c23f5f4 100644
+--- a/vncviewer/vncviewer.h
++++ b/vncviewer/vncviewer.h
+@@ -138,6 +138,7 @@ extern void SetVisualAndCmap();
+ 
+ /* cursor.c */
+ 
++extern Bool HandleCursorPos(int x, int y);
+ extern Bool HandleCursorShape(int xhot, int yhot, int width, int height,
+                               CARD32 enc);
+ extern void SoftCursorLockArea(int x, int y, int w, int h);
+@@ -182,7 +183,7 @@ extern void FullScreenOff();
+ 
+ /* listen.c */
+ 
+-extern void listenForIncomingConnections();
++extern void listenForIncomingConnections(int *argc, char **argv, int listenArgIndex);
+ 
+ /* misc.c */
+ 
