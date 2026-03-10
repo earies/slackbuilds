@@ -1,0 +1,278 @@
+diff --git a/protoc-gen-c/c_bytes_field.cc b/protoc-gen-c/c_bytes_field.cc
+index c8ac772..7fa74cf 100644
+--- a/protoc-gen-c/c_bytes_field.cc
++++ b/protoc-gen-c/c_bytes_field.cc
+@@ -68,6 +68,7 @@
+ 
+ #include "c_bytes_field.h"
+ #include "c_helpers.h"
++#include "compat.h"
+ 
+ namespace protobuf_c {
+ 
+@@ -94,7 +95,11 @@ BytesFieldGenerator::~BytesFieldGenerator() {}
+ 
+ void BytesFieldGenerator::GenerateStructMembers(google::protobuf::io::Printer* printer) const
+ {
++#if GOOGLE_PROTOBUF_VERSION >= 7034000
++  switch (compat::FieldLabel(descriptor_)) {
++#else
+   switch (descriptor_->label()) {
++#endif
+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
+       printer->Print(variables_, "ProtobufCBinaryData $name$$deprecated$;\n");
+       break;
+@@ -135,7 +140,11 @@ std::string BytesFieldGenerator::GetDefaultValue(void) const
+ }
+ void BytesFieldGenerator::GenerateStaticInit(google::protobuf::io::Printer* printer) const
+ {
++#if GOOGLE_PROTOBUF_VERSION >= 7034000
++  switch (compat::FieldLabel(descriptor_)) {
++#else
+   switch (descriptor_->label()) {
++#endif
+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
+       printer->Print(variables_, "$default_value$");
+       break;
+diff --git a/protoc-gen-c/c_enum_field.cc b/protoc-gen-c/c_enum_field.cc
+index c3111f5..2afab77 100644
+--- a/protoc-gen-c/c_enum_field.cc
++++ b/protoc-gen-c/c_enum_field.cc
+@@ -66,6 +66,7 @@
+ 
+ #include "c_enum_field.h"
+ #include "c_helpers.h"
++#include "compat.h"
+ 
+ namespace protobuf_c {
+ 
+@@ -95,7 +96,11 @@ EnumFieldGenerator::~EnumFieldGenerator() {}
+ 
+ void EnumFieldGenerator::GenerateStructMembers(google::protobuf::io::Printer* printer) const
+ {
++#if GOOGLE_PROTOBUF_VERSION >= 7034000
++  switch (compat::FieldLabel(descriptor_)) {
++#else
+   switch (descriptor_->label()) {
++#endif
+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
+       printer->Print(variables_, "$type$ $name$$deprecated$;\n");
+       break;
+@@ -117,7 +122,11 @@ std::string EnumFieldGenerator::GetDefaultValue(void) const
+ }
+ void EnumFieldGenerator::GenerateStaticInit(google::protobuf::io::Printer* printer) const
+ {
++#if GOOGLE_PROTOBUF_VERSION >= 7034000
++  switch (compat::FieldLabel(descriptor_)) {
++#else
+   switch (descriptor_->label()) {
++#endif
+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
+       printer->Print(variables_, "$default$");
+       break;
+diff --git a/protoc-gen-c/c_field.cc b/protoc-gen-c/c_field.cc
+index 8d22343..6f7620c 100644
+--- a/protoc-gen-c/c_field.cc
++++ b/protoc-gen-c/c_field.cc
+@@ -124,6 +124,15 @@ void FieldGenerator::GenerateDescriptorInitializerGeneric(google::protobuf::io::
+   if (oneof != NULL)
+     variables["oneofname"] = CamelToLower(oneof->name());
+ 
++#if GOOGLE_PROTOBUF_VERSION >= 7034000
++  if (FieldSyntax(descriptor_) == 3 &&
++    !descriptor_->is_required() && !descriptor_->is_repeated()) {
++    variables["LABEL"] = "NONE";
++    optional_uses_has = false;
++  } else {
++    variables["LABEL"] = CamelToUpper(GetLabelName(compat::FieldLabel(descriptor_)));
++  }
++#else
+   if (FieldSyntax(descriptor_) == 3 &&
+     descriptor_->label() == google::protobuf::FieldDescriptor::LABEL_OPTIONAL) {
+     variables["LABEL"] = "NONE";
+@@ -131,6 +140,7 @@ void FieldGenerator::GenerateDescriptorInitializerGeneric(google::protobuf::io::
+   } else {
+     variables["LABEL"] = CamelToUpper(GetLabelName(descriptor_->label()));
+   }
++#endif
+ 
+   if (descriptor_->has_default_value()) {
+     variables["default_value"] = std::string("&")
+@@ -145,6 +155,18 @@ void FieldGenerator::GenerateDescriptorInitializerGeneric(google::protobuf::io::
+ 
+   variables["flags"] = "0";
+ 
++#if GOOGLE_PROTOBUF_VERSION >= 7034000
++  if (descriptor_->is_repeated()
++   && is_packable_type (descriptor_->type())
++   && descriptor_->options().packed()) {
++    variables["flags"] += " | PROTOBUF_C_FIELD_FLAG_PACKED";
++  } else if (descriptor_->is_repeated()
++   && is_packable_type (descriptor_->type())
++   && FieldSyntax(descriptor_) == 3
++   && !descriptor_->options().has_packed()) {
++    variables["flags"] += " | PROTOBUF_C_FIELD_FLAG_PACKED";
++  }
++#else
+   if (descriptor_->label() == google::protobuf::FieldDescriptor::LABEL_REPEATED
+    && is_packable_type (descriptor_->type())
+    && descriptor_->options().packed()) {
+@@ -155,6 +177,7 @@ void FieldGenerator::GenerateDescriptorInitializerGeneric(google::protobuf::io::
+    && !descriptor_->options().has_packed()) {
+     variables["flags"] += " | PROTOBUF_C_FIELD_FLAG_PACKED";
+   }
++#endif
+ 
+   if (descriptor_->options().deprecated())
+     variables["flags"] += " | PROTOBUF_C_FIELD_FLAG_DEPRECATED";
+@@ -179,7 +202,11 @@ void FieldGenerator::GenerateDescriptorInitializerGeneric(google::protobuf::io::
+     "  $value$,\n"
+     "  PROTOBUF_C_LABEL_$LABEL$,\n"
+     "  PROTOBUF_C_TYPE_$TYPE$,\n");
++#if GOOGLE_PROTOBUF_VERSION >= 7034000
++  switch (compat::FieldLabel(descriptor_)) {
++#else
+   switch (descriptor_->label()) {
++#endif
+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
+       printer->Print(variables, "  0,   /* quantifier_offset */\n");
+       break;
+diff --git a/protoc-gen-c/c_message_field.cc b/protoc-gen-c/c_message_field.cc
+index 9fca920..24e9663 100644
+--- a/protoc-gen-c/c_message_field.cc
++++ b/protoc-gen-c/c_message_field.cc
+@@ -67,6 +67,7 @@
+ 
+ #include "c_helpers.h"
+ #include "c_message_field.h"
++#include "compat.h"
+ 
+ namespace protobuf_c {
+ 
+@@ -83,7 +84,11 @@ void MessageFieldGenerator::GenerateStructMembers(google::protobuf::io::Printer*
+   vars["name"] = FieldName(descriptor_);
+   vars["type"] = FullNameToC(descriptor_->message_type()->full_name(), descriptor_->message_type()->file());
+   vars["deprecated"] = FieldDeprecated(descriptor_);
++#if GOOGLE_PROTOBUF_VERSION >= 7034000
++  switch (compat::FieldLabel(descriptor_)) {
++#else
+   switch (descriptor_->label()) {
++#endif
+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
+     case google::protobuf::FieldDescriptor::LABEL_OPTIONAL:
+       printer->Print(vars, "$type$ *$name$$deprecated$;\n");
+@@ -103,7 +108,11 @@ std::string MessageFieldGenerator::GetDefaultValue(void) const
+ }
+ void MessageFieldGenerator::GenerateStaticInit(google::protobuf::io::Printer* printer) const
+ {
++#if GOOGLE_PROTOBUF_VERSION >= 7034000
++  switch (compat::FieldLabel(descriptor_)) {
++#else
+   switch (descriptor_->label()) {
++#endif
+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
+     case google::protobuf::FieldDescriptor::LABEL_OPTIONAL:
+       printer->Print("NULL");
+diff --git a/protoc-gen-c/c_primitive_field.cc b/protoc-gen-c/c_primitive_field.cc
+index 588f60e..13d7dfc 100644
+--- a/protoc-gen-c/c_primitive_field.cc
++++ b/protoc-gen-c/c_primitive_field.cc
+@@ -109,7 +109,11 @@ void PrimitiveFieldGenerator::GenerateStructMembers(google::protobuf::io::Printe
+   vars["name"] = FieldName(descriptor_);
+   vars["deprecated"] = FieldDeprecated(descriptor_);
+ 
++#if GOOGLE_PROTOBUF_VERSION >= 7034000
++  switch (compat::FieldLabel(descriptor_)) {
++#else
+   switch (descriptor_->label()) {
++#endif
+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
+       printer->Print(vars, "$c_type$ $name$$deprecated$;\n");
+       break;
+@@ -156,7 +160,11 @@ void PrimitiveFieldGenerator::GenerateStaticInit(google::protobuf::io::Printer*
+   } else {
+     vars["default_value"] = "0";
+   }
++#if GOOGLE_PROTOBUF_VERSION >= 7034000
++  switch (compat::FieldLabel(descriptor_)) {
++#else
+   switch (descriptor_->label()) {
++#endif
+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
+       printer->Print(vars, "$default_value$");
+       break;
+diff --git a/protoc-gen-c/c_string_field.cc b/protoc-gen-c/c_string_field.cc
+index 163f424..f49e908 100644
+--- a/protoc-gen-c/c_string_field.cc
++++ b/protoc-gen-c/c_string_field.cc
+@@ -69,6 +69,7 @@
+ 
+ #include "c_helpers.h"
+ #include "c_string_field.h"
++#include "compat.h"
+ 
+ namespace protobuf_c {
+ 
+@@ -94,7 +95,11 @@ void StringFieldGenerator::GenerateStructMembers(google::protobuf::io::Printer*
+ {
+   const ProtobufCFileOptions opt = descriptor_->file()->options().GetExtension(pb_c_file);
+ 
++#if GOOGLE_PROTOBUF_VERSION >= 7034000
++  switch (compat::FieldLabel(descriptor_)) {
++#else
+   switch (descriptor_->label()) {
++#endif
+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
+     case google::protobuf::FieldDescriptor::LABEL_OPTIONAL:
+       if (opt.const_strings())
+@@ -138,7 +143,11 @@ void StringFieldGenerator::GenerateStaticInit(google::protobuf::io::Printer* pri
+   } else {
+     vars["default"] = "(char *)protobuf_c_empty_string";
+   }
++#if GOOGLE_PROTOBUF_VERSION >= 7034000
++  switch (compat::FieldLabel(descriptor_)) {
++#else
+   switch (descriptor_->label()) {
++#endif
+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
+     case google::protobuf::FieldDescriptor::LABEL_OPTIONAL:
+       printer->Print(vars, "$default$");
+diff --git a/protoc-gen-c/compat.h b/protoc-gen-c/compat.h
+index f6ace7c..18f281a 100644
+--- a/protoc-gen-c/compat.h
++++ b/protoc-gen-c/compat.h
+@@ -28,6 +28,10 @@
+ #ifndef PROTOBUF_C_PROTOC_GEN_C_COMPAT_H__
+ #define PROTOBUF_C_PROTOC_GEN_C_COMPAT_H__
+ 
++#include <google/protobuf/descriptor.h>
++#include <google/protobuf/port.h>
++#include <google/protobuf/stubs/common.h>
++
+ #if GOOGLE_PROTOBUF_VERSION >= 4022000
+ # define GOOGLE_ARRAYSIZE	ABSL_ARRAYSIZE
+ # define GOOGLE_CHECK_EQ	ABSL_CHECK_EQ
+@@ -55,4 +59,23 @@ typedef const std::string& StringView;
+ 
+ }  // namespace protobuf_c
+ 
++// protobuf >= 34.0 (version macro 7034000) removed FieldDescriptor::label().
++// Provide a compat wrapper that reconstructs the label from boolean helpers.
++#if GOOGLE_PROTOBUF_VERSION >= 7034000
++namespace protobuf_c {
++namespace compat {
++
++inline google::protobuf::FieldDescriptor::Label
++FieldLabel(const google::protobuf::FieldDescriptor* field) {
++  if (field->is_repeated())
++    return google::protobuf::FieldDescriptor::LABEL_REPEATED;
++  if (field->is_required())
++    return google::protobuf::FieldDescriptor::LABEL_REQUIRED;
++  return google::protobuf::FieldDescriptor::LABEL_OPTIONAL;
++}
++
++}  // namespace compat
++}  // namespace protobuf_c
++#endif
++
+ #endif  // PROTOBUF_C_PROTOC_GEN_C_COMPAT_H__
