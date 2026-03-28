@@ -3,16 +3,27 @@
 # Start/stop/restart nsd
 #
 
+NSD_CONF="/etc/nsd/nsd.conf"
+
+nsd_pidfile() {
+  nsd-checkconf -o pidfile "$NSD_CONF"
+}
+
 do_start() {
   if [ -x /usr/sbin/nsd ]; then
     echo "Starting Name Server Daemon:  /usr/sbin/nsd"
-    /usr/sbin/nsd -c /etc/nsd/nsd.conf 2> /dev/null
+    /usr/sbin/nsd -c "$NSD_CONF" 2> /dev/null
   fi
 }
 
 do_stop() {
   echo "Stopping Name Server Daemon"
-  kill $(cat /var/run/nsd/nsd.pid) 2> /dev/null
+  PIDFILE=$(nsd_pidfile)
+  if [ -f "$PIDFILE" ]; then
+    kill $(cat "$PIDFILE") 2> /dev/null
+  else
+    echo "pidfile $PIDFILE not found"
+  fi
 }
 
 do_restart() {
@@ -22,7 +33,12 @@ do_restart() {
 }
 
 do_reload() {
-  kill -HUP $(cat /var/run/nsd/nsd.pid)
+  PIDFILE=$(nsd_pidfile)
+  if [ -f "$PIDFILE" ]; then
+    kill -HUP $(cat "$PIDFILE")
+  else
+    echo "pidfile $PIDFILE not found"
+  fi
 }
 
 do_logreopen() {
