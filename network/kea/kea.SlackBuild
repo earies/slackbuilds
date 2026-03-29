@@ -93,6 +93,7 @@ cd build
     --localstatedir=/var \
     --mandir=/usr/man \
     --buildtype=release \
+    --install-umask=0022 \
     -Dmysql=enabled \
     -Dcrypto=openssl \
 

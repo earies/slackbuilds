@@ -1,23 +1,94 @@
 #!/bin/sh
 
-case "$1" in
-'start')
-  keactrl start
-  ;;
-'stop')
-  keactrl stop
-  ;;
-'restart')
-  keactrl stop
-  keactrl start
-  ;;
-'reload')
-  keactrl reload
-  ;;
-'status')
-  keactrl status
-  ;;
-*)
-  echo "usage $0 start|stop|restart|reload|status"
-esac
+# rc.kea - Slackware startup script for ISC Kea DHCP
+#
+# Manages kea-dhcp4, kea-dhcp6, and kea-dhcp-ddns daemons directly.
+# kea-ctrl-agent is deprecated as of kea 2.7.2; the DHCP servers
+# now handle API connections over HTTP/HTTPS natively.
 
+CONFDIR=/etc/kea
+PIDDIR=/var/run/kea
+
+KEA_DHCP4=${KEA_DHCP4:-yes}
+KEA_DHCP6=${KEA_DHCP6:-no}
+KEA_DDNS=${KEA_DDNS:-no}
+
+get_pid() {
+  local name="$1"
+  local conf="$2"
+  local confbase=$(basename "$conf" .conf)
+  local pidfile="$PIDDIR/${confbase}.${name}.pid"
+  if [ -f "$pidfile" ]; then
+    cat "$pidfile" 2>/dev/null
+  fi
+}
+
+is_running() {
+  local pid=$(get_pid "$1" "$2")
+  [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null
+}
+
+start_daemon() {
+  local name="$1"
+  local conf="$2"
+  if [ ! -f "$conf" ]; then
+    echo "$name: config not found: $conf"
+    return 1
+  fi
+  if is_running "$name" "$conf"; then
+    echo "$name: already running (pid $(get_pid "$name" "$conf"))"
+    return 0
+  fi
+  echo "Starting $name..."
+  /usr/sbin/$name -c "$conf" &
+}
+
+stop_daemon() {
+  local name="$1"
+  local conf="$2"
+  local pid=$(get_pid "$name" "$conf")
+  if [ -z "$pid" ] || ! kill -0 "$pid" 2>/dev/null; then
+    echo "$name: not running"
+    return 0
+  fi
+  echo "Stopping $name..."
+  kill -15 "$pid"
+}
+
+reload_daemon() {
+  local name="$1"
+  local conf="$2"
+  local pid=$(get_pid "$name" "$conf")
+  if [ -z "$pid" ] || ! kill -0 "$pid" 2>/dev/null; then
+    echo "$name: not running"
+    return 1
+  fi
+  echo "Reloading $name..."
+  kill -1 "$pid"
+}
+
+status_daemon() {
+  local name="$1"
+  local conf="$2"
+  if is_running "$name" "$conf"; then
+    echo "$name: running (pid $(get_pid "$name" "$conf"))"
+  else
+    echo "$name: not running"
+  fi
+}
+
+run_all() {
+  local action="$1"
+  [ "$KEA_DHCP4" = "yes" ] && ${action} kea-dhcp4 $CONFDIR/kea-dhcp4.conf
+  [ "$KEA_DHCP6" = "yes" ] && ${action} kea-dhcp6 $CONFDIR/kea-dhcp6.conf
+  [ "$KEA_DDNS" = "yes" ]  && ${action} kea-dhcp-ddns $CONFDIR/kea-dhcp-ddns.conf
+}
+
+case "$1" in
+  start)   run_all start_daemon ;;
+  stop)    run_all stop_daemon ;;
+  restart) run_all stop_daemon; sleep 1; run_all start_daemon ;;
+  reload)  run_all reload_daemon ;;
+  status)  run_all status_daemon ;;
+  *)       echo "usage: $0 start|stop|restart|reload|status" ;;
+esac
