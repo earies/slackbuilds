@@ -1,0 +1,8 @@
+/* Ubuntu (laddered Light/Regular/Medium/Bold) */
+@font-face { font-family: "Inter"; src: local("Ubuntu Bold Italic"); font-weight: bolder; font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Ubuntu Bold"); font-weight: bolder; }
+@font-face { font-family: "Inter"; src: local("Ubuntu Medium Italic"); font-weight: bold; font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Ubuntu Light Italic"); font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Ubuntu Medium"); font-weight: bold; }
+@font-face { font-family: "Inter"; src: local("Ubuntu"); font-weight: 500; }
+@font-face { font-family: "Inter"; src: local("Ubuntu Light"); }

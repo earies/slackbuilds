@@ -1,0 +1,8 @@
+/* Noto Sans (laddered Light/Regular/Medium/Bold) */
+@font-face { font-family: "Inter"; src: local("Noto Sans Bold Italic"); font-weight: bolder; font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Noto Sans Bold"); font-weight: bolder; }
+@font-face { font-family: "Inter"; src: local("Noto Sans Medium Italic"); font-weight: bold; font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Noto Sans Light Italic"); font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Noto Sans Medium"); font-weight: bold; }
+@font-face { font-family: "Inter"; src: local("Noto Sans"); font-weight: 500; }
+@font-face { font-family: "Inter"; src: local("Noto Sans Light"); }

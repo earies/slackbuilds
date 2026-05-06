@@ -1,0 +1,8 @@
+/* DejaVu Sans (3-tier ExtraLight/Book/Bold; no Medium variant available) */
+@font-face { font-family: "Inter"; src: local("DejaVu Sans Bold Oblique"); font-weight: bolder; font-style: italic; }
+@font-face { font-family: "Inter"; src: local("DejaVu Sans Bold"); font-weight: bolder; }
+@font-face { font-family: "Inter"; src: local("DejaVu Sans Bold Oblique"); font-weight: bold; font-style: italic; }
+@font-face { font-family: "Inter"; src: local("DejaVu Sans Oblique"); font-style: italic; }
+@font-face { font-family: "Inter"; src: local("DejaVu Sans Bold"); font-weight: bold; }
+@font-face { font-family: "Inter"; src: local("DejaVu Sans"); font-weight: 500; }
+@font-face { font-family: "Inter"; src: local("DejaVu Sans ExtraLight"); }

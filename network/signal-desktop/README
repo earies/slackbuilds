@@ -7,3 +7,50 @@ messages, and make one-to-one voice/video calls.
 
 This is a repackaging of the official binary .deb file distributed by
 Open Whipser Systems.
+
+Local customizations
+--------------------
+This SlackBuild patches Signal's bundled app.asar to add:
+
+  - Multiple font profiles. Each profile rewrites Signal's "Inter" font
+    family at the CSS @font-face level to point at a system-installed
+    font via local(). Original (vanilla) asar is always preserved as
+    app.asar.orig and is selectable.
+  - 5% Ctrl+= / Ctrl+- zoom step (Signal's default is ~20% per press).
+    Ctrl+0 still resets to 100%.
+
+Build dependencies for the asar repack:
+  - nodejs (provides node + npx)
+    First build needs network access; npx fetches @electron/asar.
+
+Optional build variable:
+  FONT_PROFILE=<name>   Default profile installed as app.asar on first
+                        install (or after upgradepkg if no prior choice
+                        exists).
+                        Default: helveticaneue
+                        Available: dejavu, frutiger, futura, helveticaneue,
+                                   notosans, optima, ubuntu, univers
+                        plus 'orig' (vanilla Signal, always built).
+
+  Example:  FONT_PROFILE=notosans ./signal-desktop.SlackBuild
+
+The active profile name is recorded in /opt/Signal/resources/.active-profile.
+On upgradepkg, doinst.sh reads this file and re-installs the previously
+selected profile, preserving the user's choice.
+
+Profiles assume the matching system fonts are installed:
+  helveticaneue, univers, optima, frutiger, futura  - Linotype TTFs
+  notosans, ubuntu, dejavu                          - typically already
+                                                      present on Slackware
+
+Switching profile after install
+-------------------------------
+A `signal-font` helper is installed to /usr/bin. Switching copies the
+chosen variant over /opt/Signal/resources/app.asar; root is required.
+
+  signal-font                    # list profiles, show active
+  sudo signal-font ubuntu        # switch to Ubuntu
+  sudo signal-font orig          # revert to upstream Signal
+  signal-font -h                 # help
+
+Profile changes do not take effect until Signal is restarted.

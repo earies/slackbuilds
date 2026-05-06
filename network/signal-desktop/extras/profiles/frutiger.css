@@ -1,0 +1,8 @@
+/* Frutiger LT (3-tier 45 Light / 55 Roman / 65 Bold) */
+@font-face { font-family: "Inter"; src: local("Frutiger LT 66 Bold Italic"); font-weight: bolder; font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Frutiger LT 65 Bold"); font-weight: bolder; }
+@font-face { font-family: "Inter"; src: local("Frutiger LT 66 Bold Italic"); font-weight: bold; font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Frutiger LT 46 Light Italic"); font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Frutiger LT 65 Bold"); font-weight: bold; }
+@font-face { font-family: "Inter"; src: local("Frutiger LT 55 Roman"); font-weight: 500; }
+@font-face { font-family: "Inter"; src: local("Frutiger LT 45 Light"); }

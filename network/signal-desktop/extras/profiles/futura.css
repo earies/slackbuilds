@@ -1,0 +1,8 @@
+/* Futura LT (laddered Light/Book/Medium/Bold) */
+@font-face { font-family: "Inter"; src: local("Futura LT Bold Oblique"); font-weight: bolder; font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Futura LT Bold"); font-weight: bolder; }
+@font-face { font-family: "Inter"; src: local("Futura LT Medium Oblique"); font-weight: bold; font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Futura LT Light Oblique"); font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Futura LT Medium"); font-weight: bold; }
+@font-face { font-family: "Inter"; src: local("Futura LT Book"); font-weight: 500; }
+@font-face { font-family: "Inter"; src: local("Futura LT Light"); }

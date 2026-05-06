@@ -1,0 +1,8 @@
+/* HelveticaNeue LT (laddered 45/55/65/75) */
+@font-face { font-family: "Inter"; src: local("Helvetica LT 76 Bold Italic"); font-weight: bolder; font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Helvetica LT 75 Bold"); font-weight: bolder; }
+@font-face { font-family: "Inter"; src: local("Helvetica LT 66 Medium Italic"); font-weight: bold; font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Helvetica LT 46 Light Italic"); font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Helvetica LT 65 Medium"); font-weight: bold; }
+@font-face { font-family: "Inter"; src: local("Helvetica LT 55 Roman"); font-weight: 500; }
+@font-face { font-family: "Inter"; src: local("Helvetica LT 45 Light"); }

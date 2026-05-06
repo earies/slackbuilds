@@ -1,0 +1,8 @@
+/* Univers LT (laddered 45 Light / 55 Roman / 65 Bold / 75 Black) */
+@font-face { font-family: "Inter"; src: local("Univers LT 76 Black Oblique"); font-weight: bolder; font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Univers LT 75 Black"); font-weight: bolder; }
+@font-face { font-family: "Inter"; src: local("Univers LT 65 Bold Oblique"); font-weight: bold; font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Univers LT 45 Light Oblique"); font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Univers LT 65 Bold"); font-weight: bold; }
+@font-face { font-family: "Inter"; src: local("Univers LT 55 Roman"); font-weight: 500; }
+@font-face { font-family: "Inter"; src: local("Univers LT 45 Light"); }

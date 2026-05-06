@@ -1,0 +1,55 @@
+#!/bin/bash
+# Signal Desktop font profile switcher.
+# Replaces /opt/Signal/resources/app.asar with a copy of the chosen
+# pre-built variant and records the choice for upgrade preservation.
+set -e
+SIGNAL_DIR=/opt/Signal/resources
+STATE=$SIGNAL_DIR/.active-profile
+
+active() { [ -r "$STATE" ] && cat "$STATE"; }
+
+list() {
+    local current
+    current=$(active)
+    echo "Available profiles:"
+    for f in "$SIGNAL_DIR"/app.asar.*; do
+        [ -e "$f" ] || continue
+        case "$f" in *.unpacked|*.unpacked/) continue ;; esac
+        local name=${f##*/app.asar.}
+        if [ "$name" = "$current" ]; then echo "  $name (active)"
+        else echo "  $name"
+        fi
+    done
+}
+
+usage() {
+    cat <<EOF
+Usage: signal-font            # list profiles, show active
+       signal-font <profile>  # switch (root required)
+       signal-font orig       # revert to upstream Signal
+       signal-font -h         # this help
+
+Profile changes do not take effect until Signal is restarted.
+EOF
+}
+
+case "${1:-list}" in
+    list|"") list ;;
+    -h|--help|help) usage ;;
+    *)
+        target=$SIGNAL_DIR/app.asar.$1
+        if [ ! -f "$target" ]; then
+            echo "Error: profile '$1' not found" >&2
+            list >&2
+            exit 1
+        fi
+        if [ "$EUID" -ne 0 ]; then
+            echo "Error: must run as root: sudo signal-font $1" >&2
+            exit 1
+        fi
+        cp -fp "$target" "$SIGNAL_DIR/app.asar"
+        echo "$1" > "$STATE"
+        echo "Switched to: $1"
+        echo "Restart Signal for the change to take effect."
+        ;;
+esac

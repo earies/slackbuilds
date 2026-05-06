@@ -1,0 +1,8 @@
+/* Optima LT (Roman/Medium/Demi Bold/Bold) */
+@font-face { font-family: "Inter"; src: local("Optima LT Bold Italic"); font-weight: bolder; font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Optima LT Bold"); font-weight: bolder; }
+@font-face { font-family: "Inter"; src: local("Optima LT Demi Bold Italic"); font-weight: bold; font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Optima LT Italic"); font-style: italic; }
+@font-face { font-family: "Inter"; src: local("Optima LT Demi Bold"); font-weight: bold; }
+@font-face { font-family: "Inter"; src: local("Optima LT Medium"); font-weight: 500; }
+@font-face { font-family: "Inter"; src: local("Optima LT Roman"); }

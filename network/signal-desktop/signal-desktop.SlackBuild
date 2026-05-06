@@ -64,6 +64,52 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $PKG
 ar p $CWD/${PRGNAM}_${VERSION}_$DEBARCH.deb data.tar.xz | tar xJv
+
+# === Font profile build ===========================================
+# Builds one app.asar.<profile> per file in extras/profiles/, applies a
+# 5%-step zoom patch to bundles/main.js, preserves the upstream asar as
+# app.asar.orig. The active app.asar is a regular-file copy of the
+# selected profile, written by doinst.sh on install.
+FONT_PROFILE=${FONT_PROFILE:-helveticaneue}
+
+if ! command -v node >/dev/null 2>&1 || ! command -v npx >/dev/null 2>&1; then
+  echo "Error: node + npx required to build font profile asars." >&2
+  exit 1
+fi
+
+ASAR_DIR=$PKG/opt/Signal/resources
+SCRATCH=$TMP/asar-build-$$
+mkdir -p $SCRATCH
+trap "rm -rf $SCRATCH" EXIT
+
+npx --yes @electron/asar extract $ASAR_DIR/app.asar $SCRATCH/extracted
+python3 $CWD/extras/apply-font-overrides.py patch-zoom $SCRATCH/extracted 1.05
+
+mv $ASAR_DIR/app.asar $ASAR_DIR/app.asar.orig
+
+for profile_file in $CWD/extras/profiles/*.css; do
+  name=$(basename "$profile_file" .css)
+  python3 $CWD/extras/apply-font-overrides.py apply-profile \
+    $SCRATCH/extracted "$profile_file"
+  npx --yes @electron/asar pack $SCRATCH/extracted \
+    $ASAR_DIR/app.asar.$name --unpack "*.node"
+  # Per-variant .unpacked dirs aren't needed: at runtime, app.asar is a
+  # regular file copy of the chosen variant, and Electron resolves
+  # unpacked files via /opt/Signal/resources/app.asar.unpacked/ (shipped
+  # by upstream and identical for every variant since we never modify
+  # .node files).
+  rm -rf $ASAR_DIR/app.asar.$name.unpacked
+done
+
+# Validate FONT_PROFILE refers to a profile we actually built (or 'orig').
+if [ ! -e $ASAR_DIR/app.asar.${FONT_PROFILE} ]; then
+  echo "Error: FONT_PROFILE=$FONT_PROFILE does not match any profile." >&2
+  exit 1
+fi
+
+install -Dm755 $CWD/extras/signal-font $PKG/usr/bin/signal-font
+# === End font profile build =======================================
+
 chown -R root:root .
 find -L . \
   \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
@@ -85,7 +131,7 @@ cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
-cat $CWD/doinst.sh > $PKG/install/doinst.sh
+sed "s|@@FONT_PROFILE@@|$FONT_PROFILE|g" $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
