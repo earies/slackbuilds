@@ -25,16 +25,14 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=buildah
-VERSION=${VERSION:-1.43.0}
+VERSION=${VERSION:-1.44.0}
 GIT_COMMIT="e94b4f9"
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
 
 # The domain part of the go package name, usually the hosting platform
-DOMAIN=github.com
-# The name of the organization/owner of the package
-ORG=containers
+DOMAIN=go.podman.io
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -72,8 +70,8 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
-mkdir -p $PRGNAM-$VERSION/src/$DOMAIN/$ORG
-cd $PRGNAM-$VERSION/src/$DOMAIN/$ORG
+mkdir -p $PRGNAM-$VERSION/src/$DOMAIN
+cd $PRGNAM-$VERSION/src/$DOMAIN
 rm -rf $PRGNAM
 tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
 mv $PRGNAM-$VERSION $PRGNAM
