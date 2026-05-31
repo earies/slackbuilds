@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=mvfst
-VERSION=${VERSION:-20260113_06035bb}
-GITHASH=${GITHASH:-06035bb85e85cc24a46058e18a784af8fd9caf73}
+VERSION=${VERSION:-20260531_8b9c110}
+GITHASH=${GITHASH:-8b9c11029dfad67f33335c919d092c718bc0f6cd}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -81,9 +81,6 @@ find -L . \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
-
-# Fix for missing include
-patch -p1 < $CWD/missing-include.patch
 
 export CC=clang
 export CXX=clang++
