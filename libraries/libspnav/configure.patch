@@ -1,0 +1,15 @@
+--- configure	2026-06-13 14:59:58.929945859 -0600
++++ configure	2026-06-13 15:00:23.585340856 -0600
+@@ -23,9 +23,9 @@
+ srcdir="`dirname "$0"`"
+ libdir=lib
+ 
+-#if [ "`uname -m`" = 'x86_64' ]; then
+-#	libdir=lib64
+-#fi
++if [ "`uname -m`" = 'x86_64' ]; then
++	libdir=lib64
++fi
+ 
+ for arg; do
+ 	case "$arg" in
