@@ -25,7 +25,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=wxWidgets
-VERSION=${VERSION:-3.3.2}
+VERSION=${VERSION:-3.2.10}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -74,7 +74,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.bz2
+tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
 cd $PRGNAM-$VERSION
 chown -R root:root .
 find -L . \
@@ -137,11 +137,11 @@ fi
 #Move librarys to their correct location and fix pkgconfig
 if [ "$LIBDIRSUFFIX" != "" ]; then
   sed -i "s/\/lib\//\/lib${LIBDIRSUFFIX}\//g" \
-    $PKG/usr/lib${LIBDIRSUFFIX}/cmake/$PRGNAM-3.3/${PRGNAM}Config.cmake
+    $PKG/usr/lib${LIBDIRSUFFIX}/cmake/$PRGNAM-3.2/${PRGNAM}Config.cmake
   sed -i "s/\/lib\//\/lib${LIBDIRSUFFIX}\//g" \
-    $PKG/usr/lib${LIBDIRSUFFIX}/cmake/$PRGNAM-3.3/${PRGNAM}Targets.cmake
+    $PKG/usr/lib${LIBDIRSUFFIX}/cmake/$PRGNAM-3.2/${PRGNAM}Targets.cmake
   sed -i "s/\/lib\//\/lib${LIBDIRSUFFIX}\//g" \
-    $PKG/usr/lib${LIBDIRSUFFIX}/cmake/$PRGNAM-3.3/${PRGNAM}Targets-release.cmake
+    $PKG/usr/lib${LIBDIRSUFFIX}/cmake/$PRGNAM-3.2/${PRGNAM}Targets-release.cmake
 fi
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
