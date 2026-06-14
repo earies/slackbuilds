@@ -5,6 +5,6 @@ DOWNLOAD="https://github.com/Open-Cascade-SAS/OCCT/archive/refs/tags/V8_0_0.tar.
 MD5SUM="a98bc29ec0283ca0b9d405a2669e070e"
 DOWNLOAD_x86_64=""
 MD5SUM_x86_64=""
-REQUIRES="VTK"
+REQUIRES="VTK rapidjson"
 MAINTAINER="David Spencer"
 EMAIL="baildon.research@googlemail.com"
