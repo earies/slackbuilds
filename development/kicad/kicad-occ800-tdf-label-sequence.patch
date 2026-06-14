@@ -1,0 +1,9 @@
+--- a/pcbnew/python/scripting/pcbnew_utils_3d.cpp
++++ b/pcbnew/python/scripting/pcbnew_utils_3d.cpp
+@@ -33,6 +33,7 @@
+ #include <TDocStd_Document.hxx>
+ #include <XCAFApp_Application.hxx>
+ #include <XCAFDoc_DocumentTool.hxx>
++#include <TDF_LabelSequence.hxx>
+ #include <XCAFDoc_ShapeTool.hxx>
+ #include <XCAFDoc_ColorTool.hxx>
