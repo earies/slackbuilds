@@ -23,7 +23,7 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=mosquitto
-VERSION=${VERSION:-2.0.22}
+VERSION=${VERSION:-2.1.2}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -78,6 +78,7 @@ find -L . \
 mkdir build
 cd build
   cmake ../ \
+    -DCMAKE_EXE_LINKER_FLAGS="-lncurses" \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_SYSCONFDIR=/etc \
@@ -88,7 +89,7 @@ cd build
 cd ..
 
 # Preserve existing mosquitto.conf during package installation
-mv $PKG/etc/mosquitto/mosquitto.conf $PKG/etc/mosquitto/mosquitto.conf.new
+mv $PKG/etc/mosquitto/mosquitto.conf.example $PKG/etc/mosquitto/mosquitto.conf.new
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
