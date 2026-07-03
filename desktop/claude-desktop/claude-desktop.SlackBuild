@@ -2,7 +2,7 @@
 
 # Slackware build script for claude-desktop
 
-# Copyright (c) 2025, Ebben Aries <slackbuilds@dscp.org>
+# Copyright (c) 2026, Ebben Aries <slackbuilds@dscp.org>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -24,7 +24,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=claude-desktop
-VERSION=${VERSION:-0.9.2}
+VERSION=${VERSION:-1.18286.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -76,7 +76,7 @@ cd $TMP
 rm -rf $PRGNAM-$VERSION
 mkdir -p $PRGNAM-$VERSION
 cd $PRGNAM-$VERSION
-ar p $CWD/${PRGNAM}_${VERSION}_${DEBARCH}.deb data.tar.zst | tar xv --zstd
+ar p $CWD/${PRGNAM}_${VERSION}_${DEBARCH}.deb data.tar.xz | tar xvJ
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
@@ -84,12 +84,13 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-patch -p 0 < $CWD/claude-desktop.patch
-
 mkdir -p $PKG/usr/bin $PKG/usr/lib64 $PKG/usr/share
 cp -rv usr/bin/* $PKG/usr/bin/
 cp -rv usr/lib/* $PKG/usr/lib64/
 cp -rv usr/share/* $PKG/usr/share/
+
+rm -f $PKG/usr/bin/claude-desktop
+ln -sf ../lib64/claude-desktop/claude-desktop $PKG/usr/bin/claude-desktop
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION/
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild

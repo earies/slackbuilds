@@ -6,14 +6,14 @@
 # customary to leave one space after the ':' except on otherwise blank lines.
 
               |-----handy-ruler------------------------------------------------------|
-claude-desktop: claude-desktop (Claude Desktop for Linux)
+claude-desktop: claude-desktop (Claude Desktop on Linux)
 claude-desktop:
-claude-desktop: (Unofficial) Always there when you need it—Claude sits quietly
-claude-desktop: in your workflow. No tab-hopping required.
-claude-desktop:
-claude-desktop:
-claude-desktop:
+claude-desktop: The desktop app on Linux gives you the same Chat, Cowork, and Claude
+claude-desktop: Code experience as macOS and Windows: parallel sessions, visual diff
+claude-desktop: review, an integrated terminal and editor, and live app preview.
 claude-desktop:
 claude-desktop:
-claude-desktop: https://claude.ai
+claude-desktop:
+claude-desktop:
+claude-desktop: https://code.claude.com/docs/en/desktop-linux
 claude-desktop:
