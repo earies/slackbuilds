@@ -76,11 +76,18 @@ cp -rv usr/bin/* $PKG/usr/bin/
 cp -rv usr/lib/* $PKG/usr/lib64/
 cp -rv usr/share/* $PKG/usr/share/
 
+find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
+  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
+  | cut -f 1 -d : | xargs chmod 0755 2> /dev/null || true
+
 rm -f $PKG/usr/bin/claude-desktop
 ln -sf ../lib64/claude-desktop/claude-desktop $PKG/usr/bin/claude-desktop
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION/
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+mv $PKG/usr/share/doc/claude-desktop/copyright $PKG/usr/doc/$PRGNAM-$VERSION
+rm -rf $PKG/usr/share/doc
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
