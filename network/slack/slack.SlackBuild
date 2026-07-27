@@ -24,7 +24,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=slack
-VERSION=${VERSION:-4.50.143}
+VERSION=${VERSION:-4.51.180}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
