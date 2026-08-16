@@ -25,7 +25,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=grim
-VERSION=${VERSION:-20250606_b7a99854}
+VERSION=${VERSION:-20260813_f63e1d2e}
 GITHASH="$(echo "$VERSION" | cut -d_ -f2)"
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
