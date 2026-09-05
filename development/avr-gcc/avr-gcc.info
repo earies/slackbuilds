@@ -1,10 +1,10 @@
 PRGNAM="avr-gcc"
-VERSION="15.3.0"
+VERSION="16.2.0"
 HOMEPAGE="http://www.gnu.org/software/gcc/"
-DOWNLOAD="ftp://ftp.gnu.org/pub/gnu/gcc/gcc-15.3.0/gcc-15.3.0.tar.xz \
-          https://libisl.sourceforge.io/isl-0.27.tar.bz2"
-MD5SUM="82f6bba8e5b66bafe081601fe3c88fba \
-        d9b7700a2f326e6c755cde8161055e59"
+DOWNLOAD="ftp://ftp.gnu.org/pub/gnu/gcc/gcc-16.2.0/gcc-16.2.0.tar.xz \
+          https://libisl.sourceforge.io/isl-0.28.tar.bz2"
+MD5SUM="19b777fb19ea4982731392481306f0d3 \
+        176c2a715ec3b9e11a4c00c3e0901804"
 DOWNLOAD_x86_64=""
 MD5SUM_x86_64=""
 REQUIRES="avr-binutils"
