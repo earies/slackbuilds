@@ -1,0 +1,3 @@
+libyang is a YANG data modelling language parser and toolkit written
+(and providing API) in C. The library is used e.g. in libnetconf2,
+Netopeer2 or sysrepo projects.
