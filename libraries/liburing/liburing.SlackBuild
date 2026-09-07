@@ -23,8 +23,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PKGNAM=liburing
-VERSION=${VERSION:-20260828_ae61c97}
-GITHASH=${GITHASH:-ae61c975e168d78a9d10c6d332d2f0a4839a8b71}
+VERSION=${VERSION:-20260831_4cf7343}
+GITHASH=${GITHASH:-4cf73437863c2e492d2a1d0f24330f391c0f075b}
 BUILD=${BUILD:-1}
 
 # Automatically determine the architecture we're building on:
