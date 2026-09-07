@@ -1,34 +1,42 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index b1d072c..8fe11f8 100644
+Make snappy's unconditional -fno-rtti opt-out via SNAPPY_ENABLE_RTTI.
+
+Without RTTI, snappy emits no typeinfo for its polymorphic types.  Anything
+deriving from snappy::Source with RTTI enabled (folly's IOBufSnappySource in
+libfolly_compression_compression.a) then fails to link with
+"undefined reference to `typeinfo for snappy::Source'".
+
+Regenerated for snappy 1.2.2, which uses if(MSVC) rather than
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC").
+
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -53,8 +53,10 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+@@ -53,8 +53,10 @@
    add_definitions(-D_HAS_EXCEPTIONS=0)
  
    # Disable RTTI.
 -  string(REGEX REPLACE "/GR" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 -  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")
 +  if(NOT SNAPPY_ENABLE_RTTI)
-+      string(REGEX REPLACE "/GR" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")
-+  endif(SNAPPY_ENABLE_RTTI)
- else(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
++    string(REGEX REPLACE "/GR" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
++    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")
++  endif(NOT SNAPPY_ENABLE_RTTI)
+ else(MSVC)
    # Use -Wall for clang and gcc.
    if(NOT CMAKE_CXX_FLAGS MATCHES "-Wall")
-@@ -83,8 +85,10 @@ else(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+@@ -83,8 +85,10 @@
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
  
    # Disable RTTI.
 -  string(REGEX REPLACE "-frtti" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 -  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 +  if(NOT SNAPPY_ENABLE_RTTI)
-+      string(REGEX REPLACE "-frtti" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
-+  endif(SNAPPY_ENABLE_RTTI)
- endif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
++    string(REGEX REPLACE "-frtti" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
++    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
++  endif(NOT SNAPPY_ENABLE_RTTI)
+ endif(MSVC)
  
  # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to make
-@@ -103,6 +107,8 @@ option(SNAPPY_REQUIRE_AVX2 "Target processors with AVX2 support." OFF)
+@@ -103,6 +107,8 @@
  
  option(SNAPPY_INSTALL "Install Snappy's header and library" ON)
  
