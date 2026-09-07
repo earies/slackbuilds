@@ -25,8 +25,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=proxygen
-VERSION=${VERSION:-20250629_9d0d73a}
-GITHASH=${GITHASH:-9d0d73a091e9b280c5b50cae2e5c9d552e692237}
+VERSION=${VERSION:-20260907_f40829a}
+GITHASH=${GITHASH:-f40829a298a1668dfc69a35ffcf6a8d274e1178e}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -80,6 +80,9 @@ find -L . \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+# Missing gflags include, only exposed when <liburing.h> is installed
+patch -p1 < $CWD/workerthread-gflags.patch
 
 export CC=clang
 export CXX=clang++

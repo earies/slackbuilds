@@ -1,0 +1,15 @@
+WorkerThread.cpp uses the gflags DEFINE_*/FLAGS_* macros but relies on a
+transitive include via folly/io/async/IoUringBackend.h, which current folly
+no longer provides.  The block is only compiled when <liburing.h> is present,
+so upstream does not hit it.
+
+--- a/proxygen/lib/services/WorkerThread.cpp
++++ b/proxygen/lib/services/WorkerThread.cpp
+@@ -13,6 +13,7 @@
+ #include <folly/String.h>
+ #include <folly/io/async/EventBaseManager.h>
+ #include <folly/io/async/IoUringBackend.h>
++#include <folly/portability/GFlags.h>
+ #include <glog/logging.h>
+ #include <signal.h>
+
