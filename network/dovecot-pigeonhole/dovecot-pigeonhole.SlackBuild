@@ -24,11 +24,9 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=dovecot-pigeonhole
-VERSION=${VERSION:-0.5.21.1}
+VERSION=${VERSION:-2.4.5}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
-
-SRCNAM=dovecot-2.3-pigeonhole
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -59,11 +57,11 @@ fi
 
 set -e
 
-rm -rf $TMP/$SRCNAM-$VERSION $PKG
+rm -rf $TMP/$PRGNAM-$VERSION $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-tar xvf $CWD/$SRCNAM-$VERSION.tar.gz
-cd $TMP/$SRCNAM-$VERSION
+tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
+cd $TMP/$PRGNAM-$VERSION
 chown -R root.root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
@@ -89,7 +87,7 @@ make
 make install-strip DESTDIR=$PKG
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp AUTHORS COPYING* INSTALL NEWS README TODO \
+cp AUTHORS COPYING* INSTALL NEWS README \
   $PKG/usr/doc/$PRGNAM-$VERSION
 
 find $PKG/usr/man -type f -exec gzip -9 {} \;
