@@ -2,7 +2,7 @@
 
 # Slackware build script for vali
 
-# Copyright 2025-2026 Ebben Aries <slackbuilds@dscp.org>
+# Copyright 2025 Ebben Aries <slackbuilds@dscp.org>
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -25,7 +25,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=vali
-VERSION=${VERSION:-20260317_cfc9abf4}
+VERSION=${VERSION:-20251015_263c1ae0}
 GITHASH="$(echo "$VERSION" | cut -d_ -f2)"
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
@@ -76,10 +76,6 @@ find -L . \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
-
-# Use newer meson from python3-meson-opt
-PYVER=$(python3 -c 'import sys; print("%d.%d" % sys.version_info[:2])')
-export PYTHONPATH=/opt/python$PYVER/site-packages
 
 mkdir build
 cd build
