@@ -1,29 +1,34 @@
 #!/bin/sh
 #
 # Rasdaemon startup script for Slackware Linux
+#
+# rasdaemon also logs its startup messages to syslog, so console output is
+# discarded here to keep boot quiet.
 
 BASE=rasdaemon
 
-UNSHARE=/usr/bin/unshare
 RASDAEMON=/usr/bin/${BASE}
 
 # Check if rasdaemon is present.
-if [ ! -x ${RASDAEMON} ]; then
+if [ ! -x "${RASDAEMON}" ]; then
   echo "${RASDAEMON} not present or not executable"
   exit 1
 fi
 
 rasdaemon_start() {
-  echo "Starting ${BASE} ..."
-
-  ${RASDAEMON} -r
-  ${RASDAEMON} --enable
+  echo "Starting ${BASE}"
+  "${RASDAEMON}" -r > /dev/null 2>&1 || echo "${BASE}: failed to start"
+  "${RASDAEMON}" --enable > /dev/null 2>&1 || echo "${BASE}: failed to enable events"
 }
 
 rasdaemon_stop() {
-  echo -n "Stopping ${BASE} ..."
-  ${RASDAEMON} --disable
-  echo " done"
+  echo "Stopping ${BASE}"
+  "${RASDAEMON}" --disable > /dev/null 2>&1
+  pid=$(pidof -x "${BASE}")
+  if [ -n "${pid}" ]; then
+    # shellcheck disable=SC2086 # pidof may return several PIDs
+    kill ${pid}
+  fi
 }
 
 rasdaemon_restart() {
@@ -33,8 +38,7 @@ rasdaemon_restart() {
 }
 
 rasdaemon_status() {
-  pid=$(pidof ${BASE})
-  if [ ! -z "${pid}" ] && ps -o cmd $pid | grep -q ${BASE} ; then
+  if pidof -x "${BASE}" > /dev/null; then
     echo "Status of ${BASE}: running"
   else
     echo "Status of ${BASE}: stopped"
