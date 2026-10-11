@@ -96,7 +96,11 @@ cd build
     --sysconfdir=/etc \
     -Daer=enabled \
     -Dmce=enabled \
-    -Dsqlite3=enabled
+    -Dsqlite3=enabled \
+    -Denable-arch=x86 \
+    -Dcxl=disabled \
+    -Dmemory-failure=disabled \
+    -Dsignal=disabled
   "${NINJA:=ninja}"
   DESTDIR=$PKG $NINJA install
 cd ..
