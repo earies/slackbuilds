@@ -1,0 +1,12 @@
+PRGNAM="aardvark-dns"
+VERSION="2.1.0"
+HOMEPAGE="https://github.com/containers/aardvark-dns"
+DOWNLOAD="UNSUPPORTED"
+MD5SUM=""
+DOWNLOAD_x86_64="https://github.com/containers/aardvark-dns/archive/v2.1.0/aardvark-dns-2.1.0.tar.gz \
+                 https://github.com/containers/aardvark-dns/releases/download/v2.1.0/aardvark-dns-v2.1.0-vendor.tar.gz"
+MD5SUM_x86_64="c40c5a8636b7be85ba1051cf07cd984d \
+               7e87accaa89db25bcc667f20d645359e"
+REQUIRES="rust-opt"
+MAINTAINER="Gustavo B. Schenkel"
+EMAIL="gustavo.schenkel@gmail.com"
