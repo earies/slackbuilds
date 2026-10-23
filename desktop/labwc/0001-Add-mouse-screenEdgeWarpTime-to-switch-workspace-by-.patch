@@ -1,0 +1,372 @@
+From 4bc61043136a11d3fdea34424381ec96af149d85 Mon Sep 17 00:00:00 2001
+From: Ebben Aries <exa@dscp.org>
+Date: Thu, 22 Oct 2026 15:22:34 -0700
+Subject: [PATCH] Add <mouse><screenEdgeWarpTime> to switch workspace by
+ dragging to edge
+
+Like Openbox, holding a dragged window at the outer left/right edge of
+the output layout for <screenEdgeWarpTime> ms switches to the adjacent
+workspace, and the window comes along (workspaces_switch_to() already
+moves the grabbed view). While held, it keeps switching at that
+interval. <screenEdgeWarpMouse> optionally warps the cursor and window
+to the opposite edge after each switch.
+
+Outer left/right edges are reserved for warping when enabled, so they
+no longer trigger snap-to-edge. Disabled by default.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ docs/labwc-config.5.scd |  14 ++++
+ docs/rc.xml.all         |   3 +
+ include/config/rcxml.h  |   2 +
+ include/edge-warp.h     |  25 +++++++
+ src/config/rcxml.c      |   6 ++
+ src/edge-warp.c         | 159 ++++++++++++++++++++++++++++++++++++++++
+ src/input/cursor.c      |   2 +
+ src/interactive.c       |   9 +++
+ src/meson.build         |   1 +
+ 9 files changed, 221 insertions(+)
+ create mode 100644 include/edge-warp.h
+ create mode 100644 src/edge-warp.c
+
+diff --git a/docs/labwc-config.5.scd b/docs/labwc-config.5.scd
+index f8943307..b0b74dc1 100644
+--- a/docs/labwc-config.5.scd
++++ b/docs/labwc-config.5.scd
+@@ -915,6 +915,20 @@ input-devices by the Wayland protocol.
+ *<mouse><doubleClickTime>*
+ 	Set double click time in milliseconds. Default is 500.
+ 
++*<mouse><screenEdgeWarpTime>*
++	When moving a window, hold the cursor at the left or right edge of
++	the output layout for this many milliseconds to switch to the
++	workspace on the left or right. The window comes along. While the
++	cursor stays at the edge, workspaces keep switching at this interval.
++	Only outer edges count; edges shared with another output do not.
++	When enabled, outer left/right edges no longer snap windows.
++	Default is 0 (disabled).
++
++*<mouse><screenEdgeWarpMouse>* [yes|no]
++	After switching workspace with *<screenEdgeWarpTime>*, move the
++	cursor (and the window) to the opposite edge of the output.
++	Default is no.
++
+ *<mouse><context name=""><mousebind button="" direction="" action=""
+ overrideInhibition=""><action>*
+ 	Multiple *<mousebind>* can exist within one *<context>*; and multiple
+diff --git a/docs/rc.xml.all b/docs/rc.xml.all
+index cb515260..ce6f1eef 100644
+--- a/docs/rc.xml.all
++++ b/docs/rc.xml.all
+@@ -373,6 +373,9 @@
+ 
+     <!-- time is in ms -->
+     <doubleClickTime>500</doubleClickTime>
++    <!-- ms to hold a dragged window at the screen edge; 0 disables -->
++    <screenEdgeWarpTime>0</screenEdgeWarpTime>
++    <screenEdgeWarpMouse>no</screenEdgeWarpMouse>
+ 
+     <context name="Frame">
+       <mousebind button="W-Left" action="Press">
+diff --git a/include/config/rcxml.h b/include/config/rcxml.h
+index de2312e7..433f4875 100644
+--- a/include/config/rcxml.h
++++ b/include/config/rcxml.h
+@@ -137,6 +137,8 @@ struct rcxml {
+ 
+ 	/* mouse */
+ 	long doubleclick_time;     /* in ms */
++	int screen_edge_warp_time; /* in ms, 0 disables */
++	bool screen_edge_warp_mouse;
+ 	struct wl_list mousebinds; /* struct mousebind.link */
+ 
+ 	/* touch tablet */
+diff --git a/include/edge-warp.h b/include/edge-warp.h
+new file mode 100644
+index 00000000..a891411e
+--- /dev/null
++++ b/include/edge-warp.h
+@@ -0,0 +1,25 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef LABWC_EDGE_WARP_H
++#define LABWC_EDGE_WARP_H
++
++#include <stdbool.h>
++#include "common/edge.h"
++
++struct output;
++
++/*
++ * Switch workspace when a window is dragged to the left/right edge of the
++ * output layout and held there for <mouse><screenEdgeWarpTime> ms.
++ */
++
++/* Returns true if edge-warp is configured for this output edge */
++bool edge_warp_owns_edge(struct output *output, enum lab_edge edge,
++	double cursor_x, double cursor_y);
++
++/* Arm, keep or cancel the warp timer based on cursor position */
++void edge_warp_update(void);
++
++/* Cancel any pending warp */
++void edge_warp_finish(void);
++
++#endif /* LABWC_EDGE_WARP_H */
+diff --git a/src/config/rcxml.c b/src/config/rcxml.c
+index 3276124a..ea15e91d 100644
+--- a/src/config/rcxml.c
++++ b/src/config/rcxml.c
+@@ -1262,6 +1262,10 @@ entry(xmlNode *node, char *nodename, char *content)
+ 		} else {
+ 			wlr_log(WLR_ERROR, "invalid doubleClickTime");
+ 		}
++	} else if (!strcasecmp(nodename, "screenEdgeWarpTime.mouse")) {
++		rc.screen_edge_warp_time = MAX(atoi(content), 0);
++	} else if (!strcasecmp(nodename, "screenEdgeWarpMouse.mouse")) {
++		set_bool(content, &rc.screen_edge_warp_mouse);
+ 	} else if (!strcasecmp(nodename, "scrollFactor.mouse")) {
+ 		/* This is deprecated. Show an error message in post_processing() */
+ 		set_double(content, &mouse_scroll_factor);
+@@ -1601,6 +1605,8 @@ rcxml_init(void)
+ 	rc.raise_on_focus_delay_ms = 0;
+ 
+ 	rc.doubleclick_time = 500;
++	rc.screen_edge_warp_time = 0;
++	rc.screen_edge_warp_mouse = false;
+ 
+ 	rc.tablet.force_mouse_emulation = false;
+ 	rc.tablet.output_name = NULL;
+diff --git a/src/edge-warp.c b/src/edge-warp.c
+new file mode 100644
+index 00000000..108106da
+--- /dev/null
++++ b/src/edge-warp.c
+@@ -0,0 +1,159 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include "edge-warp.h"
++#include <wayland-server-core.h>
++#include <wlr/types/wlr_cursor.h>
++#include <wlr/types/wlr_output_layout.h>
++#include "config/rcxml.h"
++#include "labwc.h"
++#include "output.h"
++#include "view.h"
++#include "workspaces.h"
++
++static struct {
++	struct wl_event_source *timer;
++	/* LAB_EDGE_LEFT, LAB_EDGE_RIGHT or LAB_EDGE_NONE */
++	enum lab_edge edge;
++} state;
++
++bool
++edge_warp_owns_edge(struct output *output, enum lab_edge edge,
++		double cursor_x, double cursor_y)
++{
++	if (rc.screen_edge_warp_time <= 0) {
++		return false;
++	}
++	if (edge != LAB_EDGE_LEFT && edge != LAB_EDGE_RIGHT) {
++		return false;
++	}
++	/* Only outer edges, not edges shared with another output */
++	return !wlr_output_layout_adjacent_output(server.output_layout,
++		(enum wlr_direction)edge, output->wlr_output,
++		cursor_x, cursor_y);
++}
++
++/* Returns the outer edge the cursor is touching, or LAB_EDGE_NONE */
++static enum lab_edge
++edge_at_cursor(struct output **dest_output)
++{
++	struct output *output = output_nearest_to_cursor();
++	if (!output_is_usable(output)) {
++		return LAB_EDGE_NONE;
++	}
++	*dest_output = output;
++
++	struct wlr_box box;
++	wlr_output_layout_get_box(server.output_layout, output->wlr_output,
++		&box);
++	double x = server.seat.cursor->x;
++	double y = server.seat.cursor->y;
++
++	enum lab_edge edge = LAB_EDGE_NONE;
++	if (x < box.x + 1) {
++		edge = LAB_EDGE_LEFT;
++	} else if (x >= box.x + box.width - 1) {
++		edge = LAB_EDGE_RIGHT;
++	}
++	if (edge == LAB_EDGE_NONE
++			|| !edge_warp_owns_edge(output, edge, x, y)) {
++		return LAB_EDGE_NONE;
++	}
++	return edge;
++}
++
++/* Move the cursor (and the grabbed view with it) to the opposite edge */
++static void
++warp_cursor(struct output *output, enum lab_edge edge)
++{
++	struct wlr_box box;
++	wlr_output_layout_get_box(server.output_layout, output->wlr_output,
++		&box);
++
++	double old_x = server.seat.cursor->x;
++	double y = server.seat.cursor->y;
++	/* Land 1px outside the opposite warp zone */
++	double new_x = edge == LAB_EDGE_LEFT
++		? box.x + box.width - 2 : box.x + 1;
++
++	if (!wlr_cursor_warp(server.seat.cursor, NULL, new_x, y)) {
++		return;
++	}
++
++	/*
++	 * process_cursor_move() derives the view position from the cursor
++	 * delta, so the grab stays consistent. Move the view now so it
++	 * does not lag behind until the next motion event.
++	 */
++	struct view *view = server.grabbed_view;
++	if (view) {
++		int dx = (int)(server.seat.cursor->x - old_x);
++		view_move(view, view->current.x + dx, view->current.y);
++	}
++}
++
++static int
++handle_timeout(void *data)
++{
++	struct output *output = NULL;
++	enum lab_edge edge = edge_at_cursor(&output);
++	if (!server.grabbed_view || edge == LAB_EDGE_NONE
++			|| edge != state.edge) {
++		edge_warp_finish();
++		return 0;
++	}
++
++	struct workspace *target = workspaces_find(server.workspaces.current,
++		edge == LAB_EDGE_LEFT ? "left" : "right", /*wrap*/ true);
++	if (!target || target == server.workspaces.current) {
++		edge_warp_finish();
++		return 0;
++	}
++
++	/* The grabbed view follows the workspace switch */
++	workspaces_switch_to(target, /*update_focus*/ false);
++
++	if (rc.screen_edge_warp_mouse) {
++		warp_cursor(output, edge);
++		edge_warp_finish();
++	} else {
++		/* Still at the edge: keep flipping while held */
++		wl_event_source_timer_update(state.timer,
++			rc.screen_edge_warp_time);
++	}
++	return 0;
++}
++
++void
++edge_warp_update(void)
++{
++	if (rc.screen_edge_warp_time <= 0 || !server.grabbed_view) {
++		return;
++	}
++
++	struct output *output = NULL;
++	enum lab_edge edge = edge_at_cursor(&output);
++	if (edge == LAB_EDGE_NONE) {
++		edge_warp_finish();
++		return;
++	}
++	if (edge == state.edge) {
++		/* Already armed for this edge */
++		return;
++	}
++
++	state.edge = edge;
++	if (!state.timer) {
++		state.timer = wl_event_loop_add_timer(server.wl_event_loop,
++			handle_timeout, NULL);
++	}
++	wl_event_source_timer_update(state.timer, rc.screen_edge_warp_time);
++}
++
++void
++edge_warp_finish(void)
++{
++	if (state.timer) {
++		wl_event_source_remove(state.timer);
++	}
++	state.timer = NULL;
++	state.edge = LAB_EDGE_NONE;
++}
+diff --git a/src/input/cursor.c b/src/input/cursor.c
+index 5a169bd3..005afba2 100644
+--- a/src/input/cursor.c
++++ b/src/input/cursor.c
+@@ -23,6 +23,7 @@
+ #include "config/rcxml.h"
+ #include "cycle.h"
+ #include "dnd.h"
++#include "edge-warp.h"
+ #include "idle.h"
+ #include "input/gestures.h"
+ #include "input/keyboard.h"
+@@ -305,6 +306,7 @@ process_cursor_move(uint32_t time)
+ 
+ 	view_move(view, x, y);
+ 	overlay_update(&server.seat);
++	edge_warp_update();
+ }
+ 
+ static void
+diff --git a/src/interactive.c b/src/interactive.c
+index dcea0c0c..1f2a09d5 100644
+--- a/src/interactive.c
++++ b/src/interactive.c
+@@ -2,6 +2,7 @@
+ #include <assert.h>
+ #include <wlr/types/wlr_cursor.h>
+ #include "config/rcxml.h"
++#include "edge-warp.h"
+ #include "edges.h"
+ #include "input/keyboard.h"
+ #include "labwc.h"
+@@ -261,6 +262,13 @@ edge_from_cursor(struct seat *seat, struct output **dest_output,
+ 		return false;
+ 	}
+ 
++	/* Outer left/right edges are reserved for <screenEdgeWarpTime> */
++	if (edge_warp_owns_edge(output, *edge1, seat->cursor->x,
++			seat->cursor->y)) {
++		*edge1 = LAB_EDGE_NONE;
++		return false;
++	}
++
+ 	if (*edge1 == LAB_EDGE_TOP || *edge1 == LAB_EDGE_BOTTOM) {
+ 		if (left < rc.snap_edge_corner_range) {
+ 			*edge2 = LAB_EDGE_LEFT;
+@@ -360,6 +368,7 @@ interactive_cancel(struct view *view)
+ 	}
+ 
+ 	overlay_finish(&server.seat);
++	edge_warp_finish();
+ 
+ 	resize_indicator_hide(view);
+ 
+diff --git a/src/meson.build b/src/meson.build
+index 05163cfa..433d7885 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -4,6 +4,7 @@ labwc_sources = files(
+   'debug.c',
+   'desktop.c',
+   'dnd.c',
++  'edge-warp.c',
+   'edges.c',
+   'idle.c',
+   'interactive.c',
+-- 
+2.56.0
+
