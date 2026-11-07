@@ -1,0 +1,115 @@
+From b9544c608193189ce2ebf99495acae59cf0ad4c0 Mon Sep 17 00:00:00 2001
+From: Ebben Aries <exa@dscp.org>
+Date: Sat, 22 Aug 2026 12:51:47 -0700
+Subject: [PATCH 5/6] fix(sni): fetch item properties addressed at the
+ registered bus name
+
+A GDBus proxy resolves the name it is created for to the current owner and
+addresses subsequent messages to that unique connection name. Some
+StatusNotifierItem implementations only answer org.freedesktop.DBus.Properties
+GetAll when the message is addressed to the well-known name they registered
+with the watcher, and return an error for the same call addressed to the
+unique name that owns it.
+
+For those items the proxy's property cache comes back empty, Id and Category
+are unset, and the item is discarded as invalid even though it is present and
+serving on the bus. Electron >= 43 behaves this way, so Signal Desktop 8.24.1
+and other Electron 43 applications vanish from the tray. Signal 8.23.0 is
+unaffected only because it registers by object path, which the watcher records
+against the sender's unique name, so no well-known name is ever involved.
+
+Demonstrated against a live Signal 8.24.1 item, same process, path, interface
+and argument, differing only in destination:
+
+  gdbus ... --dest org.freedesktop.StatusNotifierItem-27365-1  -> full properties
+  gdbus ... --dest :1.2327                                     -> Error.Failed
+                                                                  "error occurred in GetAll"
+
+When the cached properties yield no Id or Category, retry once with an explicit
+GetAll addressed at bus_name exactly as registered, which is the well-known
+name for such items and the unique name for everything else. Items that answer
+the first fetch are untouched; the error and invalidate() still fire when the
+retry also comes back without the required properties.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+---
+ include/modules/sni/item.hpp |  2 ++
+ src/modules/sni/item.cpp     | 42 ++++++++++++++++++++++++++++++++++--
+ 2 files changed, 42 insertions(+), 2 deletions(-)
+
+diff --git a/include/modules/sni/item.hpp b/include/modules/sni/item.hpp
+index 6318a616..8ca757c4 100644
+--- a/include/modules/sni/item.hpp
++++ b/include/modules/sni/item.hpp
+@@ -75,6 +75,8 @@ class Item : public sigc::trackable {
+  private:
+   void onConfigure(GdkEventConfigure* ev);
+   void proxyReady(Glib::RefPtr<Gio::AsyncResult>& result);
++  void fetchPropertiesByBusName();
++  void propertiesByBusNameReady(Glib::RefPtr<Gio::AsyncResult>& result);
+   void setProperty(const std::string& name, Glib::VariantBase& value);
+   void setStatus(const Glib::ustring& value);
+   void setTooltipMarkup(const Glib::ustring& markup);
+diff --git a/src/modules/sni/item.cpp b/src/modules/sni/item.cpp
+index f26c8271..cad784f9 100644
+--- a/src/modules/sni/item.cpp
++++ b/src/modules/sni/item.cpp
+@@ -177,8 +177,14 @@ void Item::proxyReady(Glib::RefPtr<Gio::AsyncResult>& result) {
+     this->proxy_->signal_signal().connect(sigc::mem_fun(*this, &Item::onSignal));
+ 
+     if (this->id.empty() || this->category.empty()) {
+-      spdlog::error("Invalid Status Notifier Item: {}, {}", bus_name, object_path);
+-      invalidate();
++      /*
++       * The proxy resolves the item's bus name to its current owner and fetches properties from
++       * that unique name. Some implementations (Electron >= 43) only answer Properties.GetAll when
++       * the message is addressed to the well-known name they registered with the watcher, and
++       * return an error otherwise, leaving the proxy cache empty. Retry once addressed at the bus
++       * name exactly as registered before giving up on the item.
++       */
++      fetchPropertiesByBusName();
+       return;
+     }
+     this->updateImage();
+@@ -193,6 +199,38 @@ void Item::proxyReady(Glib::RefPtr<Gio::AsyncResult>& result) {
+   }
+ }
+ 
++void Item::fetchPropertiesByBusName() {
++  auto params = Glib::VariantContainerBase::create_tuple(
++      Glib::Variant<Glib::ustring>::create(SNI_INTERFACE_NAME));
++  proxy_->get_connection()->call(object_path, "org.freedesktop.DBus.Properties", "GetAll", params,
++                                 sigc::mem_fun(*this, &Item::propertiesByBusNameReady),
++                                 cancellable_, bus_name);
++}
++
++void Item::propertiesByBusNameReady(Glib::RefPtr<Gio::AsyncResult>& result) {
++  try {
++    auto reply = proxy_->get_connection()->call_finish(result);
++    Glib::Variant<std::map<Glib::ustring, Glib::VariantBase>> properties;
++    reply.get_child(properties, 0);
++    for (const auto& [name, value] : properties.get()) {
++      Glib::VariantBase property = value;
++      setProperty(name.raw(), property);
++    }
++  } catch (const Glib::Error& err) {
++    spdlog::debug("GetAll on {} {} failed: {}", bus_name, object_path, err.what());
++  } catch (const std::exception& err) {
++    spdlog::debug("GetAll on {} {} failed: {}", bus_name, object_path, err.what());
++  }
++
++  if (this->id.empty() || this->category.empty()) {
++    spdlog::error("Invalid Status Notifier Item: {}, {}", bus_name, object_path);
++    invalidate();
++    return;
++  }
++  this->updateImage();
++  setReady();
++}
++
+ template <typename T>
+ T get_variant(const Glib::VariantBase& value) {
+   return Glib::VariantBase::cast_dynamic<Glib::Variant<T>>(value).get();
+-- 
+2.56.0
+

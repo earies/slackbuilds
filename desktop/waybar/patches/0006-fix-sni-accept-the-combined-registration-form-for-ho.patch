@@ -1,0 +1,56 @@
+From 64105a61427fc66798c1f49da1264d7f3b22067d Mon Sep 17 00:00:00 2001
+From: Ebben Aries <exa@dscp.org>
+Date: Mon, 12 Oct 2026 11:25:24 -0700
+Subject: [PATCH 6/6] fix(sni): accept the combined registration form for hosts
+ too
+
+bcb91b77 taught handleRegisterItem the combined "bus_name/object_path"
+registration form that Electron >= 43.4.1 sends, but left
+handleRegisterHost with the original two-shape parser: a bare bus name or
+a bare object path resolved against the sender. Anything else is still
+taken whole as a bus name, fails g_dbus_is_name, and is rejected with
+InvalidArgs.
+
+Nothing is known to register a host that way today, and waybar's own Host
+registers by bare object path (host.cpp), so this is defensive rather than
+a fix for an observed failure. It is worth closing anyway: the watcher
+emits the combined form itself when announcing registrations,
+Host::getBusNameAndObjectPath has parsed it since ba79b4d3 (2018-11-22),
+and handleRegisterItem now accepts it, so the host handler is the only
+place left that cannot read the shape the rest of the file speaks.
+
+Same split, same idiom as bcb91b77.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01AfwWoPBpmmH5o8rFHVQAs3
+---
+ src/modules/sni/watcher.cpp | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/modules/sni/watcher.cpp b/src/modules/sni/watcher.cpp
+index b28d6d0a..ab7f5789 100644
+--- a/src/modules/sni/watcher.cpp
++++ b/src/modules/sni/watcher.cpp
+@@ -69,6 +69,7 @@ gboolean Watcher::handleRegisterHost(Watcher* obj, GDBusMethodInvocation* invoca
+                                      const gchar* service) {
+   const gchar* bus_name = service;
+   const gchar* object_path = "/StatusNotifierHost";
++  g_autofree gchar* bus_name_buf = nullptr;
+ 
+   if (strlen(service) > MAX_SERVICE_LENGTH) {
+     g_dbus_method_invocation_return_error(invocation, G_DBUS_ERROR, G_DBUS_ERROR_LIMITS_EXCEEDED,
+@@ -78,6 +79,11 @@ gboolean Watcher::handleRegisterHost(Watcher* obj, GDBusMethodInvocation* invoca
+   if (*service == '/') {
+     bus_name = g_dbus_method_invocation_get_sender(invocation);
+     object_path = service;
++  } else if (const gchar* slash = g_strstr_len(service, -1, "/")) {
++    // Same combined "bus_name/object_path" form handleRegisterItem accepts
++    bus_name_buf = g_strndup(service, slash - service);
++    bus_name = bus_name_buf;
++    object_path = slash;
+   }
+   if (g_dbus_is_name(bus_name) == FALSE) {
+     g_dbus_method_invocation_return_error(invocation, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+-- 
+2.56.0
+

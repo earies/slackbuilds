@@ -1,0 +1,91 @@
+From 06d678fc40a75b5747f2d9aaa0d870c94e3a894e Mon Sep 17 00:00:00 2001
+From: Ebben Aries <exa@dscp.org>
+Date: Fri, 3 Jul 2026 13:36:05 -0700
+Subject: [PATCH 1/6] fix(AModule): move eventMap_ definition out of header
+
+The static const inline eventMap_ defined in AModule.hpp causes every
+translation unit that includes the header to emit its own dynamic
+initializer. While the linker deduplicates the symbol, the initializer
+can collide with other static constructors, leading to a SIGSEGV
+during __static_initialization_and_destruction_0.
+
+Move the definition to AModule.cpp so it is initialized exactly once.
+
+Rebased onto b7a6fa8c, which moved eventActionMap_ above eventMap_ in
+the header, and onto the addition of the on-click-copy entry.
+---
+ include/AModule.hpp | 23 +----------------------
+ src/AModule.cpp     | 23 +++++++++++++++++++++++
+ 2 files changed, 24 insertions(+), 22 deletions(-)
+
+diff --git a/include/AModule.hpp b/include/AModule.hpp
+index 771ec869..0d2aba01 100644
+--- a/include/AModule.hpp
++++ b/include/AModule.hpp
+@@ -114,28 +114,7 @@ class AModule : public IModule {
+   gdouble distance_scrolled_y_;
+   gdouble distance_scrolled_x_;
+   sigc::connection cursor_timeout_conn_;
+-  static const inline std::map<std::pair<uint, GdkEventType>, std::string> eventMap_{
+-      {std::make_pair(1, GdkEventType::GDK_BUTTON_PRESS), "on-click"},
+-      {std::make_pair(1, GdkEventType::GDK_BUTTON_RELEASE), "on-click-release"},
+-      {std::make_pair(1, GdkEventType::GDK_2BUTTON_PRESS), "on-double-click"},
+-      {std::make_pair(1, GdkEventType::GDK_3BUTTON_PRESS), "on-triple-click"},
+-      {std::make_pair(2, GdkEventType::GDK_BUTTON_PRESS), "on-click-middle"},
+-      {std::make_pair(2, GdkEventType::GDK_BUTTON_RELEASE), "on-click-middle-release"},
+-      {std::make_pair(2, GdkEventType::GDK_2BUTTON_PRESS), "on-double-click-middle"},
+-      {std::make_pair(2, GdkEventType::GDK_3BUTTON_PRESS), "on-triple-click-middle"},
+-      {std::make_pair(3, GdkEventType::GDK_BUTTON_PRESS), "on-click-right"},
+-      {std::make_pair(3, GdkEventType::GDK_BUTTON_RELEASE), "on-click-right-release"},
+-      {std::make_pair(3, GdkEventType::GDK_2BUTTON_PRESS), "on-double-click-right"},
+-      {std::make_pair(3, GdkEventType::GDK_3BUTTON_PRESS), "on-triple-click-right"},
+-      {std::make_pair(8, GdkEventType::GDK_BUTTON_PRESS), "on-click-backward"},
+-      {std::make_pair(8, GdkEventType::GDK_BUTTON_RELEASE), "on-click-backward-release"},
+-      {std::make_pair(8, GdkEventType::GDK_2BUTTON_PRESS), "on-double-click-backward"},
+-      {std::make_pair(8, GdkEventType::GDK_3BUTTON_PRESS), "on-triple-click-backward"},
+-      {std::make_pair(9, GdkEventType::GDK_BUTTON_PRESS), "on-click-forward"},
+-      {std::make_pair(9, GdkEventType::GDK_BUTTON_RELEASE), "on-click-forward-release"},
+-      {std::make_pair(9, GdkEventType::GDK_2BUTTON_PRESS), "on-double-click-forward"},
+-      {std::make_pair(9, GdkEventType::GDK_3BUTTON_PRESS), "on-triple-click-forward"},
+-      {std::make_pair(10, GdkEventType::GDK_BUTTON_PRESS), "on-click-copy"}};
++  static const std::map<std::pair<uint, GdkEventType>, std::string> eventMap_;
+ };
+ 
+ }  // namespace waybar
+diff --git a/src/AModule.cpp b/src/AModule.cpp
+index 7e54e604..2445b1d9 100644
+--- a/src/AModule.cpp
++++ b/src/AModule.cpp
+@@ -20,6 +20,29 @@ static void forgetReapedChildren(std::vector<int>& pids) {
+                 [](int pid) { return std::find(reap.cbegin(), reap.cend(), pid) == reap.cend(); });
+ }
+ 
++const std::map<std::pair<uint, GdkEventType>, std::string> AModule::eventMap_{
++    {std::make_pair(1, GdkEventType::GDK_BUTTON_PRESS), "on-click"},
++    {std::make_pair(1, GdkEventType::GDK_BUTTON_RELEASE), "on-click-release"},
++    {std::make_pair(1, GdkEventType::GDK_2BUTTON_PRESS), "on-double-click"},
++    {std::make_pair(1, GdkEventType::GDK_3BUTTON_PRESS), "on-triple-click"},
++    {std::make_pair(2, GdkEventType::GDK_BUTTON_PRESS), "on-click-middle"},
++    {std::make_pair(2, GdkEventType::GDK_BUTTON_RELEASE), "on-click-middle-release"},
++    {std::make_pair(2, GdkEventType::GDK_2BUTTON_PRESS), "on-double-click-middle"},
++    {std::make_pair(2, GdkEventType::GDK_3BUTTON_PRESS), "on-triple-click-middle"},
++    {std::make_pair(3, GdkEventType::GDK_BUTTON_PRESS), "on-click-right"},
++    {std::make_pair(3, GdkEventType::GDK_BUTTON_RELEASE), "on-click-right-release"},
++    {std::make_pair(3, GdkEventType::GDK_2BUTTON_PRESS), "on-double-click-right"},
++    {std::make_pair(3, GdkEventType::GDK_3BUTTON_PRESS), "on-triple-click-right"},
++    {std::make_pair(8, GdkEventType::GDK_BUTTON_PRESS), "on-click-backward"},
++    {std::make_pair(8, GdkEventType::GDK_BUTTON_RELEASE), "on-click-backward-release"},
++    {std::make_pair(8, GdkEventType::GDK_2BUTTON_PRESS), "on-double-click-backward"},
++    {std::make_pair(8, GdkEventType::GDK_3BUTTON_PRESS), "on-triple-click-backward"},
++    {std::make_pair(9, GdkEventType::GDK_BUTTON_PRESS), "on-click-forward"},
++    {std::make_pair(9, GdkEventType::GDK_BUTTON_RELEASE), "on-click-forward-release"},
++    {std::make_pair(9, GdkEventType::GDK_2BUTTON_PRESS), "on-double-click-forward"},
++    {std::make_pair(9, GdkEventType::GDK_3BUTTON_PRESS), "on-triple-click-forward"},
++    {std::make_pair(10, GdkEventType::GDK_BUTTON_PRESS), "on-click-copy"}};
++
+ AModule::AModule(const Json::Value& config, const std::string& name, const std::string& id,
+                  bool enable_click, bool enable_scroll)
+     : name_(name),
+-- 
+2.56.0
+

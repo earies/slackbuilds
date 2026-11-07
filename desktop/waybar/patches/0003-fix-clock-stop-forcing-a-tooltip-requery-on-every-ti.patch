@@ -1,0 +1,97 @@
+From b767009fc1c4a828fc39c94be37951058678f4c9 Mon Sep 17 00:00:00 2001
+From: Ebben Aries <exa@dscp.org>
+Date: Sat, 8 Aug 2026 11:39:03 -0600
+Subject: [PATCH 3/6] fix(clock): stop forcing a tooltip requery on every tick
+
+Clock::update() runs every `interval` (1s in typical calendar setups)
+and unconditionally called label_.trigger_tooltip_query() after
+refreshing the custom tooltip widget's markup, regardless of whether
+the pointer was even over the module.
+
+m_tooltip_ is the same Gtk::Label instance embedded into the popup via
+tooltip->set_custom() in query_tlp_cb(); mutating its markup in place
+(the set_markup() call immediately above) already redraws it while the
+popup is open, the same way any on-screen widget redraws when its
+content changes. trigger_tooltip_query() isn't needed for that.
+
+Under gtk-layer-shell, the tooltip is an xdg_popup anchored to the
+bar's layer surface. Forcing a requery every second while hovering can
+tear down and recreate that popup's role, requiring a fresh
+configure/ack/commit round-trip with the compositor each time. If any
+one of those round-trips lands out of order, the popup can end up
+committed with a stale/empty buffer -- visible as the calendar
+occasionally showing an empty box instead of its contents partway
+through a hover, worse the longer/more often the cycle repeats over a
+session.
+
+Drop the forced requery from the periodic per-tick path. Content
+updates continue to show live while the popup is open because the
+underlying widget is mutated directly; a genuine new hover still
+triggers query_tlp_cb() through GTK's normal tooltip machinery.
+
+Calendar/timezone actions (doAction(), e.g. right-click to toggle
+month/year mode) are a different case: they can change the tooltip's
+content size, which a passive markup update won't renegotiate, and
+they're discrete user-triggered events rather than a once-a-second
+loop. So doAction() still forces an immediate update() + requery after
+running an action, restoring the in-place resize/refresh those actions
+had before, without reintroducing the periodic-tick churn.
+
+That requery can't happen synchronously inside doAction() though: GTK's
+own button-press handling hides the currently-shown tooltip via a path
+that runs after the on-click signal handler returns, in the same event,
+which clobbers an immediate trigger_tooltip_query() call made from
+inside that handler. The previous once-a-second forced requery worked
+around this by accident -- it ran from a completely separate timer
+tick, well outside any click's event processing, so it never raced
+GTK's own hide-on-click logic. Reproducing that outside-the-event
+timing deliberately: defer the post-action requery via
+Glib::signal_timeout(), so it runs on a later main-loop iteration
+instead of synchronously in the click handler.
+---
+ src/modules/clock.cpp | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/src/modules/clock.cpp b/src/modules/clock.cpp
+index a5e52e20..a3a69da7 100644
+--- a/src/modules/clock.cpp
++++ b/src/modules/clock.cpp
+@@ -285,7 +285,6 @@ auto waybar::modules::Clock::update() -> void {
+     }
+ 
+     m_tooltip_->set_markup(m_tlpText_);
+-    label_.trigger_tooltip_query();
+   }
+ 
+   ALabel::update();
+@@ -599,8 +598,26 @@ auto waybar::modules::Clock::doAction(const std::string& name) -> void {
+     (this->*actionMap_[name])();
+   } else if (auto key = name.substr(0, name.find(" ")); actionWithArgsMap_[key]) {
+     (this->*actionWithArgsMap_[key])(name);
+-  } else
++  } else {
+     spdlog::error("Clock. Unsupported action \"{0}\"", name);
++    return;
++  }
++
++  // Calendar/timezone actions can change the tooltip's content size (e.g. month <-> year
++  // mode), which a passive markup update won't renegotiate. Unlike the once-a-second
++  // periodic refresh in update(), this is a discrete, user-triggered event, so forcing a
++  // requery here doesn't reintroduce the popup-churn hazard that was removed from update().
++  //
++  // The requery can't happen synchronously in this handler: GTK's own button-press
++  // handling hides the currently-shown tooltip via a path that runs after this signal
++  // handler returns, in the same event, which clobbers an immediate trigger_tooltip_query()
++  // call here. Deferring it to a follow-up main-loop iteration via signal_timeout puts it
++  // outside that event's processing so it isn't racing GTK's own hide.
++  if (tooltipEnabled()) {
++    update();
++    Glib::signal_timeout().connect_once(
++        sigc::track_obj([this] { label_.trigger_tooltip_query(); }, *this), 50);
++  }
+ }
+ 
+ // Module actions
+-- 
+2.56.0
+

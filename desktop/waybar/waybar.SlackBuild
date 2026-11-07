@@ -26,8 +26,9 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=waybar
 SRCNAM=Waybar
-VERSION=${VERSION:-0.11.0}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-20261105_f49ec82}
+GITHASH=${GITHASH:-f49ec82e2d296f033b081fd36d12297795b017dc}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
 
@@ -67,15 +68,26 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $SRCNAM-$VERSION
-tar xvf $CWD/$SRCNAM-$VERSION.tar.gz
-cd $SRCNAM-$VERSION
+rm -rf $SRCNAM-$GITHASH
+tar xvf $CWD/$PRGNAM-$GITHASH.tar.gz
+cd $SRCNAM-$GITHASH
 chown -R root:root .
+
+# Upstream tracks a self-referential symlink (-> .) that makes the find -L
+# below detect a filesystem loop and exit nonzero, aborting the build.
+rm -f _codeql_detected_source_root
+
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+# Apply local patches
+for patch in "$CWD"/patches/*.patch ; do
+  [ -e "$patch" ] || continue
+  patch -p1 < "$patch"
+done
 
 mkdir build
 cd build

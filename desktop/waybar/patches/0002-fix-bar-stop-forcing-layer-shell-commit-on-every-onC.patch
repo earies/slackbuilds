@@ -1,0 +1,57 @@
+From b44dd1881482b73cb90d7dd74e10b5d2f000f165 Mon Sep 17 00:00:00 2001
+From: Ebben Aries <exa@dscp.org>
+Date: Sun, 5 Jul 2026 20:18:21 -0700
+Subject: [PATCH 2/6] fix(bar): stop forcing layer-shell commit on every
+ onConfigure
+
+942411d7 added an unconditional gtk_layer_try_force_commit() +
+wl_display_flush() at the end of every Bar::onConfigure(), on top of
+the existing forceLayerCommit() calls in setMode() and a one-shot idle
+callback at construction. The intent was to work around gtk-layer-shell's
+initial-configure wait timing out on a busy compositor and leaving the
+bar invisible.
+
+Rapid compositor-driven resizes on the same output (observed with
+`kanshictl switch` reconfiguring a monitor) trigger several onConfigure
+events in quick succession. Forcing a wl_surface.commit on every one,
+independent of whether GTK has actually finished resizing/redrawing to
+match the newly configured size, can submit a commit whose buffer
+doesn't match the layer-surface's just-acked dimensions. wlroots'
+layer-shell implementation treats that as a protocol violation and
+kills the connection (Gdk-Message: Error 71 (Protocol error)
+dispatching to Wayland display.), taking down the whole client with no
+core dump.
+
+Drop the forced commit from onConfigure. The construction-time idle
+callback and the setMode() call already cover the invisible-bar
+scenario 942411d7 targeted, without re-committing on every
+compositor-driven resize.
+---
+ src/bar.cpp | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+diff --git a/src/bar.cpp b/src/bar.cpp
+index e15df373..0578dbc7 100644
+--- a/src/bar.cpp
++++ b/src/bar.cpp
+@@ -871,17 +871,6 @@ void waybar::Bar::onConfigure(GdkEventConfigure* ev) {
+ #ifdef HAVE_BAR_BLUR
+   updateBlurRegion();
+ #endif
+-
+-  /*
+-   * gtk-layer-shell waits for the compositor's initial configure while realizing the window. On a
+-   * busy compositor (common during session startup) that wait can time out even though the initial
+-   * configure arrives shortly afterwards. In that case GTK may not schedule the frame commit that
+-   * presents the first layer-surface buffer, leaving an otherwise configured bar invisible. Force a
+-   * commit after every configure so late initial configures, and later compositor-driven resizes,
+-   * always result in a submitted surface state.
+-   */
+-  window.queue_draw();
+-  forceLayerCommit();
+ }
+ 
+ void waybar::Bar::configureGlobalOffset(int width, int height) {
+-- 
+2.56.0
+
