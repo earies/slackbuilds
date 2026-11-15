@@ -1,0 +1,7 @@
+ng-log is a C++14 library for application-level logging.
+
+It provides stream-based logging and helper macros.
+
+ng-log is the community-maintained successor to glog, originally
+developed by Google. The project, however, is not affiliated with
+Google, which maintains its own logging library as part of abseil-cpp.
