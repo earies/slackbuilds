@@ -76,13 +76,44 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \+
 
+# Claims to need cmake-3.22, but 15.0's 3.21.4 works fine.
+sed -i '/cmake_minimum_required/s/3\.22/3.21/' CMakeLists.txt
+
+# glog compatibility layer (drop-in replacement for google-glog)
+if [ "${COMPAT:-yes}" = "no" ]; then
+  compat="-DBUILD_COMPAT=OFF"
+else
+  compat="-DBUILD_COMPAT=ON"
+fi
+
+# optional gflags support
+pc_cflags="-DNGLOG_USE_EXPORT"
+if [ "${GFLAGS:-no}" = "yes" ]; then
+  gflags="-DWITH_GFLAGS=ON"
+  pc_cflags="$pc_cflags -DNGLOG_USE_GFLAGS"
+else
+  gflags="-DWITH_GFLAGS=OFF"
+fi
+
+# CMake consumers get these defines from the ng-log target, but the
+# pkg-config file omits them, breaking any non-CMake consumer.
+sed -i "s|^Cflags: -I\${includedir}\$|Cflags: -I\${includedir} $pc_cflags|" \
+  libng-log.pc.in
+grep -q NGLOG_USE_EXPORT libng-log.pc.in
+
 mkdir -p build
 cd build
   cmake \
+    -DCMAKE_C_FLAGS:STRING="$SLKCFLAGS" \
     -DCMAKE_CXX_FLAGS:STRING="$SLKCFLAGS" \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_LIBDIR=lib${LIBDIRSUFFIX} \
     -DBUILD_SHARED_LIBS=ON \
+    -DBUILD_TESTING=OFF \
+    -DBUILD_EXAMPLES=OFF \
+    -DWITH_PKGCONFIG=ON \
+    $compat \
+    $gflags \
     -DCMAKE_BUILD_TYPE=Release ..
   make
   make install/strip DESTDIR=$PKG

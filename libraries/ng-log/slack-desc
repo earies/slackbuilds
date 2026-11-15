@@ -9,10 +9,10 @@
 ng-log: ng-log (C++ library for application-level logging)
 ng-log:
 ng-log: ng-log is the community-maintained successor to glog, originally
-ng-log: developed by Google.
+ng-log: developed by Google. It includes a google-glog compatibility
+ng-log: layer and replaces the unmaintained google-glog package.
 ng-log:
 ng-log: Homepage: https://github.com/ng-log/ng-log
-ng-log:
 ng-log:
 ng-log:
 ng-log:
