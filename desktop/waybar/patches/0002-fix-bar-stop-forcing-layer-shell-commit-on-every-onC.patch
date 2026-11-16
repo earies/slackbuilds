@@ -1,4 +1,4 @@
-From b44dd1881482b73cb90d7dd74e10b5d2f000f165 Mon Sep 17 00:00:00 2001
+From 0ceb679a8d724d8c78eb6e4849b85c4658ecb5e0 Mon Sep 17 00:00:00 2001
 From: Ebben Aries <exa@dscp.org>
 Date: Sun, 5 Jul 2026 20:18:21 -0700
 Subject: [PATCH 2/6] fix(bar): stop forcing layer-shell commit on every
@@ -53,5 +53,5 @@ index e15df373..0578dbc7 100644
  
  void waybar::Bar::configureGlobalOffset(int width, int height) {
 -- 
-2.56.0
+2.56.1
 

@@ -1,4 +1,4 @@
-From 06d678fc40a75b5747f2d9aaa0d870c94e3a894e Mon Sep 17 00:00:00 2001
+From 80cf0fdcc13cfb0062216c5b9b4e858809e9e0ec Mon Sep 17 00:00:00 2001
 From: Ebben Aries <exa@dscp.org>
 Date: Fri, 3 Jul 2026 13:36:05 -0700
 Subject: [PATCH 1/6] fix(AModule): move eventMap_ definition out of header
@@ -87,5 +87,5 @@ index 7e54e604..2445b1d9 100644
                   bool enable_click, bool enable_scroll)
      : name_(name),
 -- 
-2.56.0
+2.56.1
 

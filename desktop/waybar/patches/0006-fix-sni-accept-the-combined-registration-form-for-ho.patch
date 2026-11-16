@@ -1,4 +1,4 @@
-From 64105a61427fc66798c1f49da1264d7f3b22067d Mon Sep 17 00:00:00 2001
+From dcdd827f9306a64aec40f1ea8d6c5ab59ed66e8b Mon Sep 17 00:00:00 2001
 From: Ebben Aries <exa@dscp.org>
 Date: Mon, 12 Oct 2026 11:25:24 -0700
 Subject: [PATCH 6/6] fix(sni): accept the combined registration form for hosts
@@ -52,5 +52,5 @@ index b28d6d0a..ab7f5789 100644
    if (g_dbus_is_name(bus_name) == FALSE) {
      g_dbus_method_invocation_return_error(invocation, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
 -- 
-2.56.0
+2.56.1
 

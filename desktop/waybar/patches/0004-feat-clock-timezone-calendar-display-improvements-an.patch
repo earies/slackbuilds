@@ -1,4 +1,4 @@
-From 13b9a52cd0e0283e613254cb46bd987b43d8886e Mon Sep 17 00:00:00 2001
+From 122962499545a599d1ff868c85ba35fe4c148a3a Mon Sep 17 00:00:00 2001
 From: Ebben Aries <exa@dscp.org>
 Date: Sun, 9 Aug 2026 11:59:59 -0600
 Subject: [PATCH 4/6] feat(clock): timezone/calendar display improvements and
@@ -93,8 +93,8 @@ exists for.
 ---
  include/modules/clock.hpp |  73 ++++-
  man/waybar-clock.5.scd    | 241 +++++++++++++-
- src/modules/clock.cpp     | 659 +++++++++++++++++++++++++++++++-------
- 3 files changed, 853 insertions(+), 120 deletions(-)
+ src/modules/clock.cpp     | 659 ++++++++++++++++++++++++++++++++------
+ 3 files changed, 854 insertions(+), 119 deletions(-)
 
 diff --git a/include/modules/clock.hpp b/include/modules/clock.hpp
 index aef3f52c..9b4f2ad2 100644
@@ -196,10 +196,10 @@ index aef3f52c..9b4f2ad2 100644
    const bool ordInTooltip_;
    std::string ordText_{""};
 diff --git a/man/waybar-clock.5.scd b/man/waybar-clock.5.scd
-index 8537779c..7188e807 100644
+index c6cd7877..c831e21d 100644
 --- a/man/waybar-clock.5.scd
 +++ b/man/waybar-clock.5.scd
-@@ -39,22 +39,68 @@ $XDG_CONFIG_HOME/waybar/config ++
+@@ -39,23 +39,69 @@ $XDG_CONFIG_HOME/waybar/config ++
  :[ The format, how the date and time should be displayed. See format options
     below. Split the braces to insert literal text, e.g. *{0:%H}text{0:%M}*
  |[ *timezone*
@@ -227,11 +227,12 @@ index 8537779c..7188e807 100644
 -:[ string
 +:[ string or list of strings
  :[
- :[ Format to use for displaying timezones in the tooltip. When set, this allows showing
+ :[ Format to use for the *{tz_list}* entries in the tooltip. When set, this allows showing
     timezone information (like timezone abbreviations) in the tooltip while keeping the
--   main display clean. Uses the same format options as *format*
-+   main display clean. Uses the same format options as *format*. Can also be a list of
-+   format strings, one per field, so each gets its own grid column
+    main display clean. Uses the same format options as *format*. This only controls how
+-   the entries are formatted; which timezones are listed is unaffected
++   the entries are formatted; which timezones are listed is unaffected. Can also be a
++   list of format strings, one per field, so each gets its own grid column
 +   (*.clock-timezone-col-0*, *-1*, ... -- see *STYLE*) when *native-tooltip* is
 +   enabled, instead of one combined column -- useful when a field like *{:%Z}*
 +   varies in width and would otherwise ragged-align its neighbors. See
@@ -274,7 +275,7 @@ index 8537779c..7188e807 100644
  |[ *locale*
  :[ string
  :[
-@@ -288,7 +334,119 @@ View all valid format options in *strftime(3)* or have a look https://en.cpprefe
+@@ -291,7 +337,119 @@ View all valid format options in *strftime(3)* or have a look https://en.cpprefe
  	"tooltip-format": "{tz_list}"
  }
  ```
@@ -395,7 +396,7 @@ index 8537779c..7188e807 100644
  
  ```
  "clock": {
-@@ -310,9 +468,10 @@ usually proportional-width digits. If your font supports it, add
+@@ -313,9 +471,10 @@ usually proportional-width digits. If your font supports it, add
  *font-feature-settings: "tnum";* to the *#clock* style (or wherever you set the bar
  font) to use fixed-width numbers.
  
@@ -409,7 +410,7 @@ index 8537779c..7188e807 100644
  
  - *.calendar-today*: The current day
  - *.calendar-days*: The day numbers
-@@ -320,6 +479,68 @@ the tooltip markup:
+@@ -323,6 +482,68 @@ the tooltip markup:
  - *.calendar-weekdays*: The weekday header (Su, Mo, ...)
  - *.calendar-months*: The month header (January, February, ...)
  
@@ -479,7 +480,7 @@ index 8537779c..7188e807 100644
  
  If clock module is disabled at startup with locale::facet::\_S\_create\_c\_locale ++
 diff --git a/src/modules/clock.cpp b/src/modules/clock.cpp
-index a3a69da7..466b8c3d 100644
+index 86117eca..8ef86d01 100644
 --- a/src/modules/clock.cpp
 +++ b/src/modules/clock.cpp
 @@ -5,6 +5,7 @@
@@ -717,7 +718,7 @@ index a3a69da7..466b8c3d 100644
    return true;
  }
  
-@@ -213,83 +355,213 @@ auto waybar::modules::Clock::update() -> void {
+@@ -213,83 +355,215 @@ auto waybar::modules::Clock::update() -> void {
          tz, local_days(shiftedDay) + (now.get_local_time() - floor<days>(now.get_local_time())),
          choose::earliest};
  
@@ -916,8 +917,10 @@ index a3a69da7..466b8c3d 100644
 +  for (size_t tz_idx{0}; tz_idx < tzList_.size(); ++tz_idx) {
 +    // Skip local timezone (nullptr) - never show it in tooltip
 +    if (tzList_[tz_idx] == nullptr) continue;
-+    // Skip current timezone unless timezone-tooltip-format is specified
-+    if (static_cast<int>(tz_idx) == tzCurrIdx_ && tzTooltipFormats_.empty()) continue;
++    // Skip the timezone the bar is currently showing, matching getTZtext(): {tz_list} is
++    // the list of the *other* timezones, independent of timezone-tooltip-format, which
++    // only decides how the entries are formatted, not which ones appear.
++    if (static_cast<int>(tz_idx) == tzCurrIdx_) continue;
 +    visible.push_back(tz_idx);
 +  }
 +
@@ -996,16 +999,7 @@ index a3a69da7..466b8c3d 100644
  auto waybar::modules::Clock::getTZtext(sys_seconds now) -> std::string {
    if (tzList_.size() == 1) return "";
  
-@@ -300,7 +572,7 @@ auto waybar::modules::Clock::getTZtext(sys_seconds now) -> std::string {
-     if (tzList_[tz_idx] == nullptr) continue;
- 
-     // Skip current timezone unless timezone-tooltip-format is specified
--    if (static_cast<int>(tz_idx) == tzCurrIdx_ && tzTooltipFormat_.empty()) continue;
-+    if (static_cast<int>(tz_idx) == tzCurrIdx_ && tzTooltipFormats_.empty()) continue;
- 
-     const auto* tz = tzList_[tz_idx];
-     auto zt{zoned_time{tz, now}};
-@@ -311,9 +583,19 @@ auto waybar::modules::Clock::getTZtext(sys_seconds now) -> std::string {
+@@ -314,9 +588,19 @@ auto waybar::modules::Clock::getTZtext(sys_seconds now) -> std::string {
      }
      first = false;
  
@@ -1028,7 +1022,7 @@ index a3a69da7..466b8c3d 100644
    }
  
    return os.str();
-@@ -352,6 +634,24 @@ auto getStandaloneMonthName(const std::locale& locale, const month& m) -> std::s
+@@ -355,6 +639,24 @@ auto getStandaloneMonthName(const std::locale& locale, const month& m) -> std::s
    return date::format(locale, "{:L%B}", m);
  }
  
@@ -1053,7 +1047,7 @@ index a3a69da7..466b8c3d 100644
  auto getCalendarLine(const year_month_day& currDate, const year_month ym, const unsigned line,
                       const weekday& firstdow, const std::locale* const m_locale_) -> std::string {
    std::ostringstream os;
-@@ -366,19 +666,9 @@ auto getCalendarLine(const year_month_day& currDate, const year_month ym, const
+@@ -369,19 +671,9 @@ auto getCalendarLine(const year_month_day& currDate, const year_month ym, const
      // Print weekday names title
      case 1: {
        auto wd{firstdow};
@@ -1075,7 +1069,7 @@ index a3a69da7..466b8c3d 100644
  
          if (wd != firstdow) os << ' ';
  
-@@ -580,6 +870,161 @@ auto waybar::modules::Clock::get_calendar(const year_month_day& today, const yea
+@@ -583,6 +875,161 @@ auto waybar::modules::Clock::get_calendar(const year_month_day& today, const yea
    return os.str();
  }
  
@@ -1238,5 +1232,5 @@ index a3a69da7..466b8c3d 100644
    const char* tz_name = getenv("TZ");
    if (tz_name) {
 -- 
-2.56.0
+2.56.1
 

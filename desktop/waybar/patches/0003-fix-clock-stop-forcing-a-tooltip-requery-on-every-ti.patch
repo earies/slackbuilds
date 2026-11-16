@@ -1,4 +1,4 @@
-From b767009fc1c4a828fc39c94be37951058678f4c9 Mon Sep 17 00:00:00 2001
+From a61b8abd71adb177f66dc1629c4a7d7e0e0f11f6 Mon Sep 17 00:00:00 2001
 From: Ebben Aries <exa@dscp.org>
 Date: Sat, 8 Aug 2026 11:39:03 -0600
 Subject: [PATCH 3/6] fix(clock): stop forcing a tooltip requery on every tick
@@ -53,7 +53,7 @@ instead of synchronously in the click handler.
  1 file changed, 19 insertions(+), 2 deletions(-)
 
 diff --git a/src/modules/clock.cpp b/src/modules/clock.cpp
-index a5e52e20..a3a69da7 100644
+index a55b8808..86117eca 100644
 --- a/src/modules/clock.cpp
 +++ b/src/modules/clock.cpp
 @@ -285,7 +285,6 @@ auto waybar::modules::Clock::update() -> void {
@@ -64,7 +64,7 @@ index a5e52e20..a3a69da7 100644
    }
  
    ALabel::update();
-@@ -599,8 +598,26 @@ auto waybar::modules::Clock::doAction(const std::string& name) -> void {
+@@ -602,8 +601,26 @@ auto waybar::modules::Clock::doAction(const std::string& name) -> void {
      (this->*actionMap_[name])();
    } else if (auto key = name.substr(0, name.find(" ")); actionWithArgsMap_[key]) {
      (this->*actionWithArgsMap_[key])(name);
@@ -93,5 +93,5 @@ index a5e52e20..a3a69da7 100644
  
  // Module actions
 -- 
-2.56.0
+2.56.1
 

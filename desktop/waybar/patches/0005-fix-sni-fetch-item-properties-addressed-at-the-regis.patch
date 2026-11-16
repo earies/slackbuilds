@@ -1,4 +1,4 @@
-From b9544c608193189ce2ebf99495acae59cf0ad4c0 Mon Sep 17 00:00:00 2001
+From 2c9fd1eca8332d925daee36a959bbec76c141221 Mon Sep 17 00:00:00 2001
 From: Ebben Aries <exa@dscp.org>
 Date: Sat, 22 Aug 2026 12:51:47 -0700
 Subject: [PATCH 5/6] fix(sni): fetch item properties addressed at the
@@ -111,5 +111,5 @@ index f26c8271..cad784f9 100644
  T get_variant(const Glib::VariantBase& value) {
    return Glib::VariantBase::cast_dynamic<Glib::Variant<T>>(value).get();
 -- 
-2.56.0
+2.56.1
 
