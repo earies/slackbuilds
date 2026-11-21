@@ -58,14 +58,13 @@ diff --git a/docs/rc.xml.all b/docs/rc.xml.all
 index cb515260..ce6f1eef 100644
 --- a/docs/rc.xml.all
 +++ b/docs/rc.xml.all
-@@ -373,6 +373,9 @@
- 
+@@ -386,5 +386,8 @@
+   <mouse>
      <!-- time is in ms -->
      <doubleClickTime>500</doubleClickTime>
 +    <!-- ms to hold a dragged window at the screen edge; 0 disables -->
 +    <screenEdgeWarpTime>0</screenEdgeWarpTime>
 +    <screenEdgeWarpMouse>no</screenEdgeWarpMouse>
- 
      <context name="Frame">
        <mousebind button="W-Left" action="Press">
 diff --git a/include/config/rcxml.h b/include/config/rcxml.h
